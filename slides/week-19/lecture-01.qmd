@@ -1,0 +1,203 @@
+---
+title: "Stationarity"
+subtitle: "ECON 3209 · Week 19, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define strict and weak stationarity in time-series analysis
+2. distinguish trend, seasonality, cycles, and white noise
+3. recognise why nonstationarity complicates estimation and forecasting
+4. use Python plots and rolling statistics to inspect time-series behaviour
+5. apply these ideas to paddy production and related Kerala examples
+
+---
+
+## Why Stationarity Matters
+
+- Many time-series tools assume the process has stable statistical properties over time.
+- Without stationarity, past relationships may not help forecast the future.
+- Before fitting ARIMA or other models, we inspect whether the series is roughly stable in mean, variance, and dependence structure.
+
+---
+
+## Strict versus Weak Stationarity
+
+- **Strict stationarity**: the full probability distribution is unchanged by time shifts.
+- **Weak stationarity** (covariance stationarity):
+  - constant mean,
+  - constant variance,
+  - autocovariance depends only on lag, not calendar time.
+- In most applied work, weak stationarity is the practical target.
+
+---
+
+## Trend, Seasonality, White Noise
+
+- **Trend:** long-run upward or downward movement.
+- **Seasonality:** regular pattern that repeats every fixed period.
+- **Cycle:** broader medium-run fluctuation.
+- **White noise:** zero mean, constant variance, no serial correlation.
+
+A nonstationary series often contains trend or changing variance.
+
+---
+
+## Simulating White Noise and Trend
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1901)
+T = 80
+white_noise = rng.normal(0, 1, T)
+trend_series = 0.2 * np.arange(T) + rng.normal(0, 1, T)
+df = pd.DataFrame({"white_noise": white_noise, "trend_series": trend_series})
+print(df.head())
+```
+
+---
+
+## Visual Comparison
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+rng = np.random.default_rng(1901)
+T = 80
+white_noise = rng.normal(0, 1, T)
+trend_series = 0.2 * np.arange(T) + rng.normal(0, 1, T)
+
+plt.figure(figsize=(7, 4))
+plt.plot(white_noise, label='White noise')
+plt.plot(trend_series, label='Trending series')
+plt.title('Stationary-looking versus nonstationary-looking behaviour')
+plt.legend()
+plt.show()
+```
+
+---
+
+## Kerala Paddy Example
+
+::: {.highlight-box}
+Annual paddy production in Kerala from 2000 to 2024 may show a downward long-run trend, climate shocks, and policy effects.
+
+A trending series is usually not weakly stationary in levels, so we may need detrending or differencing before modelling.
+:::
+
+---
+
+## Plotting Paddy Production
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+plt.figure(figsize=(7, 4))
+plt.plot(df['year'], df['paddy_production'], marker='o', linewidth=2, color='darkgreen')
+plt.xlabel('Year')
+plt.ylabel('Paddy production index')
+plt.title('Kerala paddy production, 2000-2024 (simulated example)')
+plt.show()
+```
+
+---
+
+## Rolling Mean and Variance
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+series = df['paddy_production']
+df['roll_mean'] = series.rolling(window=5).mean()
+df['roll_var'] = series.rolling(window=5).var()
+print(df[['year', 'paddy_production', 'roll_mean', 'roll_var']].tail(10).round(2))
+```
+
+---
+
+## Common Fixes for Nonstationarity
+
+- Remove deterministic trend with a trend term.
+- Difference the series to eliminate stochastic trend or unit roots.
+- Model seasonal patterns explicitly.
+- Transform the variance, for example using logs when appropriate.
+
+---
+
+## What Comes Next
+
+- Visual inspection is helpful but not enough.
+- Next we use formal tests such as the **Augmented Dickey-Fuller (ADF)** test and the **KPSS** test.
+- Together, they help us judge whether a series is stationary or contains a unit root.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use the starter code to compute a rolling mean for the paddy series. Does the rolling mean look stable? What does that suggest about stationarity in levels?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+df['roll_mean'] = df['paddy_production'].rolling(window=5).mean()
+print(df[['year', 'paddy_production', 'roll_mean']].tail(8).round(2))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Stationarity means the series has stable properties over time, especially mean and variance.
+- ✅ Trend and seasonality are common reasons a series fails to be stationary.
+- ✅ White noise is the benchmark stationary process with no serial dependence.
+- ✅ Visual plots and rolling statistics are useful first checks before formal tests.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We study unit roots with the ADF test and compare it with KPSS.
+- You will learn how to interpret apparently contradictory test outcomes.
+- Stationarity intuition now becomes formal testing practice.
+:::
+
+
