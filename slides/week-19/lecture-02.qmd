@@ -1,0 +1,218 @@
+---
+title: "Unit Roots & ADF Test"
+subtitle: "ECON 3209 · Week 19, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define a unit root and relate it to random-walk behaviour
+2. run and interpret the Augmented Dickey-Fuller test
+3. compare ADF and KPSS hypotheses
+4. test level and differenced series in Python
+5. apply these ideas to Kerala paddy production data
+
+---
+
+## What Is a Unit Root?
+
+- A simple random walk is:
+
+$$Y_t = Y_{t-1} + \varepsilon_t$$
+
+- Shocks have permanent effects.
+- The series wanders without returning to a fixed mean.
+- This is the classic nonstationary **unit-root** case.
+
+---
+
+## ADF Test Logic
+
+- The Augmented Dickey-Fuller test estimates a regression with lagged levels and lagged differences.
+- Null hypothesis: the series has a **unit root** (nonstationary).
+- Alternative: the series is stationary.
+- A small p-value leads us to reject the unit-root null.
+
+---
+
+## KPSS Complements ADF
+
+- **ADF null:** unit root.
+- **KPSS null:** stationarity.
+- Because the nulls differ, the two tests complement each other.
+- Together they provide a more balanced diagnosis.
+
+---
+
+## Simulating a Stationary Series and a Random Walk
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1902)
+T = 100
+ar1 = np.zeros(T)
+for t in range(1, T):
+    ar1[t] = 0.6 * ar1[t - 1] + rng.normal(0, 1)
+random_walk = np.cumsum(rng.normal(0, 1, T))
+df = pd.DataFrame({"ar1": ar1, "random_walk": random_walk})
+print(df.head())
+```
+
+---
+
+## ADF and KPSS in Python
+
+```{pyodide-python}
+import numpy as np
+from statsmodels.tsa.stattools import adfuller, kpss
+
+rng = np.random.default_rng(1902)
+T = 100
+ar1 = np.zeros(T)
+for t in range(1, T):
+    ar1[t] = 0.6 * ar1[t - 1] + rng.normal(0, 1)
+random_walk = np.cumsum(rng.normal(0, 1, T))
+
+print('ADF stationary series:', adfuller(ar1)[1])
+print('ADF random walk:', adfuller(random_walk)[1])
+print('KPSS stationary series:', kpss(ar1, nlags='auto')[1])
+print('KPSS random walk:', kpss(random_walk, nlags='auto')[1])
+```
+
+---
+
+## Reading the Tests
+
+- **ADF small p-value** → evidence against a unit root.
+- **KPSS small p-value** → evidence against stationarity.
+- Strongest conclusion comes when the two tests agree.
+- If they disagree, inspect plots, sample size, lag choice, and economic context.
+
+---
+
+## Kerala Paddy Series
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+from statsmodels.tsa.stattools import adfuller, kpss
+
+series = df['paddy_production']
+first_diff = series.diff().dropna()
+print('ADF level p-value:', round(adfuller(series)[1], 4))
+print('ADF first difference p-value:', round(adfuller(first_diff)[1], 4))
+print('KPSS level p-value:', round(kpss(series, nlags='auto')[1], 4))
+print('KPSS first difference p-value:', round(kpss(first_diff, nlags='auto')[1], 4))
+```
+
+---
+
+## Visualising Level and First Difference
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+first_diff = df['paddy_production'].diff()
+fig, axes = plt.subplots(2, 1, figsize=(7, 6), sharex=True)
+axes[0].plot(df['year'], df['paddy_production'], color='darkgreen')
+axes[0].set_title('Level series')
+axes[1].plot(df['year'], first_diff, color='firebrick')
+axes[1].set_title('First difference')
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## Decision Grid
+
+| ADF result | KPSS result | Typical interpretation |
+|---|---|---|
+| Reject unit root | Fail to reject stationarity | Stationary |
+| Fail to reject unit root | Reject stationarity | Nonstationary |
+| Both reject | Possible structural break / ambiguity |
+| Both fail to reject | Low power / inconclusive |
+
+Always combine tests with economic reasoning.
+
+---
+
+## Why It Matters for Forecasting
+
+- ARIMA models require correct differencing.
+- If we ignore unit roots, forecasts may be unstable and inference misleading.
+- Proper testing helps choose whether the integration order $d$ should be 0, 1, or higher.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Run ADF and KPSS on the paddy series in levels and first differences. Which version looks more stationary, and what does that imply for ARIMA differencing?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+from statsmodels.tsa.stattools import adfuller, kpss
+
+level = df['paddy_production']
+first_diff = level.diff().dropna()
+print('ADF level:', adfuller(level)[1])
+print('ADF diff:', adfuller(first_diff)[1])
+print('KPSS level:', kpss(level, nlags='auto')[1])
+print('KPSS diff:', kpss(first_diff, nlags='auto')[1])
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ A unit root implies shocks have persistent effects and the series is usually nonstationary in levels.
+- ✅ ADF tests the null of a unit root, while KPSS tests the null of stationarity.
+- ✅ Testing both levels and first differences helps determine the amount of differencing needed.
+- ✅ This decision is central for building ARIMA models in the next week.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We use ACF and PACF plots to identify AR and MA structure.
+- You will learn how lag patterns guide order selection.
+- This is the bridge from stationarity testing to ARIMA design.
+:::
+
+
