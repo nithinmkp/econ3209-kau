@@ -134,7 +134,22 @@
     .qp-status, .qp-status-container,
     div[class*="pyodide-status"], div[id*="pyodide-status"],
     .cell-output-display > p:first-child:empty { display: none !important; }
+    /* KAU logo in slide corner */
+    #kau-slide-logo {
+      position: fixed; bottom: 14px; right: 14px;
+      height: 45px; width: auto; z-index: 1000;
+      pointer-events: none;
+    }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var img = document.createElement('img');
+      img.id = 'kau-slide-logo';
+      img.src = '../../assets/kau-logo.jpg';
+      img.alt = 'KAU';
+      document.body.appendChild(img);
+    });
+  </script>
 <meta property="og:title" content="Week 6 — Working with Real Data – ECON 3209 — Econometrics with Python">
 <meta property="og:description" content="ECON 3209 · Kerala Agricultural University">
 <meta property="og:site_name" content="ECON 3209 — Econometrics with Python">
@@ -186,7 +201,6 @@
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
-<p><img src="../../../../assets/kau-logo.jpg" class="slide-logo"></p>
 <div class="footer footer-default">
 <p>ECON 3209 — Kerala Agricultural University</p>
 </div>

@@ -135,7 +135,22 @@
     .qp-status, .qp-status-container,
     div[class*="pyodide-status"], div[id*="pyodide-status"],
     .cell-output-display > p:first-child:empty { display: none !important; }
+    /* KAU logo in slide corner */
+    #kau-slide-logo {
+      position: fixed; bottom: 14px; right: 14px;
+      height: 45px; width: auto; z-index: 1000;
+      pointer-events: none;
+    }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var img = document.createElement('img');
+      img.id = 'kau-slide-logo';
+      img.src = '../../assets/kau-logo.jpg';
+      img.alt = 'KAU';
+      document.body.appendChild(img);
+    });
+  </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/editor/editor.main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     
@@ -624,7 +639,6 @@ Department of Development Economics, KAU
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
-<p><img src="../../../../assets/kau-logo.jpg" class="slide-logo"></p>
 <div class="footer footer-default">
 <p>ECON 3209 — Kerala Agricultural University</p>
 </div>
