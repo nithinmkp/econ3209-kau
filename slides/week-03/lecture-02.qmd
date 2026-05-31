@@ -1,0 +1,246 @@
+---
+title: "Linear Algebra with NumPy"
+subtitle: "ECON 3209 · Week 3, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Represent vectors and matrices with NumPy arrays
+2. Perform matrix addition, transpose, and multiplication
+3. Compute dot products and interpret them economically
+4. Solve linear systems with `np.linalg.solve()`
+5. Obtain eigenvalues and connect them to variance structure
+
+---
+
+## Why Linear Algebra Matters in Econometrics
+
+- Regression models are easiest to write in matrix form
+- Input-output analysis, portfolio models, and optimisation all use matrices
+- Linear algebra lets us represent many equations compactly
+- NumPy gives direct tools for these operations
+- Understanding the algebra helps you interpret software output better
+
+::: {.formula}
+Ordinary least squares can be written as:
+
+$$\hat{\beta} = (X'X)^{-1}X'y$$
+:::
+
+---
+
+## Vectors and Matrices in NumPy
+
+```{pyodide-python}
+import numpy as np
+
+y = np.array([125, 138, 117])
+X = np.array([
+    [1, 8.2],
+    [1, 8.5],
+    [1, 7.9]
+])
+
+print("y:", y)
+print("X:\n", X)
+print("Shape of X:", X.shape)
+```
+
+- A vector is a one-dimensional array
+- A matrix is a two-dimensional array
+- Shapes matter because multiplication follows strict rules
+- In regression, columns of `X` are explanatory variables
+
+---
+
+## Matrix Arithmetic
+
+```{pyodide-python}
+import numpy as np
+
+A = np.array([[2, 1], [0, 3]])
+B = np.array([[1, 4], [5, 2]])
+
+print("A + B =\n", A + B)
+print("A - B =\n", A - B)
+print("2A =\n", 2 * A)
+print("Transpose of B =\n", B.T)
+```
+
+- Addition and subtraction are element-wise
+- Scalar multiplication multiplies every entry by the same number
+- `.T` gives the transpose
+- Matrix shapes must match for addition and subtraction
+
+---
+
+## Dot Product and Matrix Multiplication
+
+```{pyodide-python}
+import numpy as np
+
+prices = np.array([28, 36, 165])
+quantities = np.array([3200, 1100, 1450])
+
+revenue = np.dot(prices, quantities)
+print("Total revenue:", revenue)
+
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+print("A @ B =\n", A @ B)
+```
+
+- `np.dot()` computes the dot product of two vectors
+- `@` is Python's matrix multiplication operator
+- Dot products are weighted sums — common in economics
+- Matrix multiplication is not the same as element-wise multiplication
+
+---
+
+## Economic Interpretation of a Dot Product
+
+- Suppose quantities are the output of three crops
+- Prices are the per-unit market prices
+- The dot product adds `price × quantity` across crops
+- This is a compact way to compute total value of production
+- Similar weighted sums appear in index numbers and portfolios
+
+```{pyodide-python}
+import numpy as np
+
+weights = np.array([0.4, 0.35, 0.25])
+returns = np.array([0.08, 0.06, 0.11])
+portfolio_return = np.dot(weights, returns)
+print(f"Portfolio return: {portfolio_return:.2%}")
+```
+
+---
+
+## Solving a System of Equations
+
+```{pyodide-python}
+import numpy as np
+
+# Example system:
+# q + p = 120
+# 2q - p = 30
+A = np.array([[1, 1], [2, -1]], dtype=float)
+b = np.array([120, 30], dtype=float)
+solution = np.linalg.solve(A, b)
+
+print("q, p =", solution)
+```
+
+- `np.linalg.solve(A, b)` solves `Ax = b`
+- This is better than manually computing the inverse
+- Systems like this appear in equilibrium and cost allocation problems
+- The coefficient matrix must be square and non-singular
+
+---
+
+## Determinant and Inverse
+
+```{pyodide-python}
+import numpy as np
+
+A = np.array([[4, 2], [1, 3]], dtype=float)
+print("Determinant:", np.linalg.det(A))
+print("Inverse:\n", np.linalg.inv(A))
+```
+
+- The determinant helps tell whether a matrix is invertible
+- If the determinant is zero, the inverse does not exist
+- In practice, `solve()` is usually preferred to `inv()` for equations
+- But knowing the inverse concept is important for theory
+
+---
+
+## Eigenvalues and Eigenvectors
+
+```{pyodide-python}
+import numpy as np
+
+cov_matrix = np.array([
+    [1.8, 0.6],
+    [0.6, 1.2]
+])
+
+eigvals, eigvecs = np.linalg.eig(cov_matrix)
+print("Eigenvalues:", np.round(eigvals, 4))
+print("Eigenvectors:\n", np.round(eigvecs, 4))
+```
+
+- Eigenvalues measure how much variation lies along key directions
+- They are central in principal component analysis
+- In finance, they help summarise common risk factors
+- In econometrics, they also appear in matrix stability analysis
+
+---
+
+## Regression Preview in Matrix Form
+
+- In a simple regression, the design matrix contains a column of ones and a column for `x`
+- Matrix algebra lets software estimate coefficients efficiently
+- Even if software hides the algebra, the concepts remain important
+- NumPy is the first step toward understanding what regression packages do
+- We will revisit this when we reach OLS
+
+::: {.gold-box}
+When you understand matrices, regression output becomes less mysterious and more interpretable.
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use NumPy to solve the system:
+
+- `x + 2y = 100`
+- `3x - y = 40`
+
+Then print the values of `x` and `y`.
+
+Bonus: compute the determinant of the coefficient matrix.
+:::
+
+```{pyodide-python}
+import numpy as np
+
+# Write your solution here
+A = np.array([[]], dtype=float)
+b = np.array([], dtype=float)
+solution = None
+
+print(solution)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ NumPy represents vectors and matrices naturally
+- ✅ `@` and `np.dot()` perform key linear algebra operations
+- ✅ Dot products appear as weighted sums in economics and finance
+- ✅ `np.linalg.solve()` is the standard way to solve linear systems
+- ✅ Determinants and inverses describe matrix structure
+- ✅ Eigenvalues help summarise variation and system behaviour
+
+---
+
+## Next Lecture
+
+### Statistical Operations with NumPy
+
+- We will move from matrix algebra to descriptive statistics and random numbers
+- You will learn how NumPy supports simulation and exploratory data analysis
+- These ideas lead directly to inference and econometric modelling
+
