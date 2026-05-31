@@ -1,0 +1,220 @@
+---
+title: "Nature & Consequences of Heteroscedasticity"
+subtitle: "ECON 3209 · Week 12, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. define heteroscedasticity and contrast it with homoskedasticity
+2. identify examples from cross-sectional economic data
+3. explain which OLS properties survive and which fail under heteroscedasticity
+4. show why standard errors become biased when error variance is not constant
+5. use Python plots to visualize a funnel-shaped residual pattern
+
+---
+
+## What Is Heteroscedasticity?
+
+In a homoskedastic model,
+
+::: {.formula}
+$$Var(\varepsilon_i \mid X_i) = \sigma^2$$
+:::
+
+Under heteroscedasticity,
+
+::: {.formula}
+$$Var(\varepsilon_i \mid X_i) = \sigma_i^2$$
+:::
+
+so the spread of the errors changes with the regressors.
+
+---
+
+## Why Is It Common in Cross-Section Data?
+
+- Richer households often show greater absolute variation in expenditure.
+- Larger farms may have more variable profits than small farms.
+- In cooperative member income data, variance can increase with wealth or landholding.
+
+::: {.highlight-box}
+Cross-sectional data often contain units of very different scale, and scale differences naturally create unequal variance.
+:::
+
+---
+
+## What Happens to OLS?
+
+If the zero conditional mean assumption still holds, OLS coefficients remain **unbiased**.
+
+But under heteroscedasticity:
+- OLS is no longer efficient among linear unbiased estimators.
+- Usual homoskedastic standard errors are biased.
+- t-tests and confidence intervals can be misleading.
+
+---
+
+## Why Standard Errors Are the Main Problem
+
+The usual textbook variance formula assumes constant error variance.
+
+When that assumption fails, software that uses the homoskedastic formula may understate or overstate uncertainty.
+
+::: {.gold-box}
+So the biggest danger is often **false confidence** in hypothesis tests.
+:::
+
+---
+
+## Python Demo: Simulate Heteroscedastic Data
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(77)
+n = 160
+wealth = np.random.uniform(20, 200, n)
+sigma = 2 + 0.08 * wealth
+income = 30 + 1.8*wealth + np.random.normal(0, sigma, n)
+df = pd.DataFrame({'wealth': wealth, 'income': income, 'sigma': sigma})
+
+model = smf.ols('income ~ wealth', data=df).fit()
+print(model.params.round(4))
+```
+
+---
+
+## Python Demo: Residual Funnel Plot
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+df['fitted'] = model.fittedvalues
+df['resid'] = model.resid
+
+plt.figure(figsize=(6.5, 4))
+plt.scatter(df['fitted'], df['resid'], alpha=0.6)
+plt.axhline(0, color='black', linestyle='--')
+plt.xlabel('Fitted income')
+plt.ylabel('Residual')
+plt.title('Residual plot: spread rises with fitted values')
+plt.show()
+```
+
+---
+
+## Visual Signatures to Watch For
+
+- **Funnel shape**: residual spread widens or narrows.
+- **Megaphone pattern**: variability grows with scale.
+- **Cluster-specific spread**: one subgroup is more variable than another.
+
+Residual plots are informal, but they are often the first useful diagnostic.
+
+---
+
+## Python Demo: OLS Coefficient Unbiasedness in Simulation
+
+```{pyodide-python}
+betas = []
+for seed in range(50):
+    np.random.seed(seed)
+    wealth = np.random.uniform(20, 200, n)
+    sigma = 2 + 0.08 * wealth
+    income = 30 + 1.8*wealth + np.random.normal(0, sigma, n)
+    temp = pd.DataFrame({'wealth': wealth, 'income': income})
+    betas.append(smf.ols('income ~ wealth', data=temp).fit().params['wealth'])
+
+print(f'Average estimated slope over 50 simulations: {np.mean(betas):.4f}')
+```
+
+---
+
+## Python Demo: Residual Variance by Wealth Group
+
+```{pyodide-python}
+df['wealth_group'] = pd.qcut(df['wealth'], 4, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+var_by_group = df.groupby('wealth_group', observed=False)['resid'].var()
+print(var_by_group.round(3))
+```
+
+---
+
+## Practical Consequences for Applied Work
+
+- Significant coefficients can become insignificant once robust SEs are used.
+- Policy recommendations may look more certain than they really are.
+- Forecast intervals may be poorly calibrated.
+
+::: {.highlight-box}
+Heteroscedasticity is mainly an **inference problem** unless the variance structure itself is of substantive interest.
+:::
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate income and wealth data where the error variance increases with wealth.
+2. Estimate an OLS regression of income on wealth.
+3. Plot residuals against fitted values.
+4. Compare residual variance across four wealth groups.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+np.random.seed(8)
+n = 120
+wealth = np.random.uniform(10, 180, n)
+
+# Make the variance rise with wealth and continue the exercise
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ Heteroscedasticity means the variance of the error term changes across observations.
+
+✅ It is very common in cross-sectional data such as income, farm size, and expenditure data.
+
+✅ OLS coefficients can remain unbiased, but usual standard errors become unreliable.
+
+✅ Residual plots often reveal funnel or megaphone patterns.
+
+✅ The main danger is incorrect inference, not necessarily biased coefficient estimates.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 2 — Detection Tests**
+
+We will cover:
+- Breusch-Pagan and White tests
+- reading residual plots
+- Python implementation in statsmodels
+- interpreting p-values and test outputs
+:::
+
+
+
