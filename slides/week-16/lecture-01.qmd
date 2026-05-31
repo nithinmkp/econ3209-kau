@@ -1,0 +1,256 @@
+---
+title: "Omitted Variable Bias"
+subtitle: "ECON 3209 · Week 16, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define omitted variable bias (OVB) and explain when it arises
+2. use the OVB formula to determine the direction of bias
+3. distinguish between short and long regressions in practice
+4. understand the role of proxy variables when the true regressor is unavailable
+5. illustrate OVB with Python examples relevant to credit scoring and banking data
+
+---
+
+## Why Omitted Variables Matter
+
+- We often want to estimate the effect of one regressor, say $X_1$, on $Y$.
+- Trouble begins when another relevant factor $X_2$ is left out of the model.
+- If $X_2$ affects $Y$ **and** is correlated with $X_1$, the estimated coefficient on $X_1$ absorbs part of $X_2$'s effect.
+- This is **omitted variable bias**.
+
+---
+
+## The OVB Formula
+
+If the true model is $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + u$ but we omit $X_2$, then
+
+$$\text{plim}\hat{\beta}_1 = \beta_1 + \beta_2 \frac{\text{Cov}(X_1,X_2)}{\text{Var}(X_1)}$$
+
+- Bias exists when two conditions hold:
+  1. $\beta_2 \neq 0$ (the omitted variable matters), and
+  2. $\text{Cov}(X_1, X_2) \neq 0$ (the omitted variable is correlated with the included regressor).
+
+---
+
+## Direction of Bias
+
+| Effect of omitted variable on $Y$ | Correlation with included regressor | Bias direction |
+|---|---|---|
+| Positive | Positive | Upward |
+| Positive | Negative | Downward |
+| Negative | Positive | Downward |
+| Negative | Negative | Upward |
+
+Always think in **two signs**: the omitted effect and the correlation sign.
+
+---
+
+## Short and Long Regressions in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+short_reg = smf.ols("default ~ income", data=df).fit()
+long_reg = smf.ols("default ~ income + credit_score", data=df).fit()
+print("Short regression income coef:", round(short_reg.params["income"], 4))
+print("Long regression income coef:", round(long_reg.params["income"], 4))
+```
+
+---
+
+## Interpretation of the Comparison
+
+- The short regression mixes the effect of income with the effect of credit score if credit score is related to income.
+- The long regression separates these channels more clearly.
+- A big change in the income coefficient after adding credit score is a warning sign that OVB was important.
+
+---
+
+## Proxy Variables
+
+- Sometimes the true omitted variable is not observed.
+- A **proxy variable** is an imperfect but related measure.
+- Example: if repayment discipline is unobserved, branch inspection score may capture part of it.
+- A proxy rarely removes all bias, but it can reduce it.
+
+---
+
+## Using a Proxy in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import numpy as np
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(99)
+df["credit_proxy"] = df["credit_score"] + rng.normal(0, 8, len(df))
+short_reg = smf.ols("default ~ income", data=df).fit()
+proxy_reg = smf.ols("default ~ income + credit_proxy", data=df).fit()
+full_reg = smf.ols("default ~ income + credit_score", data=df).fit()
+print({
+    "short": round(short_reg.params["income"], 4),
+    "with_proxy": round(proxy_reg.params["income"], 4),
+    "full": round(full_reg.params["income"], 4),
+})
+```
+
+---
+
+## Kerala Credit Score Example
+
+::: {.highlight-box}
+Suppose we estimate loan default using only borrower income.
+
+But if credit score is omitted and higher-income borrowers also tend to have stronger credit history, then the income coefficient partly captures the effect of credit quality.
+:::
+
+That is why econometrics always asks: **what important variable may still be missing?**
+
+---
+
+## A Simple Sensitivity Check
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import pandas as pd
+import statsmodels.formula.api as smf
+
+models = {
+    "income only": smf.ols("default ~ income", data=df).fit(),
+    "income + district": smf.ols("default ~ income + district", data=df).fit(),
+    "income + credit": smf.ols("default ~ income + credit_score", data=df).fit(),
+    "full": smf.ols("default ~ income + collateral + district + credit_score", data=df).fit(),
+}
+comparison = pd.DataFrame({name: model.params for name, model in models.items()}).T
+print(comparison[["income"]].round(4))
+```
+
+---
+
+## Practical Checklist
+
+- Start from economic theory, not only data availability.
+- Ask which omitted factors could affect both the dependent variable and a key regressor.
+- Compare short and long regressions.
+- Use better data, fixed effects, instruments, or proxies when possible.
+- Remember: OVB is about **causal credibility**, not only statistical significance.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Using the starter code, compare the income coefficient across the short, proxy, and full regressions. Which coefficient would you report to a cooperative bank manager, and why?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import numpy as np
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(77)
+df["credit_proxy"] = df["credit_score"] + rng.normal(0, 8, len(df))
+print(smf.ols("default ~ income", data=df).fit().params)
+print(smf.ols("default ~ income + credit_proxy", data=df).fit().params)
+print(smf.ols("default ~ income + credit_score", data=df).fit().params)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ OVB appears when a relevant omitted variable both affects Y and is correlated with an included regressor.
+- ✅ The OVB formula helps determine whether the bias is upward or downward.
+- ✅ Comparing short and long regressions is a useful diagnostic step.
+- ✅ Proxy variables may reduce bias, but theory and data quality remain crucial.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We test model specification with the Ramsey RESET test.
+- You will see how fitted values squared and cubed can reveal functional-form problems.
+- Today’s message about misspecification continues in a formal testing framework.
+:::
+
+
