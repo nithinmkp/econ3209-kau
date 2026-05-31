@@ -1,0 +1,190 @@
+---
+title: "ACF/PACF in Python"
+subtitle: "ECON 3209 · Week 19, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define the autocorrelation function (ACF) and partial autocorrelation function (PACF)
+2. use ACF/PACF patterns to identify AR and MA orders
+3. generate lag plots and correlograms in Python
+4. compare AR(1) and MA(1) signatures visually
+5. connect ACF/PACF evidence to model selection for forecasting
+
+---
+
+## What Is the ACF?
+
+- The **autocorrelation function** measures correlation between $Y_t$ and $Y_{t-k}$ for each lag $k$.
+- It shows how long dependence persists.
+- A slowly decaying ACF often suggests an autoregressive pattern or nonstationarity.
+
+---
+
+## What Is the PACF?
+
+- The **partial autocorrelation function** measures the direct relationship between $Y_t$ and $Y_{t-k}$ after removing intermediate lags.
+- PACF is especially useful for identifying AR order.
+- A sharp cutoff in PACF after lag $p$ often suggests an AR($p$) process.
+
+---
+
+## Identification Rules of Thumb
+
+- **AR(p):** PACF cuts off after lag $p$, ACF tails off.
+- **MA(q):** ACF cuts off after lag $q$, PACF tails off.
+- **ARMA:** both ACF and PACF usually tail off.
+- These are heuristics, not mechanical laws.
+
+---
+
+## Simulating AR(1) and MA(1)
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+from statsmodels.tsa.arima_process import ArmaProcess
+
+rng = np.random.default_rng(1903)
+ar1 = ArmaProcess(np.array([1, -0.7]), np.array([1])).generate_sample(nsample=120, distrvs=rng.normal)
+ma1 = ArmaProcess(np.array([1]), np.array([1, 0.6])).generate_sample(nsample=120, distrvs=rng.normal)
+df = pd.DataFrame({"ar1": ar1, "ma1": ma1})
+print(df.head())
+```
+
+---
+
+## ACF and PACF Plots
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+from statsmodels.tsa.arima_process import ArmaProcess
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+rng = np.random.default_rng(1903)
+ar1 = ArmaProcess(np.array([1, -0.7]), np.array([1])).generate_sample(nsample=120, distrvs=rng.normal)
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+plot_acf(ar1, lags=20, ax=axes[0])
+plot_pacf(ar1, lags=20, ax=axes[1], method='ywm')
+axes[0].set_title('ACF of AR(1)')
+axes[1].set_title('PACF of AR(1)')
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## Lag Plot Idea
+
+- A lag plot graphs $Y_t$ against $Y_{t-1}$ or another lagged value.
+- If points cluster along an upward line, persistence is positive.
+- If points are a cloud with no structure, serial dependence is weak.
+
+---
+
+## Lag Plot in Python
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+from statsmodels.tsa.arima_process import ArmaProcess
+
+rng = np.random.default_rng(1903)
+ar1 = ArmaProcess(np.array([1, -0.7]), np.array([1])).generate_sample(nsample=120, distrvs=rng.normal)
+plt.figure(figsize=(5.5, 5))
+plt.scatter(ar1[:-1], ar1[1:], alpha=0.5, color='darkgreen')
+plt.xlabel('Y(t-1)')
+plt.ylabel('Y(t)')
+plt.title('Lag plot for an AR(1) process')
+plt.show()
+```
+
+---
+
+## Kerala Series Example
+
+::: {.highlight-box}
+For Kerala monthly rubber prices, a strong positive ACF at low lags suggests persistence.
+
+PACF helps us judge whether a simple AR(1) or AR(2) structure may be enough before estimating an ARIMA model.
+:::
+
+---
+
+## Manual Correlations by Lag
+
+```{pyodide-python}
+import numpy as np
+from statsmodels.tsa.arima_process import ArmaProcess
+
+rng = np.random.default_rng(1903)
+series = ArmaProcess(np.array([1, -0.7]), np.array([1])).generate_sample(nsample=120, distrvs=rng.normal)
+for lag in range(1, 6):
+    corr = np.corrcoef(series[lag:], series[:-lag])[0, 1]
+    print(f'lag {lag}: {corr:.3f}')
+```
+
+---
+
+## From Diagnostics to Model Orders
+
+- ACF/PACF do not choose the final model alone.
+- Use them with stationarity tests, information criteria, and forecast performance.
+- But they remain a core visual tool for understanding the data-generating process.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Generate an AR(1) or MA(1) process with the starter code. Then inspect the ACF/PACF and explain which order pattern you see.
+:::
+
+```{pyodide-python}
+import numpy as np
+from statsmodels.tsa.arima_process import ArmaProcess
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(73)
+series = ArmaProcess(np.array([1, -0.6]), np.array([1])).generate_sample(nsample=100, distrvs=rng.normal)
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+plot_acf(series, lags=15, ax=axes[0])
+plot_pacf(series, lags=15, ax=axes[1], method='ywm')
+plt.show()
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ ACF measures total serial correlation across lags, while PACF isolates direct lag effects.
+- ✅ Their cutoff and decay patterns help identify AR and MA orders.
+- ✅ Lag plots give a simple visual check of persistence.
+- ✅ These diagnostics prepare us to build ARIMA models for forecasting.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We begin forecasting with AR, MA, and ARIMA models.
+- You will combine differencing, ACF/PACF evidence, and information criteria.
+- This is the main forecasting toolkit for the final week.
+:::
+
+
