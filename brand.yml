@@ -1,0 +1,60 @@
+meta:
+  name: "Kerala Agricultural University — ECON 3209"
+
+color:
+  palette:
+    kau-green:   "#5DBE50"
+    kau-gold:    "#DAB300"
+    kau-dark:    "#1A3300"
+    kau-light:   "#E8F5E2"
+    kau-tint:    "#F5FAF3"
+    white:       "#FFFFFF"
+    gray-dark:   "#2E2E2E"
+    gray-mid:    "#666666"
+    gray-light:  "#F0F0F0"
+
+  # Semantic role mappings
+  foreground:  "#2E2E2E"
+  background:  "#FFFFFF"
+  primary:     "#5DBE50"
+  secondary:   "#1A3300"
+  success:     "#5DBE50"
+  info:        "#DAB300"
+  warning:     "#DAB300"
+  danger:      "#C0392B"
+  light:       "#F5FAF3"
+  dark:        "#1A3300"
+
+typography:
+  fonts:
+    - family: "Lato"
+      source: google
+    - family: "Merriweather"
+      source: google
+    - family: "Fira Code"
+      source: google
+
+  base:
+    family: "Lato"
+    size: 1rem
+    weight: 400
+    line-height: 1.6
+
+  headings:
+    family: "Merriweather"
+    weight: 700
+    color: "#1A3300"
+
+  monospace:
+    family: "Fira Code"
+    size: 0.9em
+
+  link:
+    color: "#5DBE50"
+    decoration: none
+
+defaults:
+  shiny:
+    theme: "flatly"
+
+

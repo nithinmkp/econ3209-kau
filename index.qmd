@@ -1,0 +1,179 @@
+---
+title: "ECON 3209 — Econometrics with Python"
+page-layout: full
+title-block-banner: false
+---
+
+::: {.hero-banner}
+# ECON 3209 — Econometrics with Python
+
+**BSc Hons Cooperation & Banking | 6th Semester**  
+Kerala Agricultural University · 2025–26
+
+*A 20-week hands-on journey from Python fundamentals to applied econometrics — with every lecture interactive in your browser.*
+:::
+
+## Course Overview
+
+This course equips students with the quantitative and computational skills needed to analyse economic and agricultural data. Using **Python** throughout, you will progress from programming basics to implementing the full suite of classical econometric models — all within an interactive environment where code runs live in your browser (no installation required).
+
+::: {.columns}
+::: {.column width="48%"}
+### What You Will Learn
+
+- Python programming for data analysis
+- Data wrangling and visualisation with Pandas & Matplotlib
+- Ordinary Least Squares (OLS) estimation and inference
+- Diagnosing and correcting regression problems
+- Panel data, qualitative response, and time series models
+:::
+::: {.column width="4%"}
+:::
+::: {.column width="48%"}
+### Course Details
+
+| | |
+|---|---|
+| **Course Code** | ECON 3209 |
+| **Credits** | 3 |
+| **Semester** | 6th |
+| **Programme** | BSc Hons Cooperation & Banking |
+| **University** | Kerala Agricultural University |
+| **Duration** | 20 Weeks × 3 Lectures |
+| **Total Lectures** | 60 |
+:::
+:::
+
+---
+
+## Course Structure
+
+### 🐍 Phase 1 — Python Foundations (Weeks 1–6)
+
+::: {.week-card}
+**Week 1** · [Python Environment & Basics](slides/week-01/index.qmd)
+
+Getting started with Python · Variables & data types · Operators & expressions
+:::
+
+::: {.week-card}
+**Week 2** · [Control Flow & Functions](slides/week-02/index.qmd)
+
+Conditionals & loops · Functions & scope · List comprehensions & lambda
+:::
+
+::: {.week-card}
+**Week 3** · [NumPy for Economics](slides/week-03/index.qmd)
+
+Arrays & vectorisation · Linear algebra · Statistical operations
+:::
+
+::: {.week-card}
+**Week 4** · [Pandas & Data Wrangling](slides/week-04/index.qmd)
+
+Series & DataFrames · Merge / reshape / groupby · Real agricultural data
+:::
+
+::: {.week-card}
+**Week 5** · [Data Visualisation](slides/week-05/index.qmd)
+
+Matplotlib foundations · Seaborn statistical charts · Interactive plots
+:::
+
+::: {.week-card}
+**Week 6** · [Working with Real Data](slides/week-06/index.qmd)
+
+Import / export & APIs · Exploratory data analysis · Data cleaning case study
+:::
+
+---
+
+### 📊 Phase 2 — Econometrics (Weeks 7–20)
+
+::: {.week-card}
+**Week 7** · [Introduction to Econometrics](slides/week-07/index.qmd)
+
+What is econometrics? · Economic data types · Simple OLS derivation
+:::
+
+::: {.week-card}
+**Week 8** · [OLS: Theory & Properties](slides/week-08/index.qmd)
+
+Gauss-Markov theorem · Statistical properties · Python OLS from scratch
+:::
+
+::: {.week-card}
+**Week 9** · [Inference in OLS](slides/week-09/index.qmd)
+
+Hypothesis testing · Confidence intervals · *t* and *F* tests in Python
+:::
+
+::: {.week-card}
+**Week 10** · [Multiple Linear Regression](slides/week-10/index.qmd)
+
+MLR setup · Interpretation · Partial effects & Python implementation
+:::
+
+::: {.week-card}
+**Week 11** · [Multicollinearity](slides/week-11/index.qmd)
+
+Detection · Consequences · Remedies & VIF in Python
+:::
+
+::: {.week-card}
+**Week 12** · [Heteroscedasticity](slides/week-12/index.qmd)
+
+Nature & consequences · Detection tests · WLS & robust standard errors
+:::
+
+::: {.week-card}
+**Week 13** · [Dummy Variables](slides/week-13/index.qmd)
+
+Qualitative predictors · Interaction terms · Structural breaks in Python
+:::
+
+::: {.week-card}
+**Week 14** · [Nonlinear Regression](slides/week-14/index.qmd)
+
+Log & polynomial models · Splines · Python curve fitting
+:::
+
+::: {.week-card}
+**Week 15** · [Qualitative Response Models](slides/week-15/index.qmd)
+
+Linear probability model · Logit · Probit in Python
+:::
+
+::: {.week-card}
+**Week 16** · [Model Specification](slides/week-16/index.qmd)
+
+Omitted variable bias · RESET test · AIC / BIC model selection
+:::
+
+::: {.week-card}
+**Week 17** · [Panel Data Analysis](slides/week-17/index.qmd)
+
+Pooled vs fixed vs random effects · Hausman test · Python implementation
+:::
+
+::: {.week-card}
+**Week 18** · [Autocorrelation](slides/week-18/index.qmd)
+
+Nature & causes · Durbin-Watson & Breusch-Godfrey tests · Cochrane-Orcutt
+:::
+
+::: {.week-card}
+**Week 19** · [Time Series: Basics](slides/week-19/index.qmd)
+
+Stationarity & unit roots · ACF / PACF · ADF test in Python
+:::
+
+::: {.week-card}
+**Week 20** · [Time Series: Forecasting](slides/week-20/index.qmd)
+
+ARIMA models · Forecast evaluation · Course review
+:::
+
+---
+
+> **Interactive Slides:** All lecture slides include live Python code cells powered by [Pyodide](https://pyodide.org) — run Python directly in your browser, no installation needed.

@@ -1,0 +1,47 @@
+---
+title: "Course Schedule"
+subtitle: "20 Weeks · 3 Lectures Each · 60 Total"
+---
+
+The course runs for 20 weeks. Each week consists of three 50-minute lectures. Weeks 1–6 cover Python fundamentals; Weeks 7–20 cover econometric theory and application.
+
+---
+
+## Phase 1 — Python Foundations (Weeks 1–6) {.badge-python}
+
+| Week | Title | Lecture 1 | Lecture 2 | Lecture 3 |
+|:---:|---|---|---|---|
+| [1](slides/week-01/index.qmd) | Python Environment & Basics | Getting Started with Python | Variables & Data Types | Operators & Expressions |
+| [2](slides/week-02/index.qmd) | Control Flow & Functions | Conditionals & Loops | Functions & Scope | List Comprehensions & Lambda |
+| [3](slides/week-03/index.qmd) | NumPy for Economics | Arrays & Vectorisation | Linear Algebra with NumPy | Statistical Operations |
+| [4](slides/week-04/index.qmd) | Pandas & Data Wrangling | Series & DataFrames | Merge, Reshape & Groupby | Real Agricultural Data |
+| [5](slides/week-05/index.qmd) | Data Visualisation | Matplotlib Foundations | Seaborn Statistical Charts | Interactive Plots |
+| [6](slides/week-06/index.qmd) | Working with Real Data | Import, Export & APIs | Exploratory Data Analysis | Data Cleaning Case Study |
+
+---
+
+## Phase 2 — Econometrics (Weeks 7–20) {.badge-econometrics}
+
+| Week | Title | Lecture 1 | Lecture 2 | Lecture 3 |
+|:---:|---|---|---|---|
+| [7](slides/week-07/index.qmd) | Introduction to Econometrics | What is Econometrics? | Economic Data Types | Simple OLS Derivation |
+| [8](slides/week-08/index.qmd) | OLS: Theory & Properties | Gauss-Markov Theorem | Statistical Properties of OLS | Python OLS from Scratch |
+| [9](slides/week-09/index.qmd) | Inference in OLS | Hypothesis Testing | Confidence Intervals | *t* and *F* Tests in Python |
+| [10](slides/week-10/index.qmd) | Multiple Linear Regression | MLR Setup & Estimation | Interpretation of Coefficients | Partial Effects in Python |
+| [11](slides/week-11/index.qmd) | Multicollinearity | Nature & Detection | Consequences | VIF & Remedies in Python |
+| [12](slides/week-12/index.qmd) | Heteroscedasticity | Nature & Consequences | Detection Tests | WLS & Robust SE in Python |
+| [13](slides/week-13/index.qmd) | Dummy Variables | Qualitative Predictors | Interaction Terms | Structural Breaks in Python |
+| [14](slides/week-14/index.qmd) | Nonlinear Regression | Log & Polynomial Models | Splines | Python Curve Fitting |
+| [15](slides/week-15/index.qmd) | Qualitative Response Models | Linear Probability Model | Logit Model | Probit Model in Python |
+| [16](slides/week-16/index.qmd) | Model Specification | Omitted Variable Bias | RESET Test | AIC / BIC Selection |
+| [17](slides/week-17/index.qmd) | Panel Data Analysis | Pooled OLS | Fixed Effects | Random Effects & Hausman Test |
+| [18](slides/week-18/index.qmd) | Autocorrelation | Nature & Causes | DW & BG Tests | Cochrane-Orcutt in Python |
+| [19](slides/week-19/index.qmd) | Time Series: Basics | Stationarity | Unit Roots & ADF Test | ACF / PACF in Python |
+| [20](slides/week-20/index.qmd) | Time Series: Forecasting | ARIMA Models | Forecast Evaluation | Course Review |
+
+---
+
+::: {.callout-tip}
+## Interactive Slides
+Click any week number to open that week's slide index. All decks include live Pyodide cells — run Python directly in your browser.
+:::

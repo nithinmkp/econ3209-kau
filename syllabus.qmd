@@ -1,0 +1,95 @@
+---
+title: "Course Syllabus"
+subtitle: "ECON 3209 — Econometrics with Python"
+---
+
+## Course Information
+
+| | |
+|---|---|
+| **Course Title** | Econometrics with Python |
+| **Course Code** | ECON 3209 |
+| **Credits** | 3 |
+| **Programme** | BSc Hons Cooperation & Banking |
+| **Semester** | 6th Semester |
+| **University** | Kerala Agricultural University |
+| **Duration** | 20 Weeks (60 Lectures) |
+
+---
+
+## Course Description
+
+This course introduces students of Cooperation and Banking to the theory and practice of econometrics using the Python programming language. The first six weeks provide a thorough grounding in Python for data analysis — covering programming fundamentals, numerical computing with NumPy, data wrangling with Pandas, and scientific visualisation. The remaining fourteen weeks develop the classical econometric toolkit: from simple and multiple linear regression through diagnostic testing, qualitative response models, panel data, and time series analysis.
+
+All lecture slides are interactive — powered by Pyodide, students can run Python code directly in their browser during class and for self-study.
+
+---
+
+## Learning Outcomes
+
+Upon successful completion of this course, students will be able to:
+
+1. Write Python programs to import, clean, and explore economic and agricultural datasets.
+2. Produce publication-quality statistical charts using Matplotlib and Seaborn.
+3. Estimate and interpret simple and multiple regression models using Python's `statsmodels`.
+4. Diagnose violations of OLS assumptions (multicollinearity, heteroscedasticity, autocorrelation) and apply appropriate corrections.
+5. Model qualitative outcomes using logit and probit regression.
+6. Apply panel data methods (fixed and random effects) to agricultural and cooperative data.
+7. Test for unit roots and estimate ARIMA models for economic time series.
+8. Communicate econometric findings clearly in written and oral form.
+
+---
+
+## Textbooks & References
+
+### Primary
+- Gujarati, D.N. & Porter, D.C. (2009). *Basic Econometrics* (5th ed.). McGraw-Hill.
+- Stock, J.H. & Watson, M.W. (2019). *Introduction to Econometrics* (4th ed.). Pearson.
+
+### Python Resources
+- VanderPlas, J. (2023). *Python Data Science Handbook* (2nd ed.). O'Reilly.
+- McKinney, W. (2022). *Python for Data Analysis* (3rd ed.). O'Reilly.
+
+### Supplementary
+- Dougherty, C. (2016). *Introduction to Econometrics* (5th ed.). Oxford University Press.
+- Greene, W.H. (2018). *Econometric Analysis* (8th ed.). Pearson.
+
+---
+
+## Assessment
+
+| Component | Weight | Details |
+|---|---|---|
+| Internal Assessment | 30% | Assignments, class participation, practical exercises |
+| Mid-Semester Examination | 20% | Written paper (Weeks 1–10) |
+| End-Semester Examination | 50% | Written theory + data analysis section |
+
+### Assignment Policy
+- Assignments are to be submitted as Jupyter notebooks (`.ipynb`) or Python scripts (`.py`).
+- Late submissions will incur a 10% deduction per day.
+- Plagiarism and AI-generated code submitted without disclosure will be penalised.
+
+---
+
+## Software
+
+This course uses **Python 3.11+** with the Anaconda distribution. All required libraries are open-source:
+
+```
+numpy       pandas       matplotlib   seaborn
+scipy       statsmodels  linearmodels jupyter
+```
+
+> **No installation needed for lectures.** All interactive slide decks run Python via [Pyodide](https://pyodide.org) directly in your browser.
+
+---
+
+## Academic Integrity
+
+Students are expected to adhere to the Kerala Agricultural University Academic Integrity Policy. All submitted work must be the student's own. Discussing ideas is encouraged; copying code is not.
+
+---
+
+## Accessibility
+
+Students requiring accommodations should contact the course instructor during the first week of the semester.

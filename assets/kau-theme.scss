@@ -1,0 +1,169 @@
+/*-- scss:defaults --*/
+
+// KAU Brand Colors
+$kau-green:   #5DBE50;
+$kau-gold:    #DAB300;
+$kau-dark:    #1A3300;
+$kau-light:   #E8F5E2;
+$kau-tint:    #F5FAF3;
+
+/*-- scss:rules --*/
+
+/*-- KAU Brand Theme for ECON 3209 --*/
+
+/*-- Colour variables --*/
+:root {
+  --kau-green:   #5DBE50;
+  --kau-gold:    #DAB300;
+  --kau-dark:    #1A3300;
+  --kau-light:   #E8F5E2;
+  --kau-tint:    #F5FAF3;
+}
+
+/*-- Navbar — keep dark green for white text contrast --*/
+.navbar {
+  background-color: #1A3300 !important;
+  border-bottom: 3px solid var(--kau-gold);
+}
+
+.navbar-brand, .nav-link {
+  color: #ffffff !important;
+}
+
+.nav-link:hover {
+  color: var(--kau-gold) !important;
+}
+
+/*-- Hero / banner --*/
+.hero-banner {
+  background: linear-gradient(135deg, var(--kau-dark) 0%, var(--kau-green) 100%);
+  color: #fff;
+  padding: 3rem 2rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  border-left: 6px solid var(--kau-gold);
+}
+
+.hero-banner h1 {
+  color: var(--kau-gold);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-banner p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/*-- Section headings --*/
+h1, h2, h3 {
+  color: var(--kau-dark);
+}
+
+h2 {
+  border-bottom: 2px solid var(--kau-gold);
+  padding-bottom: 0.3rem;
+}
+
+/*-- Week cards --*/
+.week-card {
+  border-left: 4px solid var(--kau-green);
+  background: var(--kau-tint);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  border-radius: 0 0.4rem 0.4rem 0;
+  transition: box-shadow 0.2s;
+}
+
+.week-card:hover {
+  box-shadow: 0 2px 8px rgba(38,122,27,0.2);
+}
+
+.week-card .week-num {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--kau-green);
+  font-weight: 700;
+}
+
+.week-card h4 {
+  margin: 0.2rem 0;
+  color: var(--kau-dark);
+}
+
+/*-- Phase badges --*/
+.badge-python {
+  background-color: var(--kau-green);
+  color: #fff;
+  padding: 0.2em 0.7em;
+  border-radius: 1em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-econometrics {
+  background-color: var(--kau-dark);
+  color: var(--kau-gold);
+  padding: 0.2em 0.7em;
+  border-radius: 1em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/*-- Info boxes --*/
+.callout-note {
+  border-left-color: var(--kau-green) !important;
+}
+
+.callout-tip {
+  border-left-color: var(--kau-gold) !important;
+}
+
+/*-- Footer --*/
+.nav-footer {
+  background-color: var(--kau-dark) !important;
+  color: var(--kau-gold) !important;
+  border-top: 3px solid var(--kau-gold);
+}
+
+/*-- Code blocks --*/
+pre.sourceCode {
+  border-left: 3px solid var(--kau-green);
+  background: #f8fdf8;
+}
+
+/*-- Buttons & links --*/
+a {
+  color: var(--kau-green);
+}
+
+a:hover {
+  color: var(--kau-dark);
+}
+
+.btn-primary {
+  background-color: var(--kau-green);
+  border-color: var(--kau-green);
+}
+
+.btn-primary:hover {
+  background-color: var(--kau-dark);
+  border-color: var(--kau-dark);
+}
+
+/*-- Schedule table --*/
+.schedule-table thead {
+  background-color: var(--kau-green);
+  color: #fff;
+}
+
+.schedule-table tr.python-row {
+  background-color: var(--kau-tint);
+}
+
+.schedule-table tr.econ-row {
+  background-color: #fff;
+}
+
+

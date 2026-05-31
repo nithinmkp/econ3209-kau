@@ -1,0 +1,56 @@
+# Shared metadata for all lecture slide decks
+# Inherited by every .qmd file under slides/
+
+format:
+  revealjs:
+    theme: [default, ../../assets/slides-theme.scss]
+    width: 1280
+    height: 720
+    slide-number: true
+    show-slide-number: all
+    progress: true
+    history: true
+    hash: true
+    controls: true
+    controls-layout: bottom-right
+    transition: slide
+    background-transition: fade
+    incremental: false
+    smaller: false
+    scrollable: true
+    preview-links: auto
+    footer: "ECON 3209 — Kerala Agricultural University"
+    logo: ../../assets/kau-logo.png
+    chalkboard:
+      theme: chalkboard
+    highlight-style: github
+    code-line-numbers: true
+    html-math-method: mathjax
+    include-in-header:
+      text: |
+        <style>
+          .reveal .slide-number { color: #DAB300; }
+          .reveal footer { color: #5DBE50; font-size: 0.7em; }
+          /* Hide Pyodide startup status banner */
+          .qp-status, .qp-status-container,
+          div[class*="pyodide-status"], div[id*="pyodide-status"],
+          .cell-output-display > p:first-child:empty { display: none !important; }
+        </style>
+
+filters:
+  - pyodide
+
+pyodide:
+  show-startup-message: false
+  packages:
+    - numpy
+    - pandas
+    - matplotlib
+    - scipy
+    - statsmodels
+    - seaborn
+
+execute:
+  echo: true
+  warning: false
+  message: false

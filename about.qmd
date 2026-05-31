@@ -1,0 +1,31 @@
+---
+title: "About"
+---
+
+## Course Instructor
+
+This course is offered by the **Department of Agricultural Economics**, Kerala Agricultural University, as part of the BSc Hons Cooperation and Banking programme (6th Semester).
+
+---
+
+## About the Course
+
+**ECON 3209 — Econometrics with Python** introduces students to empirical economic analysis using Python. The course integrates theoretical econometrics with hands-on computational practice, preparing students for data-driven research in cooperative banking, agricultural economics, and allied fields.
+
+---
+
+## About Kerala Agricultural University
+
+[Kerala Agricultural University (KAU)](https://kau.in) is the premier agricultural university in Kerala, India. Established in 1971, KAU offers undergraduate, postgraduate, and doctoral programmes in agriculture, horticulture, forestry, fisheries, food science, cooperation and banking, and other allied sciences.
+
+---
+
+## Technology
+
+This course website and all interactive slide decks are built with:
+
+- [Quarto](https://quarto.org) — scientific and technical publishing
+- [Pyodide](https://pyodide.org) — Python in the browser (via WebAssembly)
+- [quarto-pyodide](https://github.com/coatless/quarto-pyodide) — Quarto extension for live Python cells
+
+All course materials are open and freely accessible.
