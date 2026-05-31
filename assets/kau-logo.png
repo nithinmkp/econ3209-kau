@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
-  <circle cx="60" cy="60" r="58" fill="#267A1B" stroke="#DAB300" stroke-width="3"/>
-  <text x="60" y="50" font-family="serif" font-size="18" font-weight="bold" fill="#DAB300" text-anchor="middle">KAU</text>
-  <text x="60" y="72" font-family="serif" font-size="8" fill="#FFFFFF" text-anchor="middle">Kerala Agricultural</text>
-  <text x="60" y="84" font-family="serif" font-size="8" fill="#FFFFFF" text-anchor="middle">University</text>
-  <path d="M30 94 Q60 106 90 94" stroke="#DAB300" stroke-width="1.5" fill="none"/>
-</svg>
