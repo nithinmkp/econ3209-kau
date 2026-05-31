@@ -1,0 +1,17 @@
+---
+title: "Week 14 --- Nonlinear Regression"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+---
+
+## Week 14 Overview
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | Log & Polynomial Models | [Open →](lecture-01.qmd) |
+| Lecture 2 | Splines | [Open →](lecture-02.qmd) |
+| Lecture 3 | Python Curve Fitting | [Open →](lecture-03.qmd) |
+
+::: {.callout-note}
+Slides for this week are being prepared. Check back soon.
+:::
+
