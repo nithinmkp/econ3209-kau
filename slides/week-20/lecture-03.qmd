@@ -24,7 +24,7 @@ By the end of this lecture, you should be able to:
 ## Full Course Map
 
 ::: {.cols-2}
-::: 
+::: {}
 | Week | Topic |
 |---|---|
 | 1 | Python Environment & Basics |
@@ -38,7 +38,7 @@ By the end of this lecture, you should be able to:
 | 9 | Inference in OLS |
 | 10 | Multiple Linear Regression |
 :::
-::: 
+::: {}
 | Week | Topic |
 |---|---|
 | 11 | Multicollinearity |
