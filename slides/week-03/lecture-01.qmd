@@ -1,0 +1,265 @@
+---
+title: "Arrays & Vectorisation"
+subtitle: "ECON 3209 · Week 3, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Create and inspect NumPy arrays using `ndarray`
+2. Index and slice arrays efficiently
+3. Perform element-wise vectorised operations
+4. Use boolean masks and broadcasting in economic examples
+5. Explain why vectorisation is valuable in econometrics
+
+---
+
+## Why NumPy for Economics?
+
+- Economic data often comes as columns of numbers
+- Python lists are flexible but not ideal for heavy numerical work
+- NumPy stores numbers in efficient arrays called `ndarray`
+- It supports fast vectorised operations on entire datasets
+- Most scientific Python libraries are built on top of NumPy
+
+::: {.highlight-box}
+In econometrics, NumPy lets us think in vectors and matrices rather than one observation at a time.
+:::
+
+---
+
+## Creating Arrays
+
+```{pyodide-python}
+import numpy as np
+
+rice_yield = np.array([3200, 3500, 3100, 3800])
+zeros = np.zeros(4)
+ones = np.ones(3)
+years = np.arange(2021, 2026)
+
+print(rice_yield)
+print(zeros)
+print(ones)
+print(years)
+print(type(rice_yield))
+```
+
+- `np.array()` converts a Python list into an array
+- `np.zeros()` and `np.ones()` create standard arrays quickly
+- `np.arange()` is useful for evenly spaced integer sequences
+- NumPy arrays usually contain one numeric type throughout
+
+---
+
+## Shape, Size, and Data Type
+
+```{pyodide-python}
+import numpy as np
+
+matrix = np.array([[3200, 2800], [3500, 3000], [3400, 2950]])
+print("Shape:", matrix.shape)
+print("Size:", matrix.size)
+print("Dimensions:", matrix.ndim)
+print("Data type:", matrix.dtype)
+```
+
+- `.shape` tells us rows and columns
+- `.size` counts total elements
+- `.ndim` shows number of dimensions
+- `.dtype` tells us the numeric type such as `int64` or `float64`
+- These properties matter when preparing data for models
+
+---
+
+## Indexing and Slicing
+
+```{pyodide-python}
+import numpy as np
+
+deposits = np.array([125, 138, 117, 142, 130])
+
+print("First district:", deposits[0])
+print("Last district:", deposits[-1])
+print("Middle three:", deposits[1:4])
+```
+
+- NumPy uses zero-based indexing like Python lists
+- Slices use the pattern `[start:stop]`
+- The `stop` position is excluded
+- Indexing and slicing help isolate years, districts, or variables
+
+---
+
+## Vectorised Arithmetic
+
+```{pyodide-python}
+import numpy as np
+
+prices = np.array([28, 32, 30, 35])
+quantities = np.array([3200, 2800, 3500, 3000])
+revenue = prices * quantities
+
+print("Prices:", prices)
+print("Quantities:", quantities)
+print("Revenue:", revenue)
+```
+
+- Operations happen element by element
+- No explicit loop is needed
+- This is called **vectorisation**
+- It is faster and often easier to read than manual looping
+
+---
+
+## Broadcasting
+
+- Broadcasting lets NumPy combine arrays of compatible shapes
+- A single number can be applied to every element of an array
+- This is useful for inflation adjustments, tax changes, or subsidies
+- NumPy expands smaller objects automatically when rules match
+- Understanding shapes prevents broadcasting errors
+
+```{pyodide-python}
+import numpy as np
+
+loan_amounts = np.array([50000, 80000, 120000])
+processing_fee = 500
+final_amounts = loan_amounts + processing_fee
+
+print(final_amounts)
+```
+
+---
+
+## Boolean Masks
+
+```{pyodide-python}
+import numpy as np
+
+rubber_prices = np.array([162, 158, 171, 149, 176])
+high_price = rubber_prices >= 165
+
+print("Mask:", high_price)
+print("Selected prices:", rubber_prices[high_price])
+```
+
+- A boolean mask is an array of `True` and `False`
+- It filters values using economic rules
+- This is a powerful alternative to writing manual loops
+- We often combine masks when cleaning or subsetting data
+
+---
+
+## Vectorised Growth Calculations
+
+```{pyodide-python}
+import numpy as np
+
+deposits = np.array([110, 118, 125, 133, 145], dtype=float)
+growth_rate = (deposits[1:] - deposits[:-1]) / deposits[:-1] * 100
+
+print("Deposits:", deposits)
+print("Annual growth rates (%):", np.round(growth_rate, 2))
+```
+
+- `deposits[1:]` means all but the first observation
+- `deposits[:-1]` means all but the last observation
+- Vectorisation lets us compute growth for all adjacent years at once
+- This pattern appears in finance, prices, and productivity analysis
+
+---
+
+## Why Vectorisation Beats Manual Loops
+
+::: {.cols-2}
+::: {}
+### Conceptual Benefits
+- Closer to mathematical notation
+- Less repetitive code
+- Easier to combine with linear algebra
+- Lower chance of indexing mistakes
+:::
+::: {}
+### Practical Benefits
+- Faster for large datasets
+- Works well with pandas and statsmodels
+- Easy to debug intermediate arrays
+- Standard in scientific Python workflows
+:::
+:::
+
+---
+
+## Applied Example: Fertiliser Subsidy Shock
+
+```{pyodide-python}
+import numpy as np
+
+fertiliser_cost = np.array([4200, 4600, 4400, 4800], dtype=float)
+subsidy_rate = np.array([0.10, 0.12, 0.08, 0.15])
+net_cost = fertiliser_cost * (1 - subsidy_rate)
+
+print("Original cost:", fertiliser_cost)
+print("Subsidy rate:", subsidy_rate)
+print("Net cost after subsidy:", np.round(net_cost, 2))
+```
+
+- Here each district has its own subsidy rate
+- NumPy still handles the operation element by element
+- This is a natural way to model policy differences across observations
+- Arrays make policy simulation much easier
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a NumPy array called `yields` with values `3000, 3200, 2900, 3600, 3400`.
+
+1. Add `200` to every value to represent improved irrigation.
+2. Create a boolean mask for yields above `3300`.
+3. Print only the improved yields above `3300`.
+:::
+
+```{pyodide-python}
+import numpy as np
+
+# Write your solution here
+yields = np.array([])
+improved = yields
+mask = []
+
+print(improved)
+print(mask)
+print(improved[mask])
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ NumPy arrays store numerical data efficiently
+- ✅ Array attributes like `.shape` and `.dtype` describe structure
+- ✅ Vectorised operations work on whole arrays at once
+- ✅ Boolean masks make filtering elegant and fast
+- ✅ Broadcasting applies smaller objects across larger arrays
+- ✅ NumPy is the numerical foundation for econometrics in Python
+
+---
+
+## Next Lecture
+
+### Linear Algebra with NumPy
+
+- We will extend arrays into vectors and matrices
+- You will learn matrix multiplication, solving systems, and eigenvalues
+- These tools connect directly to regression algebra
+

@@ -1,0 +1,17 @@
+---
+title: "Week 3 --- NumPy for Economics"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+---
+
+## Week 3 Overview
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | Arrays & Vectorisation | [Open →](lecture-01.qmd) |
+| Lecture 2 | Linear Algebra with NumPy | [Open →](lecture-02.qmd) |
+| Lecture 3 | Statistical Operations | [Open →](lecture-03.qmd) |
+
+::: {.callout-note}
+Slides for this week are being prepared. Check back soon.
+:::
+
