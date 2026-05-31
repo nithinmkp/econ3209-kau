@@ -144,27 +144,41 @@ $selection-bg:  $kau-gold;
   padding: 0;
 }
 
-/*-- Pyodide / WASM interactive cells --*/
-.pyodide-cell-editor-area {
+/*-- Pyodide / WASM interactive cells (quarto-pyodide extension) --*/
+.qpyodide-editor {
+  border: 1px solid #444 !important;
   border-left: 4px solid #DAB300 !important;
-  border-radius: 0 0.3em 0.3em 0 !important;
+  border-radius: 0.3em !important;
 }
 
-.pyodide-cell-run-button {
-  background-color: #7AB87A !important;
-  border-color: #7AB87A !important;
+.qpyodide-editor-toolbar {
+  background-color: #2a2a2a !important;
+}
+
+.qpyodide-button {
+  background-color: #4a8a4a !important;
   color: #fff !important;
+  border-color: #4a8a4a !important;
 }
 
-.pyodide-cell-run-button:hover {
+.qpyodide-button:hover {
   background-color: #1A3300 !important;
 }
 
-.pyodide-cell-output-area {
-  background: #f5faf3 !important;
-  border-left: 4px solid #7AB87A !important;
+.qpyodide-output-code-stdout {
+  color: #d4d4d4 !important;
+  background-color: #1e1e1e !important;
   font-family: 'Fira Code', monospace;
-  font-size: 0.8em;
+  font-size: 0.78em;
+  padding: 0.6em 1em;
+  border-left: 4px solid #7AB87A !important;
+}
+
+.qpyodide-output-code-stderr {
+  color: #f48771 !important;
+  background-color: #1e1e1e !important;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.78em;
 }
 
 /*-- Callout / info boxes --*/
