@@ -1,0 +1,317 @@
+---
+title: "Getting Started with Python"
+subtitle: "ECON 3209 · Week 1, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Explain what Python is and why economists use it
+2. Launch and navigate a Jupyter Notebook
+3. Run your first Python commands in the browser
+4. Identify the key Python libraries used in this course
+
+---
+
+## What is Python?
+
+::: {.cols-2}
+::: {}
+### A General-Purpose Language
+- Created by **Guido van Rossum** (1991)
+- Readable, beginner-friendly syntax
+- Massive scientific ecosystem
+- Free and open-source
+:::
+::: {}
+### Why Python for Econometrics?
+- `numpy` — fast numerical arrays
+- `pandas` — data wrangling
+- `matplotlib` / `seaborn` — charts
+- `statsmodels` — regression models
+- `scipy` — statistical tests
+:::
+:::
+
+::: {.highlight-box}
+💡 Python is now the **most popular language for data science** worldwide — and is increasingly standard in economics research.
+:::
+
+---
+
+## Python vs Other Tools
+
+| Feature | Python | R | Stata | Excel |
+|---|:---:|:---:|:---:|:---:|
+| Free | ✅ | ✅ | ❌ | ❌ |
+| General purpose | ✅ | ⚠️ | ❌ | ❌ |
+| Data wrangling | ✅ | ✅ | ✅ | ⚠️ |
+| Econometrics | ✅ | ✅ | ✅ | ❌ |
+| Machine learning | ✅ | ✅ | ❌ | ❌ |
+| Industry use | ✅ | ⚠️ | ❌ | ✅ |
+
+::: {.gold-box}
+For this course we use **Python** — the skills you learn generalise beyond economics to finance, data engineering, and research.
+:::
+
+---
+
+## The Python Ecosystem
+
+```{python}
+#| echo: false
+#| eval: false
+# Just illustrative — no output
+```
+
+::: {.cols-2}
+::: {}
+**Scientific Stack**
+- `numpy` — arrays & math
+- `scipy` — statistics
+- `pandas` — data tables
+- `matplotlib` — plotting
+- `statsmodels` — models
+
+:::
+::: {}
+**Working Environments**
+- **Jupyter Notebook** — `.ipynb` files
+- **JupyterLab** — enhanced IDE
+- **VS Code** — popular editor
+- **Spyder** — MATLAB-like IDE
+- **Google Colab** — cloud notebooks
+:::
+:::
+
+---
+
+## Your First Python Cell {background-color="#5DBE50"}
+
+::: {.gold-box}
+**Try it now!** Click **▶ Run** below — Python runs directly in your browser. No installation needed.
+:::
+
+```{pyodide-python}
+# Welcome to ECON 3209!
+print("Hello, Kerala Agricultural University!")
+print("Python version check:")
+import sys
+print(f"Python {sys.version}")
+```
+
+---
+
+## Jupyter Notebooks
+
+A Jupyter Notebook has two types of **cells**:
+
+::: {.cols-2}
+::: {}
+### 📝 Markdown Cells
+- Write formatted text
+- Add headings, lists, equations
+- Use `# Heading`, `**bold**`, `*italic*`
+- LaTeX math: `$y = \beta_0 + \beta_1 x$`
+
+:::
+::: {}
+### 💻 Code Cells
+- Type Python code
+- Press `Shift + Enter` to run
+- Output appears below the cell
+- Cells share a **kernel** (memory)
+:::
+:::
+
+::: {.highlight-box}
+**Shortcut keys:** `Shift+Enter` (run & advance) · `Ctrl+Enter` (run in place) · `A` (insert above) · `B` (insert below) · `M` (to markdown) · `Y` (to code)
+:::
+
+---
+
+## Arithmetic in Python
+
+```{pyodide-python}
+# Basic arithmetic — Python as a calculator
+print(2 + 3)        # Addition
+print(10 - 4)       # Subtraction
+print(6 * 7)        # Multiplication
+print(15 / 4)       # Division (always float)
+print(15 // 4)      # Integer (floor) division
+print(15 % 4)       # Remainder (modulo)
+print(2 ** 10)      # Exponentiation: 2^10
+```
+
+---
+
+## Order of Operations
+
+Python follows standard **BODMAS/PEMDAS** rules:
+
+```{pyodide-python}
+# BODMAS: Brackets, Orders, Division/Multiplication, Addition/Subtraction
+print(2 + 3 * 4)        # = 14 (not 20)
+print((2 + 3) * 4)      # = 20 (brackets first)
+print(2 ** 3 ** 2)      # = 512 (right-associative: 2^(3^2) = 2^9)
+print((2 ** 3) ** 2)    # = 64  (left-to-right with brackets)
+print(10 / 2 + 3)       # = 8.0
+print(10 / (2 + 3))     # = 2.0
+```
+
+---
+
+## The `print()` Function
+
+```{pyodide-python}
+# print() sends output to the screen
+print("Econometrics is the application of mathematics,")
+print("statistical methods, and computer science")
+print("to economic data.\n")          # \n = newline
+
+# Combining text and numbers
+gdp = 18245.6
+print("GDP of Kerala (₹ Crore):", gdp)
+print(f"GDP: ₹{gdp:,.1f} Crore")     # f-string formatting
+```
+
+---
+
+## Comments in Python
+
+```{pyodide-python}
+# This is a single-line comment — Python ignores everything after #
+
+x = 42   # Comments can go at the end of a line too
+
+"""
+This is a multi-line string.
+Often used as a docstring at the top of a file or function.
+Python does NOT execute this.
+"""
+
+# Comments are crucial — explain WHY, not just WHAT
+# Bad:  x = x + 1         # increment x
+# Good: x = x + 1         # move to next observation in the loop
+print("Comments keep your code readable!")
+```
+
+---
+
+## Importing Libraries
+
+```{pyodide-python}
+# Import the libraries we'll use all semester
+import numpy as np          # arrays & math (alias: np)
+import pandas as pd         # data wrangling (alias: pd)
+import matplotlib.pyplot as plt  # plotting (alias: plt)
+
+# Check they loaded correctly
+print("NumPy version:", np.__version__)
+print("Pandas version:", pd.__version__)
+
+# Quick test: numpy can do math fast
+arr = np.array([1, 4, 9, 16, 25])
+print("Square roots:", np.sqrt(arr))
+```
+
+---
+
+## Getting Help
+
+```{pyodide-python}
+# Three ways to get help in Python
+
+# 1. Built-in help() function
+help(print)
+```
+
+```{pyodide-python}
+# 2. ? operator (in Jupyter) — uncomment in a notebook:
+# print?
+
+# 3. dir() — list all attributes of an object
+import numpy as np
+methods = [m for m in dir(np) if not m.startswith('_')]
+print("Some NumPy functions:", methods[:15])
+```
+
+---
+
+## Course Software Setup
+
+::: {.callout-note}
+## Installation (for home use)
+1. Download **Anaconda** from [anaconda.com](https://anaconda.com) (Python 3.11+)
+2. Launch **Jupyter Notebook** from Anaconda Navigator
+3. All required packages (`numpy`, `pandas`, `matplotlib`, `statsmodels`) are included
+
+For **Google Colab** (no install): [colab.research.google.com](https://colab.research.google.com)
+:::
+
+::: {.callout-tip}
+## In Lectures
+All slide decks use **Pyodide** — Python runs directly in your browser. No setup needed for class.
+:::
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Seconds in a year: $365 \times 24 \times 60 \times 60$ = ?
+2. Compound interest: ₹10,000 at 8% for 5 years — use $A = P(1+r)^t$
+3. `print()` your name and semester
+:::
+
+```{pyodide-python}
+# 1. Seconds in a year
+seconds = 365 * 24 * 60 * 60
+
+# 2. Compound interest: P=10000, r=0.08, t=5
+A = 10000 * (1 + 0.08)**5
+
+# 3. Print your name and semester
+print(f"Seconds in a year: {seconds:,}")
+print(f"Compound interest: ₹{A:,.2f}")
+print("Your name here — 6th Semester")
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ **Python** is free, powerful, and the #1 language for data science
+
+✅ **Jupyter Notebooks** combine code, output, and explanatory text
+
+✅ **Pyodide** runs Python right in this browser — no install needed
+
+✅ Key libraries: `numpy` · `pandas` · `matplotlib` · `statsmodels`
+
+✅ Standard **BODMAS** order of operations applies in Python
+
+✅ **Comments** (`#`) make code readable — use them generously
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 2 — Variables & Data Types**
+
+We will cover:
+- Assigning and naming variables
+- Python's core data types: `int`, `float`, `str`, `bool`
+- Lists, tuples, and dictionaries
+- Type conversion and checking
+:::
+
+

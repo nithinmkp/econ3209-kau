@@ -1,0 +1,26 @@
+---
+title: "Week 1 — Python Environment & Basics"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+listing:
+  contents:
+    - lecture-01.qmd
+    - lecture-02.qmd
+    - lecture-03.qmd
+  type: table
+  fields: [title, subtitle]
+  field-display-names:
+    title: "Lecture"
+    subtitle: "Topic"
+---
+
+## Week 1 Overview
+
+This week introduces the Python programming environment. By the end of this week, you will have Python running on your computer, understand the building blocks of the language, and be able to write simple programs.
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | Getting Started with Python | [Open →](lecture-01.qmd) |
+| Lecture 2 | Variables & Data Types | [Open →](lecture-02.qmd) |
+| Lecture 3 | Operators & Expressions | [Open →](lecture-03.qmd) |
+
+
