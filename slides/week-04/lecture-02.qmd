@@ -1,0 +1,269 @@
+---
+title: "Merge, Reshape & Groupby"
+subtitle: "ECON 3209 · Week 4, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Merge related tables using keys
+2. Understand left, inner, and outer joins conceptually
+3. Reshape data using `melt()` and `pivot_table()`
+4. Aggregate data with `groupby()`
+5. Build tidy tables for agricultural and banking analysis
+
+---
+
+## Why These Tools Matter
+
+- Real projects rarely come in one perfect table
+- We often receive separate files for districts, crops, prices, or institutions
+- We need to combine them, change their shape, and summarise them
+- pandas provides powerful verbs for these tasks
+- Good wrangling prevents errors before estimation begins
+
+---
+
+## The Idea of a Merge
+
+- A merge combines tables using one or more common keys
+- Typical keys include district, year, branch code, or household ID
+- Before merging, always check whether keys are unique and clean
+- Duplicate keys can change the meaning of the final dataset
+- Missing keys may create unmatched observations
+
+::: {.formula}
+Merged table = observations matched on a common identifier such as `(district, year)`
+:::
+
+---
+
+## Example: District Data Merge
+
+```{pyodide-python}
+import pandas as pd
+
+yield_df = pd.DataFrame({
+    "district": ["Thrissur", "Ernakulam", "Palakkad"],
+    "rice_yield": [3200, 3500, 2950]
+})
+
+deposit_df = pd.DataFrame({
+    "district": ["Thrissur", "Ernakulam", "Palakkad"],
+    "deposit_crore": [125, 138, 117]
+})
+
+merged = pd.merge(yield_df, deposit_df, on="district", how="inner")
+print(merged)
+```
+
+- `on=` tells pandas which key to match
+- `how="inner"` keeps only matching rows
+- This is one of the most common wrangling tasks in applied economics
+- Always inspect the merged output immediately
+
+---
+
+## Join Types
+
+::: {.cols-2}
+::: {}
+### Common Options
+- `inner` keeps matched rows only
+- `left` keeps all rows from the left table
+- `right` keeps all rows from the right table
+- `outer` keeps everything from both sides
+:::
+::: {}
+### Why It Matters
+- Different joins answer different questions
+- A left join is common when adding extra variables
+- An inner join can silently drop observations
+- An outer join reveals mismatches to investigate
+:::
+:::
+
+---
+
+## Reshaping with `melt()`
+
+```{pyodide-python}
+import pandas as pd
+
+wide_df = pd.DataFrame({
+    "district": ["Thrissur", "Palakkad"],
+    "rice_2023": [3200, 2950],
+    "rice_2024": [3300, 3050]
+})
+
+long_df = wide_df.melt(id_vars="district", var_name="year", value_name="yield")
+print(long_df)
+```
+
+- Wide data spreads values across many columns
+- Long data stacks them into rows
+- Long format is often better for plotting and grouped analysis
+- `melt()` is the standard wide-to-long function in pandas
+
+---
+
+## Reshaping with `pivot_table()`
+
+```{pyodide-python}
+import pandas as pd
+
+long_df = pd.DataFrame({
+    "district": ["Thrissur", "Thrissur", "Palakkad", "Palakkad"],
+    "year": [2023, 2024, 2023, 2024],
+    "yield": [3200, 3300, 2950, 3050]
+})
+
+wide_again = long_df.pivot_table(index="district", columns="year", values="yield")
+print(wide_again)
+```
+
+- `pivot_table()` often takes long data back to wide format
+- It is useful for reporting tables and dashboards
+- When duplicates exist, `pivot_table()` can aggregate them
+- Tidy reshaping helps ensure one variable per column and one row per unit-time pair
+
+---
+
+## Grouped Aggregation with `groupby()`
+
+```{pyodide-python}
+import pandas as pd
+
+df = pd.DataFrame({
+    "region": ["Central", "Central", "North", "North", "South"],
+    "deposit_crore": [125, 138, 142, 119, 131],
+    "loan_crore": [96, 108, 101, 95, 99]
+})
+
+summary = df.groupby("region")[["deposit_crore", "loan_crore"]].mean()
+print(summary)
+```
+
+- `groupby()` splits data into groups
+- Then we apply summary functions such as mean, sum, or count
+- This is the split-apply-combine pattern
+- It is fundamental for descriptive economics and official statistics
+
+---
+
+## Multiple Aggregations
+
+```{pyodide-python}
+import pandas as pd
+
+df = pd.DataFrame({
+    "crop": ["Rice", "Rice", "Coconut", "Coconut", "Banana"],
+    "yield": [3200, 3300, 9800, 10200, 1800]
+})
+
+summary = df.groupby("crop").agg(
+    mean_yield=("yield", "mean"),
+    max_yield=("yield", "max"),
+    observations=("yield", "count")
+)
+print(summary)
+```
+
+- `.agg()` lets us compute several summaries at once
+- Named aggregations create clear output column names
+- This is very useful for tables in reports and slide decks
+- Group summaries should always be interpreted with sample size in mind
+
+---
+
+## A Simple Wrangling Pipeline
+
+```{pyodide-python}
+import pandas as pd
+
+df = pd.DataFrame({
+    "district": ["Thrissur", "Thrissur", "Palakkad", "Palakkad"],
+    "year": [2023, 2024, 2023, 2024],
+    "deposit_crore": [125, 132, 117, 123]
+})
+
+result = (
+    df.groupby("district", as_index=False)
+      .agg(avg_deposit=("deposit_crore", "mean"))
+      .sort_values("avg_deposit", ascending=False)
+)
+
+print(result)
+```
+
+- Wrangling steps can be chained cleanly
+- Pipelines reduce intermediate clutter
+- Sorting after summarising makes interpretation easier
+- This style is common in data science notebooks and reports
+
+---
+
+## Wrangling Checklist
+
+- Confirm keys before every merge
+- Inspect row counts before and after major operations
+- Prefer tidy long data for plotting and grouped models
+- Use descriptive variable names after reshaping
+- Treat grouping and aggregation as part of economic storytelling, not just coding
+
+::: {.gold-box}
+A clean merge or groupby table is not only technical — it determines whether your final inference is trustworthy.
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create two small DataFrames:
+
+- `bank_df` with `district` and `deposit_crore`
+- `loan_df` with `district` and `loan_crore`
+
+Then:
+1. Merge them by district.
+2. Create a `gap` column equal to deposits minus loans.
+3. Use `groupby()` on a new `region` column to compute average `gap`.
+:::
+
+```{pyodide-python}
+import pandas as pd
+
+# Write your solution here
+bank_df = pd.DataFrame()
+loan_df = pd.DataFrame()
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Merges combine related tables using keys
+- ✅ Join type affects which observations survive
+- ✅ `melt()` converts wide data to long format
+- ✅ `pivot_table()` helps reshape long data for reports
+- ✅ `groupby()` is the core tool for grouped summaries
+- ✅ Careful wrangling is essential before any econometric model
+
+---
+
+## Next Lecture
+
+### Real Agricultural Data
+
+- We will simulate a realistic agricultural data cleaning workflow
+- You will see missing values, type issues, and simple case-study analysis
+- This brings pandas closer to the kinds of datasets used in practice
+
