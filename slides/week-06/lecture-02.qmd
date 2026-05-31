@@ -1,0 +1,209 @@
+---
+title: "Exploratory Data Analysis"
+subtitle: "ECON 3209 · Week 6, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Use `info()`, `describe()`, and `value_counts()` to understand a dataset quickly.
+2. Interpret distributions, category frequencies, and summary statistics in context.
+3. Build simple visualisations such as histograms and bar charts in Python.
+4. Compute and interpret a correlation matrix carefully.
+5. Connect EDA results to later econometric modelling decisions.
+
+---
+
+## Why do EDA before econometrics?
+
+- EDA reveals the structure of the dataset before formal estimation.
+- It helps us detect unusual values, coding mistakes, and missing information.
+- Summary patterns guide variable selection and model specification.
+- In cooperative banking, EDA can show variation across districts or society types.
+- The aim is understanding, not yet causal inference.
+
+---
+
+## Core EDA tools in pandas
+
+- `df.info()` shows variable types and missing values.
+- `df.describe()` summarises numeric variables.
+- `df['var'].value_counts()` summarises categories.
+- Plots help us see shape, skewness, and spread.
+- Correlation tables give a first look at linear association.
+
+---
+
+## Inspecting structure and summary statistics
+
+```{pyodide-python}
+import pandas as pd
+
+eda_df = pd.DataFrame({
+    'district': ['Thrissur', 'Thrissur', 'Palakkad', 'Kottayam', 'Wayanad'],
+    'society_type': ['PACS', 'Urban', 'PACS', 'PACS', 'Service'],
+    'loan_amount_lakh': [18.2, 25.5, 31.0, 22.4, 15.8],
+    'recovery_rate': [93.1, 89.4, 95.0, 91.8, 87.2]
+})
+
+print(eda_df.info())
+print("\n")
+print(eda_df.describe(numeric_only=True))
+```
+
+---
+
+## Reading summary output correctly
+
+- The **mean** gives the average level.
+- The **standard deviation** tells us about spread.
+- **Minimum** and **maximum** reveal the range.
+- Quartiles show the middle 50% of the observations.
+- Always interpret numbers with units: lakhs, percentages, tonnes, hectares.
+
+---
+
+## Counting categories with `value_counts()`
+
+```{pyodide-python}
+print(eda_df['district'].value_counts())
+print("\nSociety types")
+print(eda_df['society_type'].value_counts())
+
+avg_by_type = eda_df.groupby('society_type')['recovery_rate'].mean()
+print("\nAverage recovery rate by type")
+print(avg_by_type)
+```
+
+---
+
+## Visual EDA: what plots tell us
+
+- Histograms show the distribution of a continuous variable.
+- Bar charts work well for categories and counts.
+- Scatter plots help us see relationships between two numeric variables.
+- Visuals can reveal skewness, clusters, and outliers immediately.
+- In agriculture, yield and rainfall plots often reveal seasonality and dispersion.
+
+---
+
+## Histogram and bar chart example
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+axes[0].hist(eda_df['loan_amount_lakh'], bins=4, color='darkgreen', edgecolor='white')
+axes[0].set_title('Loan amount distribution')
+axes[0].set_xlabel('Loan amount (lakh)')
+axes[0].set_ylabel('Count')
+
+eda_df['society_type'].value_counts().plot(kind='bar', ax=axes[1], color='goldenrod')
+axes[1].set_title('Society types')
+axes[1].set_xlabel('Type')
+axes[1].set_ylabel('Count')
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## Correlation matrix: first look at association
+
+- Correlation ranges from $-1$ to $+1$.
+- Positive values mean variables move together; negative values mean opposite movement.
+- A high correlation does **not** prove causation.
+- Correlation only captures linear association.
+- It is a useful starting point before regression.
+
+---
+
+## Calculating and plotting correlations
+
+```{pyodide-python}
+plot_df = pd.DataFrame({
+    'income_lakh': [2.1, 2.8, 3.0, 3.5, 4.2, 4.8],
+    'loan_repayment': [71, 76, 79, 83, 89, 92],
+    'savings_lakh': [0.4, 0.6, 0.8, 0.9, 1.2, 1.4]
+})
+
+print(plot_df.corr(numeric_only=True))
+```
+
+---
+
+## Turning EDA into econometric thinking
+
+- If a variable is strongly skewed, we may later use logs.
+- If categories differ widely, dummy variables may be useful.
+- If there are extreme values, we should check whether they are real or errors.
+- If two regressors move together closely, multicollinearity may matter later.
+- EDA helps us write better research questions and cleaner models.
+
+::: {.highlight-box}
+EDA is not a separate activity from econometrics; it is the foundation for credible econometrics.
+:::
+
+---
+
+## Common EDA mistakes to avoid
+
+- Treating correlations as causal effects.
+- Ignoring units and scales while comparing variables.
+- Drawing conclusions from a very small number of observations.
+- Forgetting to inspect missing values before plotting.
+- Reporting only averages when the full distribution matters.
+
+---
+
+## Mini case: district crop productivity
+
+- Suppose Palakkad shows high rice yield but also high irrigation coverage.
+- Suppose Wayanad shows lower yield with more rainfall variability.
+- EDA suggests which variables may belong in a later regression model.
+- It also helps identify whether district-level comparisons are meaningful.
+- Good EDA leads to better model specification and better interpretation.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a small DataFrame with `district`, `deposit_lakh`, and `loan_lakh` for four cooperative societies. Then print `describe()`, compute `value_counts()` for district, and draw a histogram of `deposit_lakh`.
+:::
+
+```{pyodide-python}
+import pandas as pd
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ EDA helps us understand structure, variation, and quality before estimation.
+- ✅ `info()` and `describe()` are the first tools to inspect a dataset.
+- ✅ `value_counts()` is useful for categorical variables such as district or society type.
+- ✅ Histograms and bar charts reveal shape and composition quickly.
+- ✅ Correlation matrices are useful but do not establish causation.
+- ✅ Strong EDA improves later econometric modelling choices.
+
+---
+
+## Next Lecture
+
+- We will complete a **data cleaning case study** using a Kerala crop dataset.
+- The focus will be missing values, outliers, type conversion, and reproducible cleaning steps.
+
