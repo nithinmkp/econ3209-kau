@@ -1,0 +1,17 @@
+---
+title: "Week 15 --- Qualitative Response Models"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+---
+
+## Week 15 Overview
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | Linear Probability Model | [Open →](lecture-01.qmd) |
+| Lecture 2 | Logit Model | [Open →](lecture-02.qmd) |
+| Lecture 3 | Probit Model in Python | [Open →](lecture-03.qmd) |
+
+::: {.callout-note}
+Slides for this week are being prepared. Check back soon.
+:::
+

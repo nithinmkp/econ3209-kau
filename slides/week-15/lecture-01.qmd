@@ -1,0 +1,289 @@
+---
+title: "Linear Probability Model"
+subtitle: "ECON 3209 · Week 15, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define a binary dependent variable and write the linear probability model (LPM)
+2. estimate an LPM with OLS and interpret coefficients as probability changes
+3. identify why LPM predictions may fall below 0 or above 1
+4. explain heteroskedasticity and other weaknesses of the LPM
+5. use Python to fit and diagnose an LPM for Kerala loan default data
+
+---
+
+## Why Binary Outcomes Need Special Care
+
+- Many econometric questions have **yes/no** outcomes: loan default, insurance enrolment, crop failure, technology adoption.
+- Here, $Y_i \in \{0,1\}$, so $E[Y_i\mid X_i] = P(Y_i=1\mid X_i)$.
+- If we run OLS with a binary $Y$, we get the **linear probability model**:
+
+$$P(Y_i=1\mid X_i) = \beta_0 + \beta_1 X_{1i} + \cdots + \beta_k X_{ki}$$
+
+- The fitted value is interpreted as a predicted probability.
+
+---
+
+## Why Teachers Still Start with LPM
+
+- OLS is familiar, fast, and easy to explain.
+- Coefficients are direct: a one-unit increase in $X_j$ changes probability by $\beta_j$.
+- It works as a useful **baseline model** before logit and probit.
+- In large samples, LPM can approximate average partial effects reasonably well near the center of the probability range.
+- But convenience does **not** remove its weaknesses.
+
+---
+
+## Estimating an LPM in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+lpm = smf.ols("default ~ income + collateral + district", data=df).fit()
+print(df.head())
+print("\nLPM coefficients")
+print(lpm.params.round(4))
+print("\nMean default rate:", round(df['default'].mean(), 3))
+```
+
+---
+
+## Interpreting the Coefficients
+
+- If the income coefficient is $-0.01$, then one extra unit of income lowers default probability by about **1 percentage point**.
+- A dummy variable coefficient compares two groups directly.
+- Example: if the collateral coefficient is $-0.08$, borrowers with collateral have about **8 percentage points lower** default risk, holding other factors constant.
+- This direct interpretation is the main attraction of the LPM.
+
+---
+
+## Predicted Probability Problem
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+lpm = smf.ols("default ~ income + collateral + district", data=df).fit()
+df["pred_lpm"] = lpm.predict(df)
+print(df[["default", "pred_lpm"]].head())
+print("\nMinimum predicted probability:", round(df["pred_lpm"].min(), 3))
+print("Maximum predicted probability:", round(df["pred_lpm"].max(), 3))
+print("Outside [0,1]:", int(((df["pred_lpm"] < 0) | (df["pred_lpm"] > 1)).sum()))
+```
+
+---
+
+## Main Weaknesses of LPM
+
+- **Nonlinearity ignored:** probability often changes more slowly near 0 and 1.
+- **Impossible fitted values:** some predictions can be negative or above 1.
+- **Heteroskedastic errors:** for binary $Y$, the variance depends on $P(Y=1\mid X)$.
+- **Marginal effects forced to be constant:** income has the same effect for every borrower.
+- These limits motivate logit and probit models.
+
+---
+
+## Robust Standard Errors Matter
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+lpm = smf.ols("default ~ income + collateral + district", data=df).fit()
+robust = lpm.get_robustcov_results(cov_type="HC1")
+print("Conventional standard errors")
+print(lpm.bse.round(4))
+print("\nRobust HC1 standard errors")
+print(robust.bse.round(4))
+```
+
+---
+
+## Kerala Context: Cooperative Bank Default
+
+::: {.highlight-box}
+Suppose a KAU student is analysing whether a cooperative bank borrower defaults on a short-term agricultural loan.
+
+Possible regressors:
+- borrower income,
+- collateral ownership,
+- district dummy for high-risk lending zones,
+- past repayment record.
+:::
+
+The LPM gives a quick first look at which borrower characteristics are associated with higher default probability.
+
+---
+
+## Visualising LPM Predictions
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import numpy as np
+import statsmodels.formula.api as smf
+
+lpm = smf.ols("default ~ income + collateral + district", data=df).fit()
+grid = pd.DataFrame({
+    "income": np.linspace(df["income"].min(), df["income"].max(), 80),
+    "collateral": 0,
+    "district": 1,
+})
+grid["pred"] = lpm.predict(grid)
+
+plt.figure(figsize=(7, 4))
+plt.scatter(df["income"], df["default"], alpha=0.25, label="Observed default")
+plt.plot(grid["income"], grid["pred"], color="darkgreen", linewidth=2.5, label="LPM prediction")
+plt.axhline(0, color="grey", linestyle="--", linewidth=1)
+plt.axhline(1, color="grey", linestyle="--", linewidth=1)
+plt.xlabel("Monthly income")
+plt.ylabel("Probability of default")
+plt.title("LPM fitted line for a district-1 borrower without collateral")
+plt.legend()
+plt.show()
+```
+
+---
+
+## When is LPM Still Useful?
+
+- As a **teaching model** to connect OLS with binary outcomes.
+- As a **first-pass descriptive model**.
+- In some large datasets with many fixed effects, LPM remains computationally convenient.
+- But for serious probability prediction, we usually prefer **logit** or **probit** because they keep fitted values inside $[0,1]$.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use the starter code to estimate an LPM for loan default. Then answer: (i) what is the sign of the income effect, (ii) how many fitted values lie outside $[0,1]$, and (iii) would you trust this model for prediction?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+lpm = smf.ols("default ~ income + collateral + district + credit_score", data=df).fit()
+df["pred_lpm"] = lpm.predict(df)
+
+print(lpm.params.round(4))
+print("Outside [0,1]:", int(((df["pred_lpm"] < 0) | (df["pred_lpm"] > 1)).sum()))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ LPM estimates binary outcomes with OLS and interprets fitted values as probabilities.
+- ✅ Its biggest strengths are simplicity and easy coefficient interpretation.
+- ✅ Its biggest weaknesses are heteroskedasticity, constant marginal effects, and impossible predictions.
+- ✅ Robust standard errors improve inference but do not fix the model's functional-form problem.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We move from a linear probability line to the nonlinear logistic curve.
+- You will learn log-odds, maximum likelihood, odds ratios, and marginal effects.
+- Bring today’s intuition about binary outcomes into the logit model.
+:::
+
+
