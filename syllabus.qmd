@@ -42,32 +42,18 @@ Upon successful completion of this course, students will be able to:
 
 ## Textbooks & References
 
-### Primary
-- Gujarati, D.N. & Porter, D.C. (2009). *Basic Econometrics* (5th ed.). McGraw-Hill.
-- Stock, J.H. & Watson, M.W. (2019). *Introduction to Econometrics* (4th ed.). Pearson.
+### Primary Textbooks
+- Maddala, G.S. & Lahiri, K. (2009). *Introduction to Econometrics* (4th ed.). Wiley.
+- Wooldridge, J.M. (2020). *Introductory Econometrics: A Modern Approach* (7th ed.). Cengage.
 
 ### Python Resources
+- Sheppard, K. *Introduction to Python for Econometrics, Statistics and Data Analysis*. University of Oxford. [Available free online](https://www.kevinsheppard.com/teaching/python/notes/)
+- Chen, W. *Python Programming for Economics and Finance*. QuantEcon / ANU. [Available free online](https://python-programming.quantecon.org)
 - VanderPlas, J. (2023). *Python Data Science Handbook* (2nd ed.). O'Reilly.
-- McKinney, W. (2022). *Python for Data Analysis* (3rd ed.). O'Reilly.
 
 ### Supplementary
-- Dougherty, C. (2016). *Introduction to Econometrics* (5th ed.). Oxford University Press.
 - Greene, W.H. (2018). *Econometric Analysis* (8th ed.). Pearson.
-
----
-
-## Assessment
-
-| Component | Weight | Details |
-|---|---|---|
-| Internal Assessment | 30% | Assignments, class participation, practical exercises |
-| Mid-Semester Examination | 20% | Written paper (Weeks 1–10) |
-| End-Semester Examination | 50% | Written theory + data analysis section |
-
-### Assignment Policy
-- Assignments are to be submitted as Jupyter notebooks (`.ipynb`) or Python scripts (`.py`).
-- Late submissions will incur a 10% deduction per day.
-- Plagiarism and AI-generated code submitted without disclosure will be penalised.
+- Gujarati, D.N. & Porter, D.C. (2009). *Basic Econometrics* (5th ed.). McGraw-Hill.
 
 ---
 
@@ -87,10 +73,4 @@ scipy       statsmodels  linearmodels jupyter
 ## Academic Integrity
 
 Students are expected to adhere to the Kerala Agricultural University Academic Integrity Policy. All submitted work must be the student's own. Discussing ideas is encouraged; copying code is not.
-
----
-
-## Accessibility
-
-Students requiring accommodations should contact the course instructor during the first week of the semester.
 
