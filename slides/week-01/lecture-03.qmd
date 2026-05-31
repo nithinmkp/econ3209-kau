@@ -1,0 +1,404 @@
+---
+title: "Operators & Expressions"
+subtitle: "ECON 3209 · Week 1, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Use all Python arithmetic, comparison, logical, and assignment operators
+2. Build compound boolean expressions to filter data
+3. Understand operator precedence and use parentheses correctly
+4. Apply string and membership operators
+5. Write clean, readable expressions for economic computations
+
+---
+
+## Arithmetic Operators — Review
+
+```{pyodide-python}
+# All arithmetic operators
+a, b = 17, 5
+
+print(f"{a} + {b}  = {a + b}")    # Addition
+print(f"{a} - {b}  = {a - b}")    # Subtraction
+print(f"{a} * {b}  = {a * b}")    # Multiplication
+print(f"{a} / {b}  = {a / b}")    # True division (always float)
+print(f"{a} // {b} = {a // b}")   # Floor division
+print(f"{a} % {b}  = {a % b}")    # Modulo (remainder)
+print(f"{a} ** {b} = {a ** b}")   # Exponentiation
+```
+
+::: {.highlight-box}
+`/` always returns a **float** in Python 3. Use `//` when you need whole-number division (e.g., counting periods).
+:::
+
+---
+
+## Economic Calculations
+
+```{pyodide-python}
+# Real-world economic formulas using operators
+
+# 1. Simple interest
+P = 100_000    # Principal (₹)
+r = 0.075      # Annual rate (7.5%)
+t = 3          # Years
+SI = P * r * t
+print(f"Simple Interest: ₹{SI:,.0f}")
+
+# 2. Compound interest
+CI = P * (1 + r)**t - P
+print(f"Compound Interest: ₹{CI:,.2f}")
+print(f"Final amount: ₹{P + CI:,.2f}")
+
+# 3. Inflation-adjusted real value
+nominal = 50_000
+inflation = 0.062   # 6.2%
+years = 5
+real_value = nominal / (1 + inflation)**years
+print(f"Real value of ₹{nominal:,} after {years} years: ₹{real_value:,.2f}")
+```
+
+---
+
+## Comparison Operators
+
+```{pyodide-python}
+# Comparison operators always return bool (True or False)
+yield_a = 3500   # kg/ha
+yield_b = 2900
+
+print(yield_a == yield_b)   # Equal to?
+print(yield_a != yield_b)   # Not equal?
+print(yield_a > yield_b)    # Greater than?
+print(yield_a >= yield_b)   # Greater or equal?
+print(yield_a < yield_b)    # Less than?
+print(yield_a <= yield_b)   # Less or equal?
+
+# Chained comparisons (Pythonic and readable)
+npa_ratio = 0.035
+print(0 <= npa_ratio <= 0.05)       # True — within acceptable range
+print(0 <= npa_ratio < 0.03)        # False — exceeds 3%
+```
+
+---
+
+## Logical Operators
+
+```{pyodide-python}
+# and, or, not — combine boolean conditions
+# Used constantly in data filtering!
+
+income = 45000    # monthly income (₹)
+loan_amount = 500_000
+credit_score = 720
+
+# Loan eligibility check
+eligible = (income >= 30000) and (credit_score >= 700) and (loan_amount <= income * 20)
+print(f"Eligible for loan: {eligible}")
+
+# OR condition
+subsidised = (income < 20000) or (credit_score < 600)
+print(f"Needs subsidy: {subsidised}")
+
+# NOT
+print(f"No default: {not False}")
+
+# Combining conditions
+approved = eligible and not subsidised
+print(f"Standard loan approved: {approved}")
+```
+
+---
+
+## Short-Circuit Evaluation
+
+```{pyodide-python}
+# Python evaluates logical expressions lazily — stops as soon as result is known
+
+# "and": stops at first False
+print(False and print("This won't print"))   # stops at False
+
+# "or": stops at first True
+print(True or print("This won't print"))    # stops at True
+
+# Practical use: guard against division by zero
+denominator = 0
+result = denominator != 0 and (100 / denominator)
+print(f"Safe division: {result}")
+
+denominator = 5
+result = denominator != 0 and (100 / denominator)
+print(f"Safe division: {result}")
+```
+
+::: {.gold-box}
+Short-circuit evaluation is how Python avoids runtime errors in compound conditions.
+:::
+
+---
+
+## Assignment Operators
+
+```{pyodide-python}
+# Augmented assignment operators — shorthand updates
+balance = 100_000
+
+balance += 5000    # balance = balance + 5000 (deposit)
+print(f"After deposit:    ₹{balance:,}")
+
+balance -= 15000   # balance = balance - 15000 (withdrawal)
+print(f"After withdrawal: ₹{balance:,}")
+
+balance *= 1.07    # balance = balance * 1.07 (7% interest)
+print(f"After interest:   ₹{balance:,.2f}")
+
+count = 10
+count //= 3        # count = count // 3
+print(f"Batches of 3: {count}")
+
+# Walrus operator := (Python 3.8+) — assign and return in expression
+data = [3, 7, 2, 9, 4, 6]
+if (n := len(data)) > 5:
+    print(f"Large dataset with {n} observations")
+```
+
+---
+
+## Membership Operators
+
+```{pyodide-python}
+# in  → tests membership
+# not in  → tests non-membership
+
+crops = ["Rice", "Wheat", "Coconut", "Rubber", "Banana"]
+districts_with_pacs = {"Thrissur", "Ernakulam", "Palakkad"}
+
+print("Rice" in crops)            # True
+print("Soybean" in crops)         # False
+print("Cotton" not in crops)      # True
+
+# Works on strings too!
+sentence = "Kerala Agricultural University"
+print("Agricultural" in sentence)  # True
+print("kau" in sentence.lower())   # True (case-insensitive)
+
+# Works on dictionaries — checks KEYS
+data = {"gdp": 18000, "inflation": 6.2}
+print("gdp" in data)              # True
+print(18000 in data)              # False — values not checked by default
+print(18000 in data.values())     # True — now checking values
+```
+
+---
+
+## Identity Operators
+
+```{pyodide-python}
+# is  → tests object identity (same object in memory, NOT just equal value)
+# is not  → tests non-identity
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = a            # c points to the SAME object as a
+
+print(a == b)    # True — same VALUE
+print(a is b)    # False — different objects in memory
+print(a is c)    # True — same object
+
+# Best practice: use 'is' only to check against None
+result = None
+print(result is None)       # ✅ Correct way
+print(result == None)       # ⚠️ Works but not idiomatic
+
+# Checking is not None
+result = 42
+if result is not None:
+    print(f"Result: {result}")
+```
+
+---
+
+## Operator Precedence
+
+```{pyodide-python}
+# Precedence (high to low):
+# ** → unary +/- → * / // % → + - → comparisons → not → and → or
+
+print(2 + 3 * 4)           # 14 (not 20)
+print(2 ** 2 + 3)          # 7  (not 25)
+print(True + True + True)  # 3  (bool is subclass of int!)
+
+# Common mistake in economics
+p = 100; r = 0.05; t = 3
+# Wrong: P × (1 + r)^t
+bad = p * 1 + r ** t        # = 100 + 0.000125 ← wrong!
+good = p * (1 + r) ** t     # = 115.76 ← correct!
+print(f"Wrong: {bad:.4f}")
+print(f"Correct: {good:.4f}")
+
+# When in doubt — use parentheses!
+```
+
+::: {.gold-box}
+**Rule of thumb:** If you're unsure about precedence, add parentheses. They're free and make code readable.
+:::
+
+---
+
+## String Operators
+
+```{pyodide-python}
+# String-specific operations
+first = "Kerala"
+second = "Agricultural"
+
+# Concatenation with +
+print(first + " " + second + " University")
+
+# Repetition with *
+print("-" * 40)
+
+# String comparison (lexicographic)
+print("Apple" < "Banana")    # True — alphabetical order
+print("abc" == "ABC")        # False — case sensitive
+
+# Useful string methods
+text = "  Coconut Oil Production Data  "
+print(text.strip())           # remove leading/trailing whitespace
+print(text.strip().lower())   # lowercase
+print(text.strip().split())   # split on whitespace → list
+print("2024-06-15".split("-"))  # split on specific character
+```
+
+---
+
+## Building Compound Expressions
+
+```{pyodide-python}
+# Practical example: credit scoring for a cooperative bank
+
+def assess_loan(income, loan_amt, credit_score, existing_emi):
+    """Return loan decision based on criteria."""
+    
+    # Debt-to-income ratio
+    dti = (existing_emi + loan_amt * 0.01) / income  # rough monthly
+    
+    # Individual criteria
+    income_ok  = income >= 25_000
+    dti_ok     = dti <= 0.40          # max 40% of income
+    credit_ok  = credit_score >= 650
+    amount_ok  = loan_amt <= 2_000_000
+    
+    approved = income_ok and dti_ok and credit_ok and amount_ok
+    
+    status = "APPROVED ✅" if approved else "REJECTED ❌"
+    print(f"Income OK: {income_ok} | DTI OK: {dti_ok} | Credit OK: {credit_ok}")
+    print(f"Decision: {status}")
+
+assess_loan(income=45_000, loan_amt=500_000, credit_score=720, existing_emi=8_000)
+```
+
+---
+
+## None — The Null Value
+
+```{pyodide-python}
+# None is Python's "no value" / missing data sentinel
+rainfall = None     # data not yet collected
+paddy_yield = None
+
+# None is falsy
+print(bool(None))   # False
+
+# Check for None
+if rainfall is None:
+    print("Rainfall data is missing — cannot proceed with analysis")
+
+# Functions return None by default
+def greet(name):
+    print(f"Hello, {name}!")
+
+result = greet("Dr. Nair")
+print(f"Return value: {result}")   # None
+
+# Common in data: Pandas uses NaN; Python logic uses None
+```
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+A cooperative bank has the following loan eligibility rules:
+
+- Minimum monthly income: ₹20,000
+- Maximum loan amount: 20× monthly income
+- Minimum credit score: 650
+- No existing defaults (`has_default = False`)
+
+Write a Python expression that evaluates to `True` if an applicant with `income=35000`, `loan=500000`, `credit_score=680`, `has_default=False` is eligible. Use meaningful variable names and print the individual checks.
+:::
+
+```{pyodide-python}
+# Exercise: Loan eligibility check
+income = 35_000
+loan = 500_000
+credit_score = 680
+has_default = False
+
+# Write your eligibility checks here
+
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+::: {.gold-box}
+### Key Takeaways — Lecture 3
+:::
+
+✅ **Arithmetic:** `+ - * / // % **` — watch out for `/` vs `//`
+
+✅ **Comparison:** `== != > >= < <=` — return `bool`; can be **chained**
+
+✅ **Logical:** `and or not` — use for compound conditions; short-circuit evaluation saves errors
+
+✅ **Assignment:** `+= -= *= /=` — compact in-place updates
+
+✅ **Membership:** `in / not in` — works on lists, strings, dict keys
+
+✅ **Precedence:** `**` > `* /` > `+ -` > comparisons > `not` > `and` > `or` — use `()` when unsure
+
+✅ `None` represents missing/absent values — check with `is None`
+
+---
+
+## Week 1 Complete! {background-color="#1A3300"}
+
+::: {.gold-box}
+### Week 1 Summary
+:::
+
+This week you built the foundation of Python programming:
+
+| Lecture | Topic | Status |
+|---|---|:---:|
+| 1 | Getting Started — Jupyter, arithmetic, imports | ✅ |
+| 2 | Variables & Data Types — int, float, str, list, dict | ✅ |
+| 3 | Operators & Expressions — arithmetic, boolean, compound | ✅ |
+
+::: {.highlight-box}
+**Next Week:** Control Flow & Functions — `if/else`, `for` loops, `while` loops, defining your own functions
+:::
+
+
