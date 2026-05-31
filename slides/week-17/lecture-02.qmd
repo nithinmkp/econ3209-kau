@@ -1,0 +1,278 @@
+---
+title: "Fixed Effects"
+subtitle: "ECON 3209 · Week 17, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. explain why fixed effects control for time-invariant omitted variables
+2. write the within estimator and understand demeaning
+3. estimate fixed effects manually and with dummy variables in Python
+4. compare pooled OLS and fixed-effects estimates
+5. recognise which variables fixed effects can and cannot identify
+
+---
+
+## Why Fixed Effects?
+
+- Suppose each district has a permanent, unobserved characteristic: soil quality, altitude, irrigation culture, or extension support.
+- If this time-invariant factor is correlated with fertilizer use, pooled OLS is biased.
+- **Fixed effects (FE)** remove these unit-specific constants.
+
+---
+
+## Within Estimator Formula
+
+$$\ddot{y}_{it} = \ddot{x}_{it}'\beta + \ddot{\varepsilon}_{it}$$
+
+where
+
+$$\ddot{y}_{it}=y_{it}-\bar{y}_i$$
+
+- Demeaning subtracts each unit’s average from the original data.
+- All time-invariant district effects cancel out.
+
+---
+
+## Intuition of Demeaning
+
+- FE compares a district **to itself over time**.
+- It asks: when fertilizer rises above a district’s own average, does productivity also rise above that district’s own average?
+- This removes bias from time-constant omitted factors.
+- It does not remove time-varying omitted variables.
+
+---
+
+## Manual Demeaning in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import statsmodels.api as sm
+
+df['prod_dm'] = df['productivity'] - df.groupby('district')['productivity'].transform('mean')
+df['fert_dm'] = df['fertilizer'] - df.groupby('district')['fertilizer'].transform('mean')
+df['rain_dm'] = df['rainfall'] - df.groupby('district')['rainfall'].transform('mean')
+fe_manual = sm.OLS(df['prod_dm'], df[['fert_dm', 'rain_dm']]).fit()
+print(fe_manual.summary())
+```
+
+---
+
+## LSDV: Least Squares Dummy Variables
+
+- Another way to estimate FE is to include a dummy for each district (dropping one reference district).
+- This is called the **LSDV approach**.
+- It gives the same slope coefficients as the within estimator when the specification matches.
+
+---
+
+## LSDV in statsmodels
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import statsmodels.formula.api as smf
+
+lsdv = smf.ols("productivity ~ fertilizer + rainfall + C(district) + C(year)", data=df).fit()
+print(lsdv.params[['fertilizer', 'rainfall']].round(4))
+```
+
+---
+
+## Comparing Pooled and FE Estimates
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import pandas as pd
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+pooled = smf.ols("productivity ~ fertilizer + rainfall", data=df).fit()
+df['prod_dm'] = df['productivity'] - df.groupby('district')['productivity'].transform('mean')
+df['fert_dm'] = df['fertilizer'] - df.groupby('district')['fertilizer'].transform('mean')
+df['rain_dm'] = df['rainfall'] - df.groupby('district')['rainfall'].transform('mean')
+fe_manual = sm.OLS(df['prod_dm'], df[['fert_dm', 'rain_dm']]).fit()
+comparison = pd.DataFrame({
+    'pooled': pooled.params[['fertilizer', 'rainfall']],
+    'fixed_effects': fe_manual.params,
+})
+print(comparison.round(4))
+```
+
+---
+
+## What FE Cannot Estimate
+
+- Any regressor that is perfectly time-invariant within district is swept out by demeaning.
+- Example: a constant coastal-district dummy cannot be identified in FE.
+- FE is excellent for removing time-constant omitted factors, but it cannot recover the effect of variables that do not change over time within units.
+
+---
+
+## Kerala District Interpretation
+
+::: {.highlight-box}
+If better soil districts also use more fertilizer, pooled OLS may exaggerate the fertilizer effect.
+
+FE removes the fixed district component, so the coefficient is identified only from within-district year-to-year changes.
+:::
+
+---
+
+## Checking the Demeaned Means
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+
+df['prod_dm'] = df['productivity'] - df.groupby('district')['productivity'].transform('mean')
+df['fert_dm'] = df['fertilizer'] - df.groupby('district')['fertilizer'].transform('mean')
+print(df.groupby('district')[['prod_dm', 'fert_dm']].mean().round(8).head())
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use manual demeaning to estimate a fixed-effects model. Then estimate the same model with district dummies. Are the fertilizer and rainfall slopes close? Why should they be?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+df['prod_dm'] = df['productivity'] - df.groupby('district')['productivity'].transform('mean')
+df['fert_dm'] = df['fertilizer'] - df.groupby('district')['fertilizer'].transform('mean')
+df['rain_dm'] = df['rainfall'] - df.groupby('district')['rainfall'].transform('mean')
+print(sm.OLS(df['prod_dm'], df[['fert_dm', 'rain_dm']]).fit().params)
+print(smf.ols('productivity ~ fertilizer + rainfall + C(district)', data=df).fit().params[['fertilizer', 'rainfall']])
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Fixed effects remove time-invariant omitted variables by comparing each unit to itself over time.
+- ✅ The within estimator uses demeaned variables; LSDV uses unit dummies.
+- ✅ FE is appropriate when unobserved unit effects are correlated with regressors.
+- ✅ Time-invariant regressors cannot be estimated in a standard FE model.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We study random effects and the Hausman test.
+- You will see when a random-effects assumption is plausible and how to compare FE with RE.
+- Because Pyodide lacks linearmodels, we will implement the logic manually.
+:::
+
+
