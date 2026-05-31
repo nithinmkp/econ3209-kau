@@ -1,0 +1,214 @@
+---
+title: "Structural Breaks in Python"
+subtitle: "ECON 3209 · Week 13, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. explain the idea of a structural break and regime change
+2. estimate before-after dummy and interaction models
+3. understand the logic of the Chow test
+4. compare restricted and unrestricted models in Python
+5. interpret policy shifts using a cooperative credit scheme example
+
+---
+
+## What Is a Structural Break?
+
+A structural break occurs when the relationship between $Y$ and $X$ changes across regimes.
+
+Examples:
+- before vs after a new cooperative credit scheme
+- pre- and post-flood periods
+- different pricing regimes
+
+---
+
+## Break in Intercept or Slope?
+
+A regime dummy can capture a change in the intercept.
+
+An interaction with the regime dummy can capture a change in the slope.
+
+::: {.formula}
+$$Y_i = \beta_0 + \beta_1 X_i + \beta_2 Post_i + \beta_3(Post_i\cdot X_i) + \varepsilon_i$$
+:::
+
+---
+
+## Chow Test Logic
+
+The Chow test compares:
+- a **restricted** model with one common relationship
+- an **unrestricted** model with separate relationships across regimes
+
+If allowing separate regimes reduces the residual sum of squares a lot, that is evidence of a break.
+
+---
+
+## Cooperative Credit Scheme Example
+
+Suppose Kerala introduced a new credit support scheme in year 6.
+
+We ask:
+- Did the average repayment rate change?
+- Did the relationship between borrower income and repayment change?
+
+This is exactly a structural-break question.
+
+---
+
+## Python Demo: Simulate Pre/Post Scheme Data
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(140)
+n = 140
+income = np.random.uniform(12, 40, n)
+post = np.random.choice([0, 1], size=n)
+eps = np.random.normal(0, 2.5, n)
+repayment = 55 + 1.1*income + 4*post + 0.5*(post*income) + eps
+df = pd.DataFrame({'repayment': repayment, 'income': income, 'post': post})
+print(df.head())
+```
+
+---
+
+## Python Demo: Restricted vs Unrestricted Models
+
+```{pyodide-python}
+restricted = smf.ols('repayment ~ income', data=df).fit()
+level_break = smf.ols('repayment ~ income + post', data=df).fit()
+full_break = smf.ols('repayment ~ income * post', data=df).fit()
+
+compare = pd.DataFrame({
+    'R2': [restricted.rsquared, level_break.rsquared, full_break.rsquared],
+    'Adj_R2': [restricted.rsquared_adj, level_break.rsquared_adj, full_break.rsquared_adj]
+}, index=['restricted', 'level break', 'full break'])
+print(compare.round(4))
+```
+
+---
+
+## Python Demo: Compute a Chow-Style F Statistic
+
+```{pyodide-python}
+RSS_r = np.sum(restricted.resid**2)
+RSS_u = np.sum(full_break.resid**2)
+q = 2   # added post and post*income
+n = len(df)
+k_u = len(full_break.params)
+F = ((RSS_r - RSS_u)/q) / (RSS_u/(n - k_u))
+print(f'Chow-style F statistic = {F:.4f}')
+```
+
+---
+
+## Python Demo: Plot the Two Regimes
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+grid = pd.DataFrame({'income': np.linspace(df['income'].min(), df['income'].max(), 50)})
+grid0 = grid.assign(post=0)
+grid1 = grid.assign(post=1)
+
+plt.figure(figsize=(6.5, 4))
+plt.scatter(df['income'], df['repayment'], c=df['post'], cmap='coolwarm', alpha=0.55)
+plt.plot(grid['income'], full_break.predict(grid0), color='navy', label='Pre-scheme')
+plt.plot(grid['income'], full_break.predict(grid1), color='darkred', label='Post-scheme')
+plt.xlabel('Income')
+plt.ylabel('Repayment score')
+plt.legend()
+plt.title('Structural break: pre vs post scheme')
+plt.show()
+```
+
+---
+
+## Policy Interpretation
+
+- A positive `post` coefficient means the average repayment score shifted upward.
+- A positive interaction means income became more predictive after the scheme.
+- Together, these coefficients describe both level and slope changes.
+
+---
+
+## Practical Notes
+
+- Structural breaks may come from policy, climate, institutional change, or data revisions.
+- Dummy-based break models are simple and transparent.
+- Formal break testing becomes especially important in longer time series.
+
+::: {.highlight-box}
+A structural break says the same model no longer fits all observations equally well.
+:::
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate data for borrower repayment before and after a scheme change.
+2. Estimate a restricted model and a full break model with an interaction.
+3. Compare model fit and compute a Chow-style F statistic.
+4. Plot fitted lines for the pre- and post-scheme periods.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(24)
+n = 120
+income = np.random.uniform(10, 35, n)
+post = np.random.choice([0, 1], size=n)
+
+# Create repayment, estimate restricted and break models, and compare them
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ Structural breaks occur when regression relationships change across regimes or periods.
+
+✅ Regime dummies can capture shifts in intercepts, and interactions can capture shifts in slopes.
+
+✅ The Chow-test idea compares restricted and unrestricted residual sums of squares.
+
+✅ Dummy-based break models are useful for evaluating policy changes such as credit scheme reforms.
+
+✅ Plots and model comparisons make structural changes easy to communicate.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Week 14 — Nonlinear Regression**
+
+We will cover:
+- log transformations
+- polynomial models
+- splines and piecewise fits
+- curve fitting and model comparison
+:::
+
+
+
