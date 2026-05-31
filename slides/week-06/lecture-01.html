@@ -32,6 +32,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #24292e;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #24292e; } /* Normal */
+    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
+    code span.an { color: #6a737d; } /* Annotation */
+    code span.at { color: #d73a49; } /* Attribute */
+    code span.bn { color: #005cc5; } /* BaseN */
+    code span.bu { color: #d73a49; } /* BuiltIn */
+    code span.cf { color: #d73a49; } /* ControlFlow */
+    code span.ch { color: #032f62; } /* Char */
+    code span.cn { color: #005cc5; } /* Constant */
+    code span.co { color: #6a737d; } /* Comment */
+    code span.cv { color: #6a737d; } /* CommentVar */
+    code span.do { color: #6a737d; } /* Documentation */
+    code span.dt { color: #d73a49; } /* DataType */
+    code span.dv { color: #005cc5; } /* DecVal */
+    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
+    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
+    code span.fl { color: #005cc5; } /* Float */
+    code span.fu { color: #6f42c1; } /* Function */
+    code span.im { color: #032f62; } /* Import */
+    code span.in { color: #6a737d; } /* Information */
+    code span.kw { color: #d73a49; } /* Keyword */
+    code span.op { color: #24292e; } /* Operator */
+    code span.ot { color: #6f42c1; } /* Other */
+    code span.pp { color: #d73a49; } /* Preprocessor */
+    code span.re { color: #6a737d; } /* RegionMarker */
+    code span.sc { color: #005cc5; } /* SpecialChar */
+    code span.ss { color: #032f62; } /* SpecialString */
+    code span.st { color: #032f62; } /* String */
+    code span.va { color: #e36209; } /* Variable */
+    code span.vs { color: #032f62; } /* VerbatimString */
+    code span.wa { color: #ff5555; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-013407f46110eb557e71e61490391164.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -313,7 +379,7 @@
   }
 
   // Store cell data
-  globalThis.qpyodideCellDetails = [{"code":"import pandas as pd\nfrom io import StringIO\n\ncsv_text = \"\"\"district,crop,area_ha,yield_ton\nThrissur,Rice,1200,4.8\nPalakkad,Rice,2100,5.3\nWayanad,Coffee,900,1.7\nAlappuzha,Rice,1500,4.6\n\"\"\"\n\ncrop_df = pd.read_csv(StringIO(csv_text))\nprint(crop_df)\nprint(\"\\nAverage yield:\", crop_df['yield_ton'].mean())","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\njson_text = \"\"\"\n[\n  {\"district\": \"Kottayam\", \"loan_recovery\": 92.1, \"societies\": 48},\n  {\"district\": \"Kannur\", \"loan_recovery\": 88.4, \"societies\": 51},\n  {\"district\": \"Kollam\", \"loan_recovery\": 90.7, \"societies\": 44}\n]\n\"\"\"\n\nbank_df = pd.read_json(StringIO(json_text))\nprint(bank_df)\nprint(\"\\nCSV preview\")\nprint(bank_df.to_csv(index=False))\n\n# In a full Python environment:\n# bank_xlsx = pd.read_excel(\"cooperative_banking.xlsx\", sheet_name=\"district_summary\")","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import requests\nimport pandas as pd\n\nurl = \"https://api.worldbank.org/v2/country/IND/indicator/FP.CPI.TOTL?format=json&per_page=5\"\nresponse = requests.get(url)\nprint(\"Status code:\", response.status_code)\n\npayload = response.json()\nrecords = pd.json_normalize(payload[1])\nprint(records[['country.value', 'date', 'value']].head())","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\nraw_text = \"\"\"district;crop;production_ton\nPalakkad;Rice;12000\nIdukki;Pepper;3400\nErnakulam;Banana;5600\n\"\"\"\n\nraw_df = pd.read_csv(StringIO(raw_text), sep=';')\nraw_df.columns = raw_df.columns.str.lower()\nraw_df['production_ton'] = raw_df['production_ton'].astype(int)\nclean_df = raw_df.sort_values('district')\nprint(clean_df)","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\n# Simulated PLFS-style unit data (actual data downloaded from mospi.gov.in)\n# Variables: state, sector (rural/urban), usual_activity, weekly_wage\nplfs_text = \"\"\"state,sector,usual_activity,weekly_wage\nKerala,Rural,Self-employed,3200\nKerala,Urban,Regular wage,8500\nTamil Nadu,Rural,Casual labour,1800\nKarnataka,Urban,Regular wage,9200\nKerala,Rural,Regular wage,6100\nKerala,Urban,Self-employed,7400\n\"\"\"\n\nplfs = pd.read_csv(StringIO(plfs_text))\n\n# State-level wage summary (typical PLFS analysis)\nsummary = plfs.groupby(['state', 'sector'])['weekly_wage'].agg(['mean', 'count'])\nsummary.columns = ['avg_wage', 'n_workers']\nprint(summary.round(0))","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\n# Simulated eSankhyiki-style GSDP download (CSV from portal)\ngsdp_text = \"\"\"state,year,gsdp_cr,growth_pct\nKerala,2021,920340,8.1\nKerala,2022,1012400,10.0\nTamil Nadu,2021,1985600,9.3\nTamil Nadu,2022,2198000,10.7\nKarnataka,2021,2102800,9.8\nKarnataka,2022,2334500,11.0\n\"\"\"\n\ngsdp = pd.read_csv(StringIO(gsdp_text))\nprint(gsdp.pivot(index='state', columns='year', values='growth_pct'))","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\ntext = \"\"\"branch;loans;recovery_rate\nAlappuzha;1250000;91.5\nKottayam;980000;94.2\n\"\"\"\n\n# Your code below","id":7,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qpyodideCellDetails = [{"code":"import pandas as pd\nfrom io import StringIO\n\ncsv_text = \"\"\"district,crop,area_ha,yield_ton\nThrissur,Rice,1200,4.8\nPalakkad,Rice,2100,5.3\nWayanad,Coffee,900,1.7\nAlappuzha,Rice,1500,4.6\n\"\"\"\n\ncrop_df = pd.read_csv(StringIO(csv_text))\nprint(crop_df)\nprint(\"\\nAverage yield:\", crop_df['yield_ton'].mean())","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\njson_text = \"\"\"\n[\n  {\"district\": \"Kottayam\", \"loan_recovery\": 92.1, \"societies\": 48},\n  {\"district\": \"Kannur\", \"loan_recovery\": 88.4, \"societies\": 51},\n  {\"district\": \"Kollam\", \"loan_recovery\": 90.7, \"societies\": 44}\n]\n\"\"\"\n\nbank_df = pd.read_json(StringIO(json_text))\nprint(bank_df)\nprint(\"\\nCSV preview\")\nprint(bank_df.to_csv(index=False))\n\n# In a full Python environment:\n# bank_xlsx = pd.read_excel(\"cooperative_banking.xlsx\", sheet_name=\"district_summary\")","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import requests\nimport pandas as pd\n\nurl = \"https://api.worldbank.org/v2/country/IND/indicator/FP.CPI.TOTL?format=json&per_page=5\"\nresponse = requests.get(url)\nprint(\"Status code:\", response.status_code)\n\npayload = response.json()\nrecords = pd.json_normalize(payload[1])\nprint(records[['country.value', 'date', 'value']].head())","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\nraw_text = \"\"\"district;crop;production_ton\nPalakkad;Rice;12000\nIdukki;Pepper;3400\nErnakulam;Banana;5600\n\"\"\"\n\nraw_df = pd.read_csv(StringIO(raw_text), sep=';')\nraw_df.columns = raw_df.columns.str.lower()\nraw_df['production_ton'] = raw_df['production_ton'].astype(int)\nclean_df = raw_df.sort_values('district')\nprint(clean_df)","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"# Simulate what esankhyiki.get_data(\"PLFS\", ...) returns\n# (run this in browser — for real data use esankhyiki in local Python)\nimport pandas as pd\nfrom io import StringIO\n\nplfs_csv = \"\"\"year,state,sector,gender,indicator,value,unit\n2017-18,All India,Rural+Urban,Persons,Unemployment Rate,6.1,%\n2018-19,All India,Rural+Urban,Persons,Unemployment Rate,5.8,%\n2019-20,All India,Rural+Urban,Persons,Unemployment Rate,4.8,%\n2020-21,All India,Rural+Urban,Persons,Unemployment Rate,4.2,%\n2021-22,All India,Rural+Urban,Persons,Unemployment Rate,4.1,%\n2022-23,All India,Rural+Urban,Persons,Unemployment Rate,3.2,%\n2023-24,All India,Rural+Urban,Persons,Unemployment Rate,3.1,%\n\"\"\"\n\ndf = pd.read_csv(StringIO(plfs_csv))\nprint(df[['year', 'value']].to_string(index=False))\nprint(f\"\\nUnemployment trend: {df['value'].iloc[0]}% → {df['value'].iloc[-1]}%\")","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import pandas as pd\nfrom io import StringIO\n\ntext = \"\"\"branch;loans;recovery_rate\nAlappuzha;1250000;91.5\nKottayam;980000;94.2\n\"\"\"\n\n# Your code below","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
   </script>
@@ -649,102 +715,93 @@ Department of Development Economics, KAU
 <li>Careful import choices affect every later econometric conclusion.</li>
 </ul>
 </section>
-<section id="mospi-indias-official-micro-data-source" class="slide level2">
-<h2>MOSPI: India’s Official Micro-data Source</h2>
-<ul>
-<li><strong>MOSPI</strong> (Ministry of Statistics &amp; Programme Implementation) is India’s apex statistical body.</li>
-<li>Publishes large-scale unit-level surveys used in empirical economics research.</li>
-</ul>
+<section id="mospi-two-python-packages-for-indian-data" class="slide level2">
+<h2>MOSPI: Two Python Packages for Indian Data</h2>
 <table class="caption-top">
-<colgroup>
-<col style="width: 26%">
-<col style="width: 29%">
-<col style="width: 44%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Dataset</th>
-<th>Coverage</th>
-<th>Key Variables</th>
+<th>Package</th>
+<th>Install</th>
+<th>What it gives you</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>NSS</strong> (National Sample Survey)</td>
-<td>Households, consumption, employment</td>
-<td>Expenditure, MPCE, employment status</td>
+<td><code>mospi-unitdata</code></td>
+<td><code>pip install mospi-unitdata</code></td>
+<td><strong>Unit-level microdata</strong> — download raw NSS, PLFS, ASI datasets from <a href="https://microdata.gov.in">microdata.gov.in</a></td>
 </tr>
 <tr class="even">
-<td><strong>PLFS</strong> (Periodic Labour Force Survey)</td>
-<td>Workers 15+</td>
-<td>WPR, LFPR, wages, industry</td>
-</tr>
-<tr class="odd">
-<td><strong>ASI</strong> (Annual Survey of Industries)</td>
-<td>Formal manufacturing plants</td>
-<td>Output, employment, capital</td>
-</tr>
-<tr class="even">
-<td><strong>NSSO Debt &amp; Investment</strong></td>
-<td>Rural/urban households</td>
-<td>Assets, liabilities, interest rates</td>
+<td><code>mospi-esankhyiki</code></td>
+<td><code>pip install mospi-esankhyiki</code></td>
+<td><strong>Aggregate indicators</strong> — 500+ statistical series across 22 datasets (PLFS, CPI, IIP, NAS, WPI …)</td>
 </tr>
 </tbody>
 </table>
 <div class="highlight-box">
-<p>Unit-level data → one row per household or worker → essential for microeconometrics.</p>
+<p>Both packages are official MOSPI/NSO tools (MIT licence). <code>mospi-unitdata</code> requires a free API key; <code>mospi-esankhyiki</code> is fully open.</p>
+</div>
+<p><strong>Run these in a local Python environment</strong> (Jupyter / terminal) — they call live government APIs that are not available inside the browser sandbox.</p>
+</section>
+<section id="mospi-unitdata-downloading-microdata" class="slide level2">
+<h2>mospi-unitdata: Downloading Microdata</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="co"># pip install mospi-unitdata</span></span>
+<span id="cb1-2"><a></a><span class="im">from</span> MospiUnitdata <span class="im">import</span> list_datasets, list_files, download_file</span>
+<span id="cb1-3"><a></a></span>
+<span id="cb1-4"><a></a>API_KEY <span class="op">=</span> <span class="st">"YOUR_KEY"</span>   <span class="co"># get free key at microdata.gov.in → Profile</span></span>
+<span id="cb1-5"><a></a></span>
+<span id="cb1-6"><a></a><span class="co"># 1. Search available surveys</span></span>
+<span id="cb1-7"><a></a>datasets <span class="op">=</span> list_datasets(API_KEY, query<span class="op">=</span><span class="st">"labour force"</span>)</span>
+<span id="cb1-8"><a></a><span class="cf">for</span> d <span class="kw">in</span> datasets:</span>
+<span id="cb1-9"><a></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>d[<span class="st">'idno'</span>]<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>d[<span class="st">'title'</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-10"><a></a><span class="co"># DDI-IND-NSO-PLFS-2023-24: Periodic Labour Force Survey 2023-24</span></span>
+<span id="cb1-11"><a></a><span class="co"># DDI-IND-NSO-PLFS-2022-23: Periodic Labour Force Survey 2022-23</span></span>
+<span id="cb1-12"><a></a></span>
+<span id="cb1-13"><a></a><span class="co"># 2. See files in a dataset</span></span>
+<span id="cb1-14"><a></a>files <span class="op">=</span> list_files(<span class="st">"DDI-IND-NSO-PLFS-2023-24"</span>, API_KEY)</span>
+<span id="cb1-15"><a></a><span class="cf">for</span> f <span class="kw">in</span> files:</span>
+<span id="cb1-16"><a></a>    <span class="bu">print</span>(f[<span class="st">'name'</span>], f.get(<span class="st">'size'</span>, <span class="st">'?'</span>))</span>
+<span id="cb1-17"><a></a></span>
+<span id="cb1-18"><a></a><span class="co"># 3. Download to your project</span></span>
+<span id="cb1-19"><a></a>download_file(<span class="st">"DDI-IND-NSO-PLFS-2023-24"</span>,</span>
+<span id="cb1-20"><a></a>              <span class="st">"PLFS_2023_24_Visit1_CSV.zip"</span>, <span class="st">"./data"</span>, API_KEY)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="highlight-box">
+<p>Once downloaded: <code>pd.read_csv("./data/PLFS_2023_24_Visit1_CSV.zip")</code> — one row per household member.</p>
 </div>
 </section>
-<section id="accessing-mospi-data-in-python" class="slide level2">
-<h2>Accessing MOSPI Data in Python</h2>
+<section id="mospi-esankhyiki-statistical-indicators" class="slide level2">
+<h2>mospi-esankhyiki: Statistical Indicators</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="co"># pip install mospi-esankhyiki</span></span>
+<span id="cb2-2"><a></a><span class="im">import</span> esankhyiki</span>
+<span id="cb2-3"><a></a></span>
+<span id="cb2-4"><a></a><span class="co"># Step 1 – discover the 22 datasets</span></span>
+<span id="cb2-5"><a></a>datasets_df <span class="op">=</span> esankhyiki.list_datasets(<span class="bu">format</span><span class="op">=</span><span class="st">"df"</span>)</span>
+<span id="cb2-6"><a></a></span>
+<span id="cb2-7"><a></a><span class="co"># Step 2 – see indicators for PLFS (Periodic Labour Force Survey)</span></span>
+<span id="cb2-8"><a></a>indicators <span class="op">=</span> esankhyiki.get_indicators(<span class="st">"PLFS"</span>)</span>
+<span id="cb2-9"><a></a></span>
+<span id="cb2-10"><a></a><span class="co"># Step 3 – find valid filter codes (years, states, sectors …)</span></span>
+<span id="cb2-11"><a></a>meta <span class="op">=</span> esankhyiki.get_metadata(<span class="st">"PLFS"</span>, indicator_code<span class="op">=</span><span class="dv">3</span>, frequency_code<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-12"><a></a></span>
+<span id="cb2-13"><a></a><span class="co"># Step 4 – fetch as DataFrame</span></span>
+<span id="cb2-14"><a></a>df <span class="op">=</span> esankhyiki.get_data(<span class="st">"PLFS"</span>, {</span>
+<span id="cb2-15"><a></a>    <span class="st">"indicator_code"</span>: <span class="dv">3</span>,   <span class="co"># Unemployment Rate</span></span>
+<span id="cb2-16"><a></a>    <span class="st">"frequency_code"</span>: <span class="dv">1</span>,   <span class="co"># Annual</span></span>
+<span id="cb2-17"><a></a>    <span class="st">"year"</span>: <span class="st">"2023-24"</span>,</span>
+<span id="cb2-18"><a></a>    <span class="st">"state_code"</span>: <span class="dv">99</span>,      <span class="co"># All India</span></span>
+<span id="cb2-19"><a></a>    <span class="st">"gender_code"</span>: <span class="dv">3</span>,      <span class="co"># Persons (all)</span></span>
+<span id="cb2-20"><a></a>    <span class="st">"age_code"</span>: <span class="dv">1</span>,</span>
+<span id="cb2-21"><a></a>    <span class="st">"sector_code"</span>: <span class="dv">3</span>,      <span class="co"># Rural + Urban</span></span>
+<span id="cb2-22"><a></a>}, <span class="bu">format</span><span class="op">=</span><span class="st">"df"</span>)</span>
+<span id="cb2-23"><a></a><span class="bu">print</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Other useful datasets:</strong> <code>"CPI"</code>, <code>"NAS"</code> (GDP), <code>"IIP"</code>, <code>"HCES"</code> (consumption/poverty), <code>"ASI"</code>, <code>"WPI"</code></p>
+</section>
+<section id="working-with-esankhyiki-output-in-python" class="slide level2">
+<h2>Working with esankhyiki output in Python</h2>
 <div id="qpyodide-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div class="highlight-box">
-<p><strong>Actual download:</strong> <a href="https://mospi.gov.in">mospi.gov.in</a> → Surveys → Unit Level Data → Register (free)</p>
-</div>
-</section>
-<section id="mospi-esankhyiki-the-data-portal" class="slide level2">
-<h2>MOSPI eSankhyiki: The Data Portal</h2>
-<ul>
-<li><strong>eSankhyiki</strong> (<a href="https://esankhyiki.mospi.gov.in">esankhyiki.mospi.gov.in</a>) is MOSPI’s open-access portal.</li>
-<li>Provides <strong>aggregate tables</strong> (not unit-level) downloadable as CSV/Excel — no registration needed.</li>
-</ul>
-<p><strong>What you can get directly:</strong></p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Indicator</th>
-<th>Frequency</th>
-<th>Format</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>State Domestic Product (GSDP)</td>
-<td>Annual</td>
-<td>Excel</td>
-</tr>
-<tr class="even">
-<td>CPI by state and commodity group</td>
-<td>Monthly</td>
-<td>CSV</td>
-</tr>
-<tr class="odd">
-<td>Index of Industrial Production (IIP)</td>
-<td>Monthly</td>
-<td>Excel</td>
-</tr>
-<tr class="even">
-<td>Employment (Quarterly Bulletin)</td>
-<td>Quarterly</td>
-<td>PDF/Excel</td>
-</tr>
-</tbody>
-</table>
-<div id="qpyodide-insertion-location-6"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<div class="highlight-box">
-<p>eSankhyiki = ready-to-use aggregate tables · Unit Data Portal = raw micro-data for research</p>
+<p>Once you call <code>esankhyiki.get_data(..., format="df")</code> locally, the DataFrame has this same structure — ready for regression or visualisation.</p>
 </div>
 </section>
 <section id="exercise" class="slide level2" data-background-color="#1A3300">
@@ -752,7 +809,7 @@ Department of Development Economics, KAU
 <div class="gold-box">
 <p>A cooperative bank officer gives you a semicolon-separated file with columns <code>branch</code>, <code>loans</code>, and <code>recovery_rate</code>. Write code to import the data, convert <code>loans</code> to numeric, and export a clean CSV preview without row numbers.</p>
 </div>
-<div id="qpyodide-insertion-location-7"></div>
+<div id="qpyodide-insertion-location-6"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="summary" class="slide level2" data-background-color="#1A3300">
@@ -763,8 +820,8 @@ Department of Development Economics, KAU
 <li>✅ <code>to_csv(index=False)</code> helps save a clean analysis-ready dataset.</li>
 <li>✅ APIs return structured data that can be turned into pandas DataFrames.</li>
 <li>✅ Import mistakes in headers, delimiters, or types can distort later results.</li>
-<li>✅ <strong>MOSPI Unit Data</strong> (NSS, PLFS, ASI) provides household and firm-level micro-data for India.</li>
-<li>✅ <strong>eSankhyiki</strong> portal gives free access to aggregate tables (GSDP, CPI, IIP) in CSV/Excel.</li>
+<li>✅ <strong><code>mospi-unitdata</code></strong> — downloads raw NSS/PLFS/ASI unit-level microdata from microdata.gov.in via Python API.</li>
+<li>✅ <strong><code>mospi-esankhyiki</code></strong> — fetches 500+ aggregate indicators (PLFS, CPI, NAS, IIP …) directly as DataFrames in 4 steps.</li>
 <li>✅ A reproducible import-clean-export workflow is essential in applied economics.</li>
 </ul>
 </section>

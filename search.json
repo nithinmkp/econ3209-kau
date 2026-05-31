@@ -5390,25 +5390,32 @@
     "text": "Applied example: Kerala data sources\n\nCrop data may come from district agriculture offices.\nCooperative credit figures may come from annual reports in Excel.\nIndia-level macro indicators may come from RBI or World Bank APIs.\nA research project often combines several sources in one master dataset.\nCareful import choices affect every later econometric conclusion."
   },
   {
-    "objectID": "slides/week-06/lecture-01.html#mospi-indias-official-micro-data-source",
-    "href": "slides/week-06/lecture-01.html#mospi-indias-official-micro-data-source",
+    "objectID": "slides/week-06/lecture-01.html#mospi-two-python-packages-for-indian-data",
+    "href": "slides/week-06/lecture-01.html#mospi-two-python-packages-for-indian-data",
     "title": "Import, Export & APIs",
-    "section": "MOSPI: India’s Official Micro-data Source",
-    "text": "MOSPI: India’s Official Micro-data Source\n\nMOSPI (Ministry of Statistics & Programme Implementation) is India’s apex statistical body.\nPublishes large-scale unit-level surveys used in empirical economics research.\n\n\n\n\n\n\n\n\n\nDataset\nCoverage\nKey Variables\n\n\n\n\nNSS (National Sample Survey)\nHouseholds, consumption, employment\nExpenditure, MPCE, employment status\n\n\nPLFS (Periodic Labour Force Survey)\nWorkers 15+\nWPR, LFPR, wages, industry\n\n\nASI (Annual Survey of Industries)\nFormal manufacturing plants\nOutput, employment, capital\n\n\nNSSO Debt & Investment\nRural/urban households\nAssets, liabilities, interest rates\n\n\n\n\nUnit-level data → one row per household or worker → essential for microeconometrics."
+    "section": "MOSPI: Two Python Packages for Indian Data",
+    "text": "MOSPI: Two Python Packages for Indian Data\n\n\n\nPackage\nInstall\nWhat it gives you\n\n\n\n\nmospi-unitdata\npip install mospi-unitdata\nUnit-level microdata — download raw NSS, PLFS, ASI datasets from microdata.gov.in\n\n\nmospi-esankhyiki\npip install mospi-esankhyiki\nAggregate indicators — 500+ statistical series across 22 datasets (PLFS, CPI, IIP, NAS, WPI …)\n\n\n\n\nBoth packages are official MOSPI/NSO tools (MIT licence). mospi-unitdata requires a free API key; mospi-esankhyiki is fully open.\n\nRun these in a local Python environment (Jupyter / terminal) — they call live government APIs that are not available inside the browser sandbox."
   },
   {
-    "objectID": "slides/week-06/lecture-01.html#accessing-mospi-data-in-python",
-    "href": "slides/week-06/lecture-01.html#accessing-mospi-data-in-python",
+    "objectID": "slides/week-06/lecture-01.html#mospi-unitdata-downloading-microdata",
+    "href": "slides/week-06/lecture-01.html#mospi-unitdata-downloading-microdata",
     "title": "Import, Export & APIs",
-    "section": "Accessing MOSPI Data in Python",
-    "text": "Accessing MOSPI Data in Python\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nActual download: mospi.gov.in → Surveys → Unit Level Data → Register (free)"
+    "section": "mospi-unitdata: Downloading Microdata",
+    "text": "mospi-unitdata: Downloading Microdata\n# pip install mospi-unitdata\nfrom MospiUnitdata import list_datasets, list_files, download_file\n\nAPI_KEY = \"YOUR_KEY\"   # get free key at microdata.gov.in → Profile\n\n# 1. Search available surveys\ndatasets = list_datasets(API_KEY, query=\"labour force\")\nfor d in datasets:\n    print(f\"{d['idno']}: {d['title']}\")\n# DDI-IND-NSO-PLFS-2023-24: Periodic Labour Force Survey 2023-24\n# DDI-IND-NSO-PLFS-2022-23: Periodic Labour Force Survey 2022-23\n\n# 2. See files in a dataset\nfiles = list_files(\"DDI-IND-NSO-PLFS-2023-24\", API_KEY)\nfor f in files:\n    print(f['name'], f.get('size', '?'))\n\n# 3. Download to your project\ndownload_file(\"DDI-IND-NSO-PLFS-2023-24\",\n              \"PLFS_2023_24_Visit1_CSV.zip\", \"./data\", API_KEY)\n\nOnce downloaded: pd.read_csv(\"./data/PLFS_2023_24_Visit1_CSV.zip\") — one row per household member."
   },
   {
-    "objectID": "slides/week-06/lecture-01.html#mospi-esankhyiki-the-data-portal",
-    "href": "slides/week-06/lecture-01.html#mospi-esankhyiki-the-data-portal",
+    "objectID": "slides/week-06/lecture-01.html#mospi-esankhyiki-statistical-indicators",
+    "href": "slides/week-06/lecture-01.html#mospi-esankhyiki-statistical-indicators",
     "title": "Import, Export & APIs",
-    "section": "MOSPI eSankhyiki: The Data Portal",
-    "text": "MOSPI eSankhyiki: The Data Portal\n\neSankhyiki (esankhyiki.mospi.gov.in) is MOSPI’s open-access portal.\nProvides aggregate tables (not unit-level) downloadable as CSV/Excel — no registration needed.\n\nWhat you can get directly:\n\n\n\nIndicator\nFrequency\nFormat\n\n\n\n\nState Domestic Product (GSDP)\nAnnual\nExcel\n\n\nCPI by state and commodity group\nMonthly\nCSV\n\n\nIndex of Industrial Production (IIP)\nMonthly\nExcel\n\n\nEmployment (Quarterly Bulletin)\nQuarterly\nPDF/Excel\n\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\neSankhyiki = ready-to-use aggregate tables · Unit Data Portal = raw micro-data for research"
+    "section": "mospi-esankhyiki: Statistical Indicators",
+    "text": "mospi-esankhyiki: Statistical Indicators\n# pip install mospi-esankhyiki\nimport esankhyiki\n\n# Step 1 – discover the 22 datasets\ndatasets_df = esankhyiki.list_datasets(format=\"df\")\n\n# Step 2 – see indicators for PLFS (Periodic Labour Force Survey)\nindicators = esankhyiki.get_indicators(\"PLFS\")\n\n# Step 3 – find valid filter codes (years, states, sectors …)\nmeta = esankhyiki.get_metadata(\"PLFS\", indicator_code=3, frequency_code=1)\n\n# Step 4 – fetch as DataFrame\ndf = esankhyiki.get_data(\"PLFS\", {\n    \"indicator_code\": 3,   # Unemployment Rate\n    \"frequency_code\": 1,   # Annual\n    \"year\": \"2023-24\",\n    \"state_code\": 99,      # All India\n    \"gender_code\": 3,      # Persons (all)\n    \"age_code\": 1,\n    \"sector_code\": 3,      # Rural + Urban\n}, format=\"df\")\nprint(df)\nOther useful datasets: \"CPI\", \"NAS\" (GDP), \"IIP\", \"HCES\" (consumption/poverty), \"ASI\", \"WPI\""
+  },
+  {
+    "objectID": "slides/week-06/lecture-01.html#working-with-esankhyiki-output-in-python",
+    "href": "slides/week-06/lecture-01.html#working-with-esankhyiki-output-in-python",
+    "title": "Import, Export & APIs",
+    "section": "Working with esankhyiki output in Python",
+    "text": "Working with esankhyiki output in Python\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nOnce you call esankhyiki.get_data(..., format=\"df\") locally, the DataFrame has this same structure — ready for regression or visualisation."
   },
   {
     "objectID": "slides/week-06/lecture-01.html#exercise",
@@ -5422,7 +5429,7 @@
     "href": "slides/week-06/lecture-01.html#summary",
     "title": "Import, Export & APIs",
     "section": "Summary",
-    "text": "Summary\n\n✅ CSV, Excel, JSON, and APIs are the main gateways into econometric work.\n✅ pd.read_csv(), pd.read_excel(), and pd.read_json() are core import tools.\n✅ to_csv(index=False) helps save a clean analysis-ready dataset.\n✅ APIs return structured data that can be turned into pandas DataFrames.\n✅ Import mistakes in headers, delimiters, or types can distort later results.\n✅ MOSPI Unit Data (NSS, PLFS, ASI) provides household and firm-level micro-data for India.\n✅ eSankhyiki portal gives free access to aggregate tables (GSDP, CPI, IIP) in CSV/Excel.\n✅ A reproducible import-clean-export workflow is essential in applied economics."
+    "text": "Summary\n\n✅ CSV, Excel, JSON, and APIs are the main gateways into econometric work.\n✅ pd.read_csv(), pd.read_excel(), and pd.read_json() are core import tools.\n✅ to_csv(index=False) helps save a clean analysis-ready dataset.\n✅ APIs return structured data that can be turned into pandas DataFrames.\n✅ Import mistakes in headers, delimiters, or types can distort later results.\n✅ mospi-unitdata — downloads raw NSS/PLFS/ASI unit-level microdata from microdata.gov.in via Python API.\n✅ mospi-esankhyiki — fetches 500+ aggregate indicators (PLFS, CPI, NAS, IIP …) directly as DataFrames in 4 steps.\n✅ A reproducible import-clean-export workflow is essential in applied economics."
   },
   {
     "objectID": "slides/week-06/lecture-01.html#next-lecture",
