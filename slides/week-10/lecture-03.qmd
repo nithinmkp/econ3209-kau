@@ -1,0 +1,262 @@
+---
+title: "Partial Effects in Python"
+subtitle: "ECON 3209 · Week 10, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. estimate multiple regression models with `statsmodels` formula syntax
+2. read the main sections of a regression summary table
+3. extract coefficients, confidence intervals, and fitted values in Python
+4. visualize partial effects with prediction grids
+5. compute scenario-based marginal effects for Kerala policy examples
+
+---
+
+## The Python Workflow for MLR
+
+1. Build a tidy `pandas` DataFrame.
+2. Write a model formula such as `yield_ ~ fertilizer + rainfall + irrigation`.
+3. Fit with `smf.ols(...).fit()`.
+4. Read the summary table.
+5. Use fitted values and prediction grids for interpretation.
+
+::: {.highlight-box}
+For a linear model without interactions or logs, the marginal effect of a regressor equals its estimated coefficient everywhere.
+:::
+
+---
+
+## What Does the Summary Table Contain?
+
+::: {.cols-2}
+::: {}
+### Model fit panel
+- number of observations
+- $R^2$ and adjusted $R^2$
+- F-statistic for joint significance
+- residual standard error proxy (`sqrt(mse_resid)`)
+:::
+::: {}
+### Coefficient panel
+- estimate (`coef`)
+- standard error (`std err`)
+- t-statistic and p-value
+- confidence interval
+:::
+:::
+
+---
+
+## Python Demo: Fit and Print the Full Summary
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(2026)
+n = 110
+df = pd.DataFrame({
+    'fertilizer': np.random.uniform(40, 220, n),
+    'rainfall': np.random.uniform(850, 1550, n),
+    'irrigation': np.random.uniform(0, 1, n),
+    'soil_score': np.random.uniform(45, 90, n)
+})
+eps = np.random.normal(0, 15, n)
+df['yield_'] = 12 + 0.10*df['fertilizer'] + 0.03*df['rainfall'] + 10*df['irrigation'] + 0.25*df['soil_score'] + eps
+
+model = smf.ols('yield_ ~ fertilizer + rainfall + irrigation + soil_score', data=df).fit()
+print(model.summary())
+```
+
+---
+
+## Reading the Coefficient Panel
+
+- `coef` gives the estimated partial effect.
+- `std err` shows sampling uncertainty.
+- `P>|t|` helps test $H_0: \beta_j=0$.
+- The 95% interval shows a plausible range for the true parameter.
+
+::: {.formula}
+$$t_j = \frac{\hat\beta_j - 0}{se(\hat\beta_j)}$$
+:::
+
+If the model is linear in variables, the estimated partial effect of fertilizer is simply $\hat\beta_{fertilizer}$.
+
+---
+
+## Python Demo: Extract a Custom Results Table
+
+```{pyodide-python}
+table = pd.DataFrame({
+    'coef': model.params,
+    'std_err': model.bse,
+    'p_value': model.pvalues,
+    'ci_low': model.conf_int()[0],
+    'ci_high': model.conf_int()[1]
+})
+print(table.round(4))
+```
+
+---
+
+## Fitted Values and Residuals
+
+After estimation we can compute
+
+::: {.formula}
+$$\hat{Y}_i = X_i'\hat{\beta}, \qquad \hat{\varepsilon}_i = Y_i - \hat{Y}_i$$
+:::
+
+These are useful for:
+- prediction
+- residual plots
+- model checking
+- scenario analysis
+
+---
+
+## Python Demo: Plot a Partial Effect
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+grid = pd.DataFrame({
+    'fertilizer': np.linspace(40, 220, 60),
+    'rainfall': df['rainfall'].mean(),
+    'irrigation': df['irrigation'].mean(),
+    'soil_score': df['soil_score'].mean()
+})
+grid['pred'] = model.predict(grid)
+
+plt.figure(figsize=(7, 4))
+plt.scatter(df['fertilizer'], df['yield_'], alpha=0.45)
+plt.plot(grid['fertilizer'], grid['pred'], color='darkgreen', linewidth=2)
+plt.xlabel('Fertilizer (kg/acre)')
+plt.ylabel('Predicted yield')
+plt.title('Partial effect of fertilizer')
+plt.show()
+```
+
+---
+
+## When Marginal Effects Need More Care
+
+- In a plain linear model, the marginal effect is constant.
+- With **interactions**, the effect depends on another variable.
+- With **logs**, the effect can be a percentage effect or elasticity.
+- With **quadratic terms**, the effect changes with the level of $X$.
+
+::: {.gold-box}
+Later weeks extend this idea to interactions, heteroscedasticity-robust inference, and nonlinear models.
+:::
+
+---
+
+## Python Demo: Scenario-Based Effects
+
+```{pyodide-python}
+base = pd.DataFrame({
+    'fertilizer': [100],
+    'rainfall': [1200],
+    'irrigation': [0.4],
+    'soil_score': [65]
+})
+improved = base.copy()
+improved['fertilizer'] = 130
+
+y_base = model.predict(base)[0]
+y_improved = model.predict(improved)[0]
+
+print(f'Predicted yield at 100 kg fertilizer: {y_base:.2f}')
+print(f'Predicted yield at 130 kg fertilizer: {y_improved:.2f}')
+print(f'Estimated change: {y_improved - y_base:.2f}')
+```
+
+---
+
+## A Good Reporting Sentence
+
+::: {.highlight-box}
+“Holding rainfall, irrigation, and soil quality constant, an additional kilogram of fertilizer per acre is associated with an increase of $\hat\beta_1$ units in expected crop yield.”
+:::
+
+This sentence contains:
+- the conditioning variables
+- the unit of change in $X$
+- the unit of change in $Y$
+- the direction of the effect
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate data on crop yield, fertilizer, rainfall, irrigation, and soil score.
+2. Estimate an MLR with `statsmodels`.
+3. Extract a compact coefficient table and identify the most precisely estimated regressor.
+4. Create a prediction grid for fertilizer and plot the partial effect.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(99)
+n = 100
+df = pd.DataFrame({
+    'fertilizer': np.random.uniform(50, 210, n),
+    'rainfall': np.random.uniform(900, 1500, n),
+    'irrigation': np.random.uniform(0, 1, n)
+})
+
+# Add soil_score and yield_, then fit your model
+# df['soil_score'] = ...
+# df['yield_'] = ...
+# model = smf.ols('yield_ ~ fertilizer + rainfall + irrigation + soil_score', data=df).fit()
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ `statsmodels` makes it easy to estimate, summarize, and visualize MLR models.
+
+✅ The summary table reports fit statistics, coefficient estimates, standard errors, tests, and confidence intervals.
+
+✅ In a linear MLR without interactions, the marginal effect equals the coefficient everywhere.
+
+✅ Prediction grids convert regression output into interpretable visuals and scenarios.
+
+✅ Clear interpretation requires both statistical precision and economic language.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Week 11 — Multicollinearity**
+
+We will cover:
+- what multicollinearity is
+- how to detect it
+- why it inflates standard errors
+- how to diagnose and remedy it in Python
+:::
+
+
+
