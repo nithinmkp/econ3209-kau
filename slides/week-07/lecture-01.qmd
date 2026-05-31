@@ -1,0 +1,204 @@
+---
+title: "What is Econometrics?"
+subtitle: "ECON 3209 · Week 7, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Define econometrics and explain its role in economics.
+2. Distinguish clearly between correlation and causation.
+3. Understand why data are central to empirical economic analysis.
+4. Recognise the three major types of economic data.
+5. Connect abstract econometric ideas to Kerala agriculture and cooperative banking examples.
+
+---
+
+## What is econometrics?
+
+- Econometrics combines **economic theory**, **mathematics**, and **data**.
+- It helps us test economic ideas using observed evidence.
+- It also helps us forecast, estimate relationships, and evaluate policies.
+- Without econometrics, many policy debates remain descriptive rather than analytical.
+- In short, econometrics turns economic questions into measurable empirical models.
+
+---
+
+## A working definition
+
+::: {.formula}
+Econometrics is the application of statistical methods to economic data in order to estimate economic relationships, test theories, and evaluate policy effects.
+:::
+
+- The word contains both **economics** and **metrics**.
+- The goal is not only to describe data, but to make structured inferences.
+- Good econometrics requires both data quality and economic reasoning.
+
+---
+
+## Why do data matter?
+
+- Economic theory gives us ideas, but data tell us whether those ideas fit reality.
+- Farmers, cooperatives, and markets differ across districts and over time.
+- Data help us measure these differences quantitatively.
+- Public policy decisions are stronger when backed by evidence.
+- Econometrics makes evidence systematic rather than anecdotal.
+
+---
+
+## Correlation is not causation
+
+- Two variables may move together without one causing the other.
+- A third factor may influence both variables.
+- Reverse causality may also confuse interpretation.
+- Example: high fertilizer use and high rice yield may both reflect better irrigation.
+- Econometrics tries to isolate causal effects carefully.
+
+---
+
+## Kerala example: yield and fertilizer
+
+- Suppose we observe that farms using more fertilizer also have higher rice yield.
+- Is fertilizer the cause, or do richer farms simply buy more inputs?
+- Rainfall, soil quality, irrigation, and farmer skill may all matter.
+- This is why economists build models instead of relying on raw correlation alone.
+- Causal questions require stronger design and assumptions.
+
+---
+
+## A simple correlation example in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+soil_quality = np.random.normal(0, 1, 50)
+fertilizer = 100 + 20 * soil_quality + np.random.normal(0, 10, 50)
+yield_ton = 3 + 0.02 * fertilizer + 0.8 * soil_quality + np.random.normal(0, 0.4, 50)
+
+corr_df = pd.DataFrame({'fertilizer': fertilizer, 'yield_ton': yield_ton, 'soil_quality': soil_quality})
+print(corr_df.corr(numeric_only=True))
+```
+
+---
+
+## Three major data types
+
+- **Cross-section data**: many units observed at one point in time.
+- **Time-series data**: one unit observed over many periods.
+- **Panel data**: many units observed over many periods.
+- Each type supports different economic questions.
+- Next lecture will study these in detail.
+
+---
+
+## Economic questions and variables
+
+- Econometrics starts from a clear question.
+- Then we define a dependent variable and one or more explanatory variables.
+- Example: does household income affect loan repayment in cooperative societies?
+- Example: does irrigation raise rice yield in Palakkad?
+- Variables must be measurable before they can be analysed.
+
+---
+
+## Visualising a relationship
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(7, 4))
+plt.scatter(corr_df['fertilizer'], corr_df['yield_ton'], color='darkgreen')
+plt.xlabel('Fertilizer use')
+plt.ylabel('Rice yield (ton/ha)')
+plt.title('Correlation does not automatically imply causation')
+plt.show()
+```
+
+---
+
+## Typical steps in an econometric study
+
+1. State an economic question.
+2. Build a simple theoretical relationship.
+3. Collect appropriate data.
+4. Estimate a statistical model.
+5. Interpret the results in economic language.
+6. Check whether the conclusions are credible.
+
+---
+
+## Small dataset structures in Python
+
+```{pyodide-python}
+import pandas as pd
+
+cross_section = pd.DataFrame({'society': ['A', 'B', 'C'], 'recovery_rate': [91, 88, 95]})
+time_series = pd.DataFrame({'month': ['Jan', 'Feb', 'Mar'], 'rubber_price': [172, 176, 181]})
+panel = pd.DataFrame({'district': ['Palakkad', 'Palakkad', 'Thrissur'], 'year': [2022, 2023, 2022], 'yield_ton': [4.9, 5.1, 4.5]})
+
+print('Cross-section\n', cross_section)
+print('\nTime series\n', time_series)
+print('\nPanel\n', panel)
+```
+
+---
+
+## What makes a good econometric question?
+
+- It is specific and measurable.
+- It names the outcome we care about.
+- It identifies the explanatory variable clearly.
+- It suggests a feasible data source.
+- It leaves room for testing alternative explanations.
+
+---
+
+## From description to evidence
+
+- Descriptive statistics tell us what the data look like.
+- Econometrics goes further by estimating relationships systematically.
+- It does not replace economic judgment; it strengthens it.
+- In agriculture and banking, evidence-based decisions can improve outcomes.
+- This is why econometrics is a core skill for applied economics students.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a small DataFrame with `income_lakh` and `loan_repayment_rate` for five borrowers. Compute the correlation matrix and write one sentence explaining why a positive correlation does not necessarily prove causation.
+:::
+
+```{pyodide-python}
+import pandas as pd
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Econometrics combines theory, mathematics, and data.
+- ✅ It helps estimate relationships, test theories, and evaluate policy.
+- ✅ Data are essential because economic claims must be checked against reality.
+- ✅ Correlation is not the same as causation.
+- ✅ Cross-section, time series, and panel data are the main data types.
+- ✅ Clear questions and careful data choices are the starting point of good econometrics.
+
+---
+
+## Next Lecture
+
+- We will study **economic data types** in more detail.
+- The focus will be cross-section, time series, and panel data with cooperative banking examples.
+
