@@ -1,0 +1,210 @@
+---
+title: "Economic Data Types"
+subtitle: "ECON 3209 · Week 7, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Define cross-section, time-series, and panel data clearly.
+2. Identify suitable examples from cooperative banking and agriculture.
+3. Recognise how dataset structure affects econometric questions.
+4. Organise each data type correctly in pandas.
+5. Compare the strengths and limitations of the three data forms.
+
+---
+
+## Why data structure matters
+
+- The type of data determines what variation we can study.
+- Some questions need differences **across units**.
+- Some questions need changes **over time**.
+- Some questions need both dimensions together.
+- Econometric method follows data structure.
+
+---
+
+## Cross-section data
+
+- Cross-section data observe many units at a single point in time.
+- Units may be households, farms, banks, districts, or firms.
+- Example: 50 cooperative societies in Kerala in March 2026.
+- These data are useful for studying differences across units.
+- They do not directly show change over time.
+
+---
+
+## Cross-section example in pandas
+
+```{pyodide-python}
+import pandas as pd
+
+cross_df = pd.DataFrame({
+    'society': ['S1', 'S2', 'S3', 'S4'],
+    'district': ['Thrissur', 'Palakkad', 'Kottayam', 'Kannur'],
+    'deposits_lakh': [220, 310, 260, 205],
+    'recovery_rate': [92.4, 95.1, 90.7, 88.9]
+})
+
+print(cross_df)
+print("\nAverage recovery rate:", cross_df['recovery_rate'].mean())
+```
+
+---
+
+## Time-series data
+
+- Time-series data observe one unit repeatedly across time.
+- The time unit may be daily, monthly, quarterly, or yearly.
+- Example: monthly rubber prices in Kerala from 2010 to 2024.
+- These data are useful for trends, cycles, and forecasting.
+- Time order matters strongly in time-series analysis.
+
+---
+
+## Time-series example in pandas
+
+```{pyodide-python}
+import numpy as np
+
+months = pd.date_range('2023-01-01', periods=12, freq='M')
+rubber_price = pd.Series([171, 174, 176, 180, 182, 179, 177, 183, 186, 188, 191, 193])
+
+ts_df = pd.DataFrame({'month': months, 'rubber_price': rubber_price})
+print(ts_df.head())
+```
+
+---
+
+## Visualising a time series
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 4))
+plt.plot(ts_df['month'], ts_df['rubber_price'], marker='o', color='darkgreen')
+plt.title('Monthly rubber prices')
+plt.xlabel('Month')
+plt.ylabel('Price index')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## Panel data
+
+- Panel data combine cross-section and time-series dimensions.
+- We observe many units over multiple time periods.
+- Example: district agricultural productivity from 2018 to 2024.
+- Panel data allow us to study both differences across districts and changes over time.
+- They are especially useful for policy evaluation.
+
+---
+
+## Panel data example in pandas
+
+```{pyodide-python}
+panel_df = pd.DataFrame({
+    'district': ['Palakkad', 'Palakkad', 'Thrissur', 'Thrissur', 'Wayanad', 'Wayanad'],
+    'year': [2022, 2023, 2022, 2023, 2022, 2023],
+    'yield_ton': [4.9, 5.1, 4.4, 4.6, 2.0, 2.1],
+    'credit_lakh': [180, 195, 165, 172, 120, 128]
+})
+
+print(panel_df)
+```
+
+---
+
+## Comparing the three data types
+
+- Cross-section answers: **who differs from whom?**
+- Time series answers: **what changed over time?**
+- Panel data answers: **who changed, and when?**
+- Panel data often give richer evidence, but they are harder to manage.
+- The data type should match the research question.
+
+---
+
+## Useful panel operations in pandas
+
+```{pyodide-python}
+summary_panel = panel_df.groupby('district')[['yield_ton', 'credit_lakh']].mean()
+print(summary_panel)
+
+pivoted = panel_df.pivot(index='district', columns='year', values='yield_ton')
+print("\nYield by district and year")
+print(pivoted)
+```
+
+---
+
+## Cooperative banking examples
+
+- Cross-section: loan recovery rates across 50 societies in one year.
+- Time series: monthly deposits in one district cooperative bank.
+- Panel: branch-level recovery rates from 2018 to 2025.
+- Different structures reveal different policy insights.
+- Data type affects both storage and econometric technique.
+
+---
+
+## Common data management issues
+
+- Time variables must be stored consistently.
+- Unit identifiers should be unique and stable.
+- Panel data often contain missing years for some units.
+- Sorting by unit and time is essential.
+- Clear identifiers reduce errors in merging and analysis.
+
+---
+
+## Choosing the right data for a question
+
+- If you want district comparison at one time, use cross-section.
+- If you want trend or forecast, use time series.
+- If you want policy impact across districts and years, use panel data.
+- Better data structure leads to better identification.
+- Data design is part of econometric thinking.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create one small cross-section DataFrame and one small panel DataFrame for cooperative societies. Then compute the mean recovery rate for the cross-section and a district-wise average for the panel.
+:::
+
+```{pyodide-python}
+import pandas as pd
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Cross-section data observe many units at one point in time.
+- ✅ Time-series data observe one unit over multiple periods.
+- ✅ Panel data observe many units over many periods.
+- ✅ Data structure determines what type of variation we can analyse.
+- ✅ Cooperative banking and agricultural datasets often appear in all three forms.
+- ✅ Good econometrics begins with choosing the right data format.
+
+---
+
+## Next Lecture
+
+- We will derive **simple OLS** step by step.
+- The lecture will move from the population regression function to the sample regression line and the formulas for $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
