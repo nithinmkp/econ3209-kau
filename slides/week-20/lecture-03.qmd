@@ -1,0 +1,291 @@
+---
+title: "Course Review"
+subtitle: "ECON 3209 · Week 20, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. review the full 20-week structure of ECON 3209
+2. summarise the most important econometric formulas and workflows from the course
+3. run a compact Python mini-project that combines description, estimation, diagnostics, and forecasting
+4. identify next steps for further study and research after this course
+5. leave the course with a clear roadmap for independent practice
+
+---
+
+## Full Course Map
+
+::: {.cols-2}
+::: 
+| Week | Topic |
+|---|---|
+| 1 | Python Environment & Basics |
+| 2 | Control Flow & Functions |
+| 3 | NumPy for Economics |
+| 4 | Pandas & Data Wrangling |
+| 5 | Data Visualisation |
+| 6 | Working with Real Data |
+| 7 | Introduction to Econometrics |
+| 8 | OLS: Theory & Properties |
+| 9 | Inference in OLS |
+| 10 | Multiple Linear Regression |
+:::
+::: 
+| Week | Topic |
+|---|---|
+| 11 | Multicollinearity |
+| 12 | Heteroscedasticity |
+| 13 | Dummy Variables |
+| 14 | Nonlinear Regression |
+| 15 | Qualitative Response Models |
+| 16 | Model Specification |
+| 17 | Panel Data Analysis |
+| 18 | Autocorrelation |
+| 19 | Time Series: Basics |
+| 20 | Time Series: Forecasting |
+:::
+:::
+
+---
+
+## The Core Workflow of Applied Econometrics
+
+1. Start with an economic question.
+2. Obtain and clean data.
+3. Visualise and describe the sample.
+4. Choose an econometric model linked to theory.
+5. Estimate, diagnose, and improve the specification.
+6. Interpret results for policy, management, or research.
+7. Forecast or simulate when needed.
+
+---
+
+## Key Formula Sheet
+
+- OLS slope intuition: partial effect holding other regressors constant.
+- Omitted variable bias:
+
+$$\text{plim}\hat{\beta}_1 = \beta_1 + \beta_2 \frac{\text{Cov}(X_1,X_2)}{\text{Var}(X_1)}$$
+
+- Logit probability:
+
+$$P(Y_i=1|X_i) = \frac{e^{\beta_0+\beta_1 X_i}}{1+e^{\beta_0+\beta_1 X_i}}$$
+
+---
+
+## More Formulas to Remember
+
+- Fixed effects within estimator:
+
+$$\ddot{y}_{it} = \ddot{x}_{it}'\beta + \ddot{\varepsilon}_{it}$$
+
+- Durbin-Watson:
+
+$$DW = \frac{\sum_{t=2}^T(\hat{e}_t - \hat{e}_{t-1})^2}{\sum_{t=1}^T \hat{e}_t^2}$$
+
+- ARIMA:
+
+$$\phi(B)(1-B)^d Y_t = \theta(B)\varepsilon_t$$
+
+---
+
+## Mini-Project: Build a Dataset
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(2020)
+n = 180
+income = rng.normal(34, 7, n)
+collateral = rng.binomial(1, 0.48, n)
+credit_score = 60 + income + 7 * collateral + rng.normal(0, 5, n)
+default = (1.4 - 0.06 * income - 0.7 * collateral - 0.02 * credit_score + rng.normal(0, 0.8, n) > 0).astype(int)
+months = pd.date_range('2020-01-01', periods=n, freq='M')
+npa_ratio = 12 - 0.18 * income - 1.1 * collateral - 0.05 * credit_score + 0.3 * np.arange(n) / 12 + rng.normal(0, 1.2, n)
+df = pd.DataFrame({
+    'month': months,
+    'income': income,
+    'collateral': collateral,
+    'credit_score': credit_score,
+    'default': default,
+    'npa_ratio': npa_ratio,
+})
+print(df.head())
+```
+
+---
+
+## Mini-Project: Describe the Data
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(2020)
+n = 180
+income = rng.normal(34, 7, n)
+collateral = rng.binomial(1, 0.48, n)
+credit_score = 60 + income + 7 * collateral + rng.normal(0, 5, n)
+default = (1.4 - 0.06 * income - 0.7 * collateral - 0.02 * credit_score + rng.normal(0, 0.8, n) > 0).astype(int)
+months = pd.date_range('2020-01-01', periods=n, freq='M')
+npa_ratio = 12 - 0.18 * income - 1.1 * collateral - 0.05 * credit_score + 0.3 * np.arange(n) / 12 + rng.normal(0, 1.2, n)
+df = pd.DataFrame({'month': months, 'income': income, 'collateral': collateral, 'credit_score': credit_score, 'default': default, 'npa_ratio': npa_ratio})
+print(df[['income', 'credit_score', 'npa_ratio']].describe().round(2))
+plt.figure(figsize=(7, 4))
+plt.hist(df['income'], bins=18, color='darkgreen', alpha=0.8)
+plt.title('Income distribution in the mini-project data')
+plt.show()
+```
+
+---
+
+## Mini-Project: Estimate OLS
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(2020)
+n = 180
+income = rng.normal(34, 7, n)
+collateral = rng.binomial(1, 0.48, n)
+credit_score = 60 + income + 7 * collateral + rng.normal(0, 5, n)
+default = (1.4 - 0.06 * income - 0.7 * collateral - 0.02 * credit_score + rng.normal(0, 0.8, n) > 0).astype(int)
+months = pd.date_range('2020-01-01', periods=n, freq='M')
+npa_ratio = 12 - 0.18 * income - 1.1 * collateral - 0.05 * credit_score + 0.3 * np.arange(n) / 12 + rng.normal(0, 1.2, n)
+df = pd.DataFrame({'month': months, 'income': income, 'collateral': collateral, 'credit_score': credit_score, 'default': default, 'npa_ratio': npa_ratio})
+ols = smf.ols('npa_ratio ~ income + collateral + credit_score', data=df).fit()
+print(ols.summary().tables[1])
+```
+
+---
+
+## Mini-Project: Estimate Logit
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(2020)
+n = 180
+income = rng.normal(34, 7, n)
+collateral = rng.binomial(1, 0.48, n)
+credit_score = 60 + income + 7 * collateral + rng.normal(0, 5, n)
+default = (1.4 - 0.06 * income - 0.7 * collateral - 0.02 * credit_score + rng.normal(0, 0.8, n) > 0).astype(int)
+df = pd.DataFrame({'income': income, 'collateral': collateral, 'credit_score': credit_score, 'default': default})
+logit_model = smf.logit('default ~ income + collateral + credit_score', data=df).fit(disp=False)
+print(logit_model.params.round(4))
+print(logit_model.get_margeff(at='overall').summary())
+```
+
+---
+
+## Mini-Project: Forecast a Series
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+
+rng = np.random.default_rng(2020)
+n = 120
+series = 100 + np.cumsum(rng.normal(0, 1.5, n))
+months = pd.date_range('2015-01-01', periods=n, freq='M')
+df = pd.DataFrame({'month': months, 'series': series})
+model = ARIMA(df['series'], order=(1, 1, 1)).fit()
+forecast = model.forecast(steps=12)
+future = pd.date_range(df['month'].iloc[-1] + pd.offsets.MonthEnd(), periods=12, freq='M')
+plt.figure(figsize=(7, 4))
+plt.plot(df['month'], df['series'], label='Observed')
+plt.plot(future, forecast, linestyle='--', marker='o', label='Forecast')
+plt.legend()
+plt.title('Mini-project forecasting step')
+plt.show()
+```
+
+---
+
+## What’s Next?
+
+::: {.highlight-box}
+Possible next steps after ECON 3209:
+- MSc courses in econometrics, statistics, agricultural economics, or data science.
+- Research projects on credit, prices, crop productivity, labour, and climate shocks.
+- Internship work with banks, cooperatives, NGOs, and policy institutions.
+- Independent replication of published papers using Python.
+:::
+
+---
+
+## Research Applications
+
+- Evaluate cooperative credit programmes.
+- Model technology adoption by farmers.
+- Forecast commodity prices and procurement needs.
+- Measure policy effects with panel data and qualitative response models.
+- Extend these tools into dissertations, term papers, and evidence-based policy work.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Using the mini-project starter, add one more explanatory variable or forecast comparison. Then explain which tool from the course helps you most: OLS, logit, diagnostics, panel methods, or time series.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(2021)
+n = 150
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.5, n)
+credit_score = 58 + income + 6 * collateral + rng.normal(0, 5, n)
+default = (1.3 - 0.05 * income - 0.6 * collateral - 0.02 * credit_score + rng.normal(0, 0.8, n) > 0).astype(int)
+df = pd.DataFrame({'income': income, 'collateral': collateral, 'credit_score': credit_score, 'default': default})
+print(smf.logit('default ~ income + collateral + credit_score', data=df).fit(disp=False).params)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ The course moved from Python foundations to core econometric tools and finally forecasting methods.
+- ✅ You now have a workflow for data cleaning, visualisation, estimation, diagnosis, and interpretation.
+- ✅ The most important habit is to connect methods to economic questions and data structure.
+- ✅ With continued practice, these tools can support exams, projects, research, and professional work.
+
+---
+
+## Thank You {background-color="#1A3300"}
+
+::: {.highlight-box}
+**ECON 3209 · Econometrics with Python**  
+Department of Agricultural Economics  
+Kerala Agricultural University
+
+- Thank you for your energy, questions, and coding effort across 20 weeks.
+- Keep practising with real Kerala data: crop yields, prices, credit, and rural livelihoods.
+- Best wishes for your exams, projects, and future research.
+:::
+
+
