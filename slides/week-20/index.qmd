@@ -1,0 +1,17 @@
+---
+title: "Week 20 --- Time Series: Forecasting"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+---
+
+## Week 20 Overview
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | ARIMA Models | [Open →](lecture-01.qmd) |
+| Lecture 2 | Forecast Evaluation | [Open →](lecture-02.qmd) |
+| Lecture 3 | Course Review | [Open →](lecture-03.qmd) |
+
+::: {.callout-note}
+Slides for this week are being prepared. Check back soon.
+:::
+

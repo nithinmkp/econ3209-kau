@@ -1,0 +1,220 @@
+---
+title: "ARIMA Models"
+subtitle: "ECON 3209 · Week 20, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define AR, MA, and ARIMA models and interpret the orders p, d, and q
+2. write the compact ARIMA equation using backshift notation
+3. follow the Box-Jenkins workflow for identification, estimation, and checking
+4. estimate simple ARIMA models in Python and compare orders with AIC
+5. produce and interpret forecasts for a Kerala-style time series
+
+---
+
+## From AR and MA to ARIMA
+
+- **AR(p):** current value depends on past values.
+- **MA(q):** current value depends on current and past shocks.
+- **ARIMA(p,d,q):** combines autoregressive terms, differencing, and moving-average terms.
+
+$$\phi(B)(1-B)^d Y_t = \theta(B)\varepsilon_t$$
+
+---
+
+## Meaning of p, d, q
+
+- $p$: number of autoregressive lags.
+- $d$: number of differences needed for stationarity.
+- $q$: number of moving-average lags.
+- Example: ARIMA(1,1,1) means first-difference the series once, then model the differenced series with one AR term and one MA term.
+
+---
+
+## Box-Jenkins Methodology
+
+1. Plot the data and test stationarity.
+2. Difference if needed.
+3. Use ACF/PACF and theory to suggest $p$ and $q$.
+4. Estimate candidate models.
+5. Compare AIC/BIC and residual diagnostics.
+6. Forecast and evaluate.
+
+---
+
+## Prepare a Forecasting Series
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+print(df.head())
+print(df.tail())
+```
+
+---
+
+## Fit an ARIMA Model
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+from statsmodels.tsa.arima.model import ARIMA
+
+model = ARIMA(df['paddy_production'], order=(1, 1, 1)).fit()
+print(model.summary())
+```
+
+---
+
+## Searching over Small Orders
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+
+rows = []
+for p in range(3):
+    for q in range(3):
+        fitted = ARIMA(df['paddy_production'], order=(p, 1, q)).fit()
+        rows.append((p, 1, q, fitted.aic, fitted.bic))
+results = pd.DataFrame(rows, columns=['p', 'd', 'q', 'AIC', 'BIC'])
+print(results.sort_values('AIC').head().round(2))
+```
+
+---
+
+## Kerala Interpretation
+
+::: {.highlight-box}
+For Kerala paddy production, the differencing order often handles trend, while AR and MA terms capture short-run persistence in shocks due to weather, prices, and policy changes.
+:::
+
+---
+
+## Forecasting with ARIMA
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+from statsmodels.tsa.arima.model import ARIMA
+
+model = ARIMA(df['paddy_production'], order=(1, 1, 1)).fit()
+forecast = model.forecast(steps=5)
+future_years = np.arange(df['year'].iloc[-1] + 1, df['year'].iloc[-1] + 6)
+
+plt.figure(figsize=(7, 4))
+plt.plot(df['year'], df['paddy_production'], marker='o', label='Observed')
+plt.plot(future_years, forecast, marker='o', linestyle='--', label='Forecast')
+plt.xlabel('Year')
+plt.ylabel('Production index')
+plt.title('ARIMA forecast for paddy production')
+plt.legend()
+plt.show()
+```
+
+---
+
+## How to Choose the Final Model
+
+- Respect stationarity evidence and use the right differencing order.
+- Prefer parsimonious models that pass residual checks.
+- Compare AIC/BIC and out-of-sample forecast performance.
+- Avoid choosing orders mechanically from one graph alone.
+
+---
+
+## What ARIMA Can and Cannot Do
+
+- ARIMA is strong for short-run univariate forecasting.
+- It does not explain structural causal mechanisms by itself.
+- If major policy or climate regime changes occur, forecast performance may weaken.
+- Still, it is a foundational tool in applied time-series work.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Estimate ARIMA(1,1,1) and ARIMA(2,1,0) on the paddy series. Which model has the lower AIC, and what five-year forecast does it produce?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+from statsmodels.tsa.arima.model import ARIMA
+
+m111 = ARIMA(df['paddy_production'], order=(1, 1, 1)).fit()
+m210 = ARIMA(df['paddy_production'], order=(2, 1, 0)).fit()
+print('ARIMA(1,1,1) AIC:', m111.aic)
+print('ARIMA(2,1,0) AIC:', m210.aic)
+print('Forecast from ARIMA(1,1,1):', m111.forecast(steps=5))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ ARIMA combines autoregression, differencing, and moving-average dynamics in one framework.
+- ✅ The Box-Jenkins process links identification, estimation, checking, and forecasting.
+- ✅ AIC/BIC and diagnostics help narrow down plausible orders.
+- ✅ ARIMA is a central tool for practical short-run forecasting.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We evaluate forecasts using MAE, RMSE, MAPE, and rolling windows.
+- You will compare competing forecasts out-of-sample.
+- Model estimation matters, but forecast evaluation decides usefulness.
+:::
+
+
