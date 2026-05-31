@@ -1,0 +1,17 @@
+---
+title: "Week 11 --- Multicollinearity"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+---
+
+## Week 11 Overview
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | Nature & Detection | [Open →](lecture-01.qmd) |
+| Lecture 2 | Consequences | [Open →](lecture-02.qmd) |
+| Lecture 3 | VIF & Remedies in Python | [Open →](lecture-03.qmd) |
+
+::: {.callout-note}
+Slides for this week are being prepared. Check back soon.
+:::
+
