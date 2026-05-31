@@ -22,7 +22,7 @@ format:
     footer: "ECON 3209 — Kerala Agricultural University"
     chalkboard:
       theme: chalkboard
-    highlight-style: github
+    highlight-style: monokai
     code-line-numbers: true
     html-math-method: mathjax
     include-in-header:
