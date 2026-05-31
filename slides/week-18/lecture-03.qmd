@@ -1,0 +1,242 @@
+---
+title: "Cochrane-Orcutt in Python"
+subtitle: "ECON 3209 · Week 18, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. explain the logic of Cochrane-Orcutt and Prais-Winsten corrections
+2. estimate the autocorrelation parameter from OLS residuals
+3. apply a transformed regression in Python
+4. compare transformed estimates with HAC robust standard errors
+5. choose a practical response when autocorrelation is detected
+
+---
+
+## Why Correct Autocorrelation?
+
+- After detecting serial correlation, we have two broad options:
+  1. keep OLS coefficients but fix inference using robust methods,
+  2. transform the model to reduce serial correlation directly.
+- Cochrane-Orcutt is a classic transformation approach for AR(1) errors.
+
+---
+
+## Cochrane-Orcutt Steps
+
+1. Estimate the original regression by OLS.
+2. Obtain residuals and estimate $\rho$ from $\hat{e}_t = \rho \hat{e}_{t-1} + v_t$.
+3. Transform the variables:
+   - $y_t^* = y_t - \rho y_{t-1}$
+   - $x_t^* = x_t - \rho x_{t-1}$
+4. Re-estimate the transformed regression.
+
+This is a feasible GLS idea.
+
+---
+
+## Prais-Winsten versus Cochrane-Orcutt
+
+- **Cochrane-Orcutt** drops the first observation after transformation.
+- **Prais-Winsten** keeps the first observation with a modified weighting.
+- Both target AR(1) errors; Prais-Winsten is often preferred because it uses more information.
+
+---
+
+## Step 1: Fit OLS and Estimate rho
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1813)
+T = 120
+trend = np.arange(T)
+rain = rng.normal(100, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.75 * u[t - 1] + rng.normal(0, 1.8)
+price = 115 + 0.35 * trend - 0.28 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+rho_hat = np.corrcoef(ols.resid[1:], ols.resid[:-1])[0, 1]
+print('Estimated rho:', round(rho_hat, 4))
+print(ols.params.round(4))
+```
+
+---
+
+## Step 2: Transform and Refit
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1813)
+T = 120
+trend = np.arange(T)
+rain = rng.normal(100, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.75 * u[t - 1] + rng.normal(0, 1.8)
+price = 115 + 0.35 * trend - 0.28 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+rho_hat = np.corrcoef(ols.resid[1:], ols.resid[:-1])[0, 1]
+trans = df.copy()
+trans['price_star'] = trans['price'] - rho_hat * trans['price'].shift(1)
+trans['trend_star'] = trans['trend'] - rho_hat * trans['trend'].shift(1)
+trans['rain_star'] = trans['rain'] - rho_hat * trans['rain'].shift(1)
+co = smf.ols('price_star ~ trend_star + rain_star', data=trans.dropna()).fit()
+print(co.params.round(4))
+```
+
+---
+
+## HAC Robust Standard Errors
+
+- Sometimes we do not want to transform the model.
+- We can keep the OLS specification but compute **HAC (heteroskedasticity and autocorrelation consistent)** standard errors.
+- This is especially useful when the focus is inference rather than forecasting the dynamic structure.
+
+---
+
+## HAC in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1813)
+T = 120
+trend = np.arange(T)
+rain = rng.normal(100, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.75 * u[t - 1] + rng.normal(0, 1.8)
+price = 115 + 0.35 * trend - 0.28 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+hac = ols.get_robustcov_results(cov_type='HAC', maxlags=1)
+print('OLS SE:', ols.bse.round(4))
+print('HAC SE:', hac.bse.round(4))
+```
+
+---
+
+## Kerala Monthly Price Example
+
+::: {.highlight-box}
+For Kerala rubber or coconut prices, serial correlation may come from storage, trade contracts, and gradual market adjustment.
+
+If your goal is policy inference, HAC standard errors may be enough. If your goal is modelling the dynamics, transformation or a time-series model becomes more appealing.
+:::
+
+---
+
+## Comparing Fits Visually
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1813)
+T = 120
+trend = np.arange(T)
+rain = rng.normal(100, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.75 * u[t - 1] + rng.normal(0, 1.8)
+price = 115 + 0.35 * trend - 0.28 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+plt.figure(figsize=(7, 4))
+plt.plot(df['price'], label='Observed price', linewidth=2)
+plt.plot(ols.fittedvalues, label='OLS fitted', linewidth=2)
+plt.xlabel('Month index')
+plt.ylabel('Price')
+plt.title('Observed versus OLS fitted values')
+plt.legend()
+plt.show()
+```
+
+---
+
+## What to Report
+
+- State that autocorrelation was detected.
+- Report the diagnostic test used.
+- Explain whether you corrected via transformation, HAC standard errors, or a dynamic time-series model.
+- Link the method choice to the empirical objective.
+
+---
+
+## Practical Takeaway
+
+- Cochrane-Orcutt is a useful teaching tool for feasible GLS correction.
+- Prais-Winsten keeps the first observation and is often preferred.
+- HAC standard errors offer a convenient alternative when the coefficient estimates themselves are acceptable.
+- The next topic extends this logic into full time-series modelling.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use the starter code to estimate rho from OLS residuals and run a Cochrane-Orcutt transformation. Compare the transformed coefficient on trend with the original OLS coefficient.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(88)
+T = 100
+trend = np.arange(T)
+rain = rng.normal(100, 8, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.7 * u[t - 1] + rng.normal(0, 1.5)
+price = 110 + 0.3 * trend - 0.2 * rain + u
+df = pd.DataFrame({'price': price, 'trend': trend, 'rain': rain})
+ols = smf.ols('price ~ trend + rain', data=df).fit()
+rho_hat = np.corrcoef(ols.resid[1:], ols.resid[:-1])[0, 1]
+print('rho_hat =', rho_hat)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Cochrane-Orcutt estimates the AR(1) parameter and transforms the regression accordingly.
+- ✅ Prais-Winsten is a related correction that retains the first observation.
+- ✅ HAC robust standard errors are a practical alternative when only inference needs repair.
+- ✅ Method choice depends on whether you want corrected inference or a full dynamic specification.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We begin time-series basics with stationarity, trend, seasonality, and white noise.
+- You will learn why stable stochastic properties matter before forecasting.
+- Autocorrelation prepares us for the broader time-series toolkit.
+:::
+
+
