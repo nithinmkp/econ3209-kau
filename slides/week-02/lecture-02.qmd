@@ -1,0 +1,263 @@
+---
+title: "Functions & Scope"
+subtitle: "ECON 3209 · Week 2, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Define functions using `def` and call them with appropriate arguments
+2. Use parameters, default values, and keyword arguments
+3. Return one or more values from a function
+4. Apply `*args` and `**kwargs` in flexible function design
+5. Distinguish between local and global scope in Python
+
+---
+
+## Why Economists Use Functions
+
+- Functions let us reuse the same logic many times
+- They reduce copy-paste errors in data analysis
+- They make notebooks easier to read and test
+- In econometrics, functions are useful for repeated formulas and indicators
+- Good functions turn messy code into clear economic procedures
+
+::: {.highlight-box}
+If you compute loan interest for 50 borrowers, a function is safer than rewriting the same formula 50 times.
+:::
+
+---
+
+## Basic Function Syntax
+
+```{pyodide-python}
+def greet_student(name):
+    print(f"Welcome to ECON 3209, {name}!")
+
+greet_student("Anjali")
+greet_student("Faisal")
+```
+
+- `def` starts a function definition
+- The function name should be descriptive
+- Parameters go inside parentheses
+- The indented block is the function body
+- The function runs only when it is **called**
+
+---
+
+## Example: Farm Revenue Function
+
+```{pyodide-python}
+def crop_revenue(yield_kg, price_per_kg):
+    revenue = yield_kg * price_per_kg
+    return revenue
+
+rice_revenue = crop_revenue(3200, 28)
+banana_revenue = crop_revenue(1800, 36)
+
+print(f"Rice revenue: ₹{rice_revenue:,}")
+print(f"Banana revenue: ₹{banana_revenue:,}")
+```
+
+- A function can receive inputs and produce output
+- `return` sends a value back to the caller
+- Store the returned value in a variable when needed
+- This makes economic formulas reusable and transparent
+
+---
+
+## Parameters and Arguments
+
+- A **parameter** is the variable inside the function definition
+- An **argument** is the actual value passed when calling the function
+- Functions can use positional or keyword arguments
+- Clear parameter names improve readability
+- Default values make functions more convenient
+
+```{pyodide-python}
+def final_amount(principal, rate=0.07, years=1):
+    return principal * (1 + rate) ** years
+
+print(final_amount(100000))
+print(final_amount(100000, years=3))
+print(final_amount(principal=100000, rate=0.08, years=2))
+```
+
+---
+
+## Returning Multiple Values
+
+```{pyodide-python}
+def loan_summary(principal, rate, years):
+    amount = principal * (1 + rate) ** years
+    interest = amount - principal
+    return amount, interest
+
+amount, interest = loan_summary(250000, 0.085, 2)
+print(f"Final amount: ₹{amount:,.2f}")
+print(f"Interest earned: ₹{interest:,.2f}")
+```
+
+- Python can return more than one value at once
+- The returned values are packed in a tuple
+- We often unpack them into separate variables
+- This is useful for reporting both totals and components
+
+---
+
+## Functions Inside Loops
+
+```{pyodide-python}
+def classify_yield(yield_kg):
+    if yield_kg >= 4000:
+        return "High"
+    elif yield_kg >= 3000:
+        return "Medium"
+    return "Low"
+
+yields = [2800, 3150, 4025, 2950, 4300]
+for value in yields:
+    print(value, "->", classify_yield(value))
+```
+
+- Functions and loops work naturally together
+- The loop handles repetition
+- The function handles the decision rule
+- This is more readable than repeating the whole `if` block each time
+
+---
+
+## Flexible Inputs with `*args`
+
+- `*args` collects extra positional arguments into a tuple
+- Use it when the number of inputs may vary
+- It is helpful for totals, averages, and custom summaries
+- Choose a meaningful function name so flexibility does not reduce clarity
+
+```{pyodide-python}
+def average_deposit(*amounts):
+    return sum(amounts) / len(amounts)
+
+print("Average deposit:", average_deposit(12.5, 14.2, 13.8))
+print("Average deposit:", average_deposit(10.1, 11.4, 13.0, 12.7, 14.8))
+```
+
+---
+
+## Named Options with `**kwargs`
+
+```{pyodide-python}
+def borrower_profile(name, **kwargs):
+    print("Borrower:", name)
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+borrower_profile(
+    "Suma",
+    district="Thrissur",
+    crop="Coconut",
+    loan_type="Kisan Credit",
+    amount=180000
+)
+```
+
+- `**kwargs` collects extra keyword arguments into a dictionary
+- It is useful for optional descriptors or settings
+- But do not overuse it when fixed parameters would be clearer
+- Good design balances flexibility with simplicity
+
+---
+
+## Scope: Local vs Global Variables
+
+- A variable created inside a function is **local** to that function
+- A variable created outside functions is often called **global**
+- Local variables disappear after the function finishes
+- Functions should usually rely on inputs rather than hidden globals
+- This makes code easier to debug and reuse
+
+```{pyodide-python}
+rate = 0.09  # global variable
+
+def show_rate():
+    rate = 0.07  # local variable
+    print("Inside function:", rate)
+
+show_rate()
+print("Outside function:", rate)
+```
+
+---
+
+## Best Practices for Writing Functions
+
+- Keep each function focused on one task
+- Use descriptive names such as `compute_interest()` instead of `do_it()`
+- Add docstrings to explain purpose, inputs, and outputs
+- Test functions on small examples before using large datasets
+- Prefer returning values instead of printing everything inside the function
+
+```{pyodide-python}
+def debt_service_ratio(annual_income, annual_repayment):
+    """Return debt service ratio as a percentage."""
+    return (annual_repayment / annual_income) * 100
+
+ratio = debt_service_ratio(480000, 108000)
+print(f"Debt service ratio: {ratio:.2f}%")
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Write a function called `net_income` that takes `revenue` and `cost` as inputs and returns profit.
+
+Then call the function for:
+- Revenue = `125000`, Cost = `86000`
+- Revenue = `98000`, Cost = `102000`
+
+Finally, print whether each farm made a profit or a loss.
+:::
+
+```{pyodide-python}
+def net_income(revenue, cost):
+    # Write your function here
+    pass
+
+examples = [(125000, 86000), (98000, 102000)]
+
+for revenue, cost in examples:
+    profit = None
+    print(revenue, cost, profit)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Functions package reusable logic using `def`
+- ✅ Parameters and arguments let us customize function behaviour
+- ✅ `return` sends results back for later use
+- ✅ `*args` and `**kwargs` allow flexible inputs when needed
+- ✅ Local scope keeps variables contained inside a function
+- ✅ Well-designed functions make econometrics code modular and reliable
+
+---
+
+## Next Lecture
+
+### List Comprehensions & Lambda
+
+- We will learn compact ways to transform data
+- You will see how comprehensions and anonymous functions speed up data preparation
+- These tools are especially useful before moving into NumPy and pandas
+
