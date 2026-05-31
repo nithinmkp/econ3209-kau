@@ -171,7 +171,23 @@
       height: 45px; width: auto; z-index: 1000;
       pointer-events: none;
     }
-    /* ── Pyodide / Monaco Editor — dark theme ── */
+    /* ── Pyodide output text — key fix ── */
+    /* Extension sets color:#111 on dark .reveal pre background → invisible */
+    .reveal pre div code.qpyodide-output-code-stdout,
+    .qpyodide-output-code-stdout {
+      color: #d4d4d4 !important;
+    }
+    .reveal pre div code.qpyodide-output-code-stderr,
+    .qpyodide-output-code-stderr {
+      color: #f48771 !important;
+    }
+    /* Output container inherits .reveal pre dark bg; keep it consistent */
+    .reveal div.qpyodide-output-code-area pre {
+      background: #1e1e1e !important;
+      border-left: 4px solid #7AB87A !important;
+      color: #d4d4d4 !important;
+    }
+    /* ── Pyodide Monaco Editor — dark theme ── */
     /* Editor container */
     .qpyodide-editor {
       border: 1px solid #444 !important;
@@ -720,7 +736,7 @@ Topic
 </thead>
 <tbody class="list">
 
-<tr data-index="0" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230021810" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1064" data-listing-title-sort="Getting Started with Python" data-listing-filename-sort="lecture-01.qmd">
+<tr data-index="0" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230532225" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1064" data-listing-title-sort="Getting Started with Python" data-listing-filename-sort="lecture-01.qmd">
 <td>
 <a href="../../slides/week-01/lecture-01.html" class="title listing-title">Getting Started with Python</a>
 </td>
@@ -730,7 +746,7 @@ Topic
 
 </tr>
 
-<tr data-index="1" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230021810" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1656" data-listing-title-sort="Operators &amp; Expressions" data-listing-filename-sort="lecture-03.qmd">
+<tr data-index="1" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230532225" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1656" data-listing-title-sort="Operators &amp; Expressions" data-listing-filename-sort="lecture-03.qmd">
 <td>
 <a href="../../slides/week-01/lecture-03.html" class="title listing-title">Operators &amp; Expressions</a>
 </td>
@@ -740,7 +756,7 @@ Topic
 
 </tr>
 
-<tr data-index="2" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230021810" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1591" data-listing-title-sort="Variables &amp; Data Types" data-listing-filename-sort="lecture-02.qmd">
+<tr data-index="2" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230532225" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1591" data-listing-title-sort="Variables &amp; Data Types" data-listing-filename-sort="lecture-02.qmd">
 <td>
 <a href="../../slides/week-01/lecture-02.html" class="title listing-title">Variables &amp; Data Types</a>
 </td>

@@ -140,7 +140,23 @@
       height: 45px; width: auto; z-index: 1000;
       pointer-events: none;
     }
-    /* ── Pyodide / Monaco Editor — dark theme ── */
+    /* ── Pyodide output text — key fix ── */
+    /* Extension sets color:#111 on dark .reveal pre background → invisible */
+    .reveal pre div code.qpyodide-output-code-stdout,
+    .qpyodide-output-code-stdout {
+      color: #d4d4d4 !important;
+    }
+    .reveal pre div code.qpyodide-output-code-stderr,
+    .qpyodide-output-code-stderr {
+      color: #f48771 !important;
+    }
+    /* Output container inherits .reveal pre dark bg; keep it consistent */
+    .reveal div.qpyodide-output-code-area pre {
+      background: #1e1e1e !important;
+      border-left: 4px solid #7AB87A !important;
+      color: #d4d4d4 !important;
+    }
+    /* ── Pyodide Monaco Editor — dark theme ── */
     /* Editor container */
     .qpyodide-editor {
       border: 1px solid #444 !important;
