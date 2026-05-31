@@ -1,0 +1,218 @@
+---
+title: "Interaction Terms"
+subtitle: "ECON 3209 · Week 13, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. write and interpret dummy-by-continuous interaction models
+2. distinguish intercept shifts from slope shifts
+3. compute group-specific marginal effects
+4. visualize fitted lines for different categories
+5. estimate interaction models in Python with formula syntax
+
+---
+
+## Interaction Model
+
+::: {.formula}
+$$Y_i = \beta_0 + \beta_1 X_i + \beta_2 D_i + \beta_3(D_i \cdot X_i) + \varepsilon_i$$
+:::
+
+- $\beta_0$: intercept for the reference group ($D=0$)
+- $\beta_1$: slope for the reference group
+- $\beta_2$: intercept shift for the dummy group
+- $\beta_3$: slope difference for the dummy group
+
+---
+
+## Group-Specific Equations
+
+If $D=0$:
+
+::: {.formula}
+$$Y = \beta_0 + \beta_1 X + \varepsilon$$
+:::
+
+If $D=1$:
+
+::: {.formula}
+$$Y = (\beta_0 + \beta_2) + (\beta_1 + \beta_3)X + \varepsilon$$
+:::
+
+So the interaction allows both the intercept and the slope to differ.
+
+---
+
+## Kerala Interpretation
+
+Example: effect of fertilizer on yield may differ between irrigated and rainfed farms.
+
+- `D = 1` for irrigated plots
+- $\beta_2$ tells us whether irrigated farms start from a different baseline yield
+- $\beta_3$ tells us whether fertilizer is more or less productive under irrigation
+
+---
+
+## Reading the Coefficients Carefully
+
+- Do **not** interpret $\beta_1$ as the effect for everyone.
+- Do **not** interpret $\beta_2$ as the total effect of the dummy when $X$ changes.
+- Always compute the group-specific line.
+
+::: {.highlight-box}
+In interaction models, coefficients rarely speak alone. They speak as a bundle.
+:::
+
+---
+
+## Python Demo: Simulate Slope Differences
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(90)
+n = 120
+df = pd.DataFrame({
+    'fertilizer': np.random.uniform(40, 180, n),
+    'irrigated': np.random.choice([0, 1], size=n)
+})
+eps = np.random.normal(0, 7, n)
+df['yield_'] = 28 + 0.10*df['fertilizer'] + 6*df['irrigated'] + 0.08*(df['irrigated']*df['fertilizer']) + eps
+print(df.head())
+```
+
+---
+
+## Python Demo: Estimate the Interaction Model
+
+```{pyodide-python}
+model = smf.ols('yield_ ~ fertilizer * irrigated', data=df).fit()
+print(model.summary().tables[1])
+```
+
+---
+
+## Python Demo: Plot Group-Specific Fitted Lines
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+grid = pd.DataFrame({
+    'fertilizer': np.linspace(40, 180, 50)
+})
+grid0 = grid.assign(irrigated=0)
+grid1 = grid.assign(irrigated=1)
+
+plt.figure(figsize=(6.5, 4))
+plt.scatter(df['fertilizer'], df['yield_'], c=df['irrigated'], cmap='viridis', alpha=0.5)
+plt.plot(grid['fertilizer'], model.predict(grid0), color='black', label='Rainfed')
+plt.plot(grid['fertilizer'], model.predict(grid1), color='darkgreen', label='Irrigated')
+plt.xlabel('Fertilizer')
+plt.ylabel('Yield')
+plt.legend()
+plt.title('Interaction model fitted lines')
+plt.show()
+```
+
+---
+
+## Python Demo: Compute Marginal Effects by Group
+
+```{pyodide-python}
+b = model.params
+slope_rainfed = b['fertilizer']
+slope_irrigated = b['fertilizer'] + b['fertilizer:irrigated']
+print(f'Rainfed fertilizer effect:   {slope_rainfed:.4f}')
+print(f'Irrigated fertilizer effect: {slope_irrigated:.4f}')
+```
+
+---
+
+## Common Mistakes
+
+- forgetting the main effects when adding the interaction
+- comparing groups without computing both intercept and slope
+- reading the interaction coefficient as a standalone marginal effect
+- using interaction models without plotting them
+
+---
+
+## Alternative Examples
+
+Interaction terms also help with:
+- wage returns to education by gender
+- income effects before and after a policy reform
+- crop-response functions by soil type
+
+They are a flexible way to ask whether **one effect depends on another condition**.
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate crop yield as a function of fertilizer and irrigation.
+2. Estimate `yield_ ~ fertilizer * irrigated`.
+3. Compute the fertilizer slope for rainfed and irrigated farms separately.
+4. Plot the two fitted lines and interpret the difference.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(21)
+n = 100
+df = pd.DataFrame({
+    'fertilizer': np.random.uniform(30, 160, n),
+    'irrigated': np.random.choice([0, 1], size=n)
+})
+
+# Create yield_ with an interaction effect and estimate the model
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ Interaction terms allow slopes to differ across groups.
+
+✅ In a dummy-by-continuous interaction, one coefficient shifts the intercept and another shifts the slope.
+
+✅ Group-specific effects must be computed from combinations of coefficients.
+
+✅ Plots are one of the best ways to interpret interaction models.
+
+✅ Interaction models answer whether one relationship depends on context.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 3 — Structural Breaks in Python**
+
+We will cover:
+- regime dummies
+- before-and-after comparisons
+- Chow-test logic
+- cooperative credit scheme example
+:::
+
+
+
