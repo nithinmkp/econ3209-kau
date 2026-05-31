@@ -1,0 +1,225 @@
+---
+title: "Import, Export & APIs"
+subtitle: "ECON 3209 · Week 6, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Use `pd.read_csv()`, `pd.read_excel()`, and `pd.read_json()` to bring data into Python.
+2. Export cleaned data with `to_csv()` for future analysis and reporting.
+3. Understand the logic of API calls and JSON responses in applied economics.
+4. Recognise common import problems such as bad delimiters, headers, and data types.
+5. Build a simple data workflow using Kerala agriculture and India-level public data examples.
+
+---
+
+## Why data import matters
+
+- Econometrics begins with data, not with estimation.
+- Real-world datasets arrive as CSV files, Excel sheets, JSON files, and API responses.
+- Agricultural economists often combine farm surveys, market prices, rainfall, and banking records.
+- A careful import step prevents errors from spreading into regression analysis.
+- Good data management saves time when assignments become larger.
+
+---
+
+## Common file formats in practice
+
+- **CSV**: simple, portable, and common for field surveys.
+- **Excel**: frequent in offices, banks, and administrative records.
+- **JSON**: common when data come from websites and APIs.
+- **Export files** let us share reproducible datasets after cleaning.
+- In Kerala, we may merge crop yield data, district rainfall, and cooperative loan records.
+
+---
+
+## Reading a CSV file with pandas
+
+```{pyodide-python}
+import pandas as pd
+from io import StringIO
+
+csv_text = """district,crop,area_ha,yield_ton
+Thrissur,Rice,1200,4.8
+Palakkad,Rice,2100,5.3
+Wayanad,Coffee,900,1.7
+Alappuzha,Rice,1500,4.6
+"""
+
+crop_df = pd.read_csv(StringIO(csv_text))
+print(crop_df)
+print("\nAverage yield:", crop_df['yield_ton'].mean())
+```
+
+---
+
+## Important import options
+
+- `sep=` changes the delimiter when a file uses `;` instead of `,`.
+- `header=` tells pandas where variable names are located.
+- `na_values=` helps identify missing values such as `NA`, `-`, or `missing`.
+- `usecols=` keeps only needed variables.
+- `parse_dates=` is useful for time-series data such as monthly rubber prices.
+
+---
+
+## Excel, JSON, and exporting data
+
+- `pd.read_excel()` is common for cooperative bank branch records.
+- `pd.read_json()` is useful when data arrive in nested web formats.
+- `df.to_csv()` stores a clean version for later econometric work.
+- Exporting cleaned data improves reproducibility and transparency.
+- Always check whether row labels should be saved with `index=False`.
+
+---
+
+## Reading JSON and exporting to CSV
+
+```{pyodide-python}
+import pandas as pd
+from io import StringIO
+
+json_text = """
+[
+  {"district": "Kottayam", "loan_recovery": 92.1, "societies": 48},
+  {"district": "Kannur", "loan_recovery": 88.4, "societies": 51},
+  {"district": "Kollam", "loan_recovery": 90.7, "societies": 44}
+]
+"""
+
+bank_df = pd.read_json(StringIO(json_text))
+print(bank_df)
+print("\nCSV preview")
+print(bank_df.to_csv(index=False))
+
+# In a full Python environment:
+# bank_xlsx = pd.read_excel("cooperative_banking.xlsx", sheet_name="district_summary")
+```
+
+---
+
+## What is an API?
+
+- An **API** is a structured way to request data from a server.
+- Instead of downloading a file manually, Python can ask for current information.
+- API responses often arrive in JSON format.
+- Economists use APIs for prices, inflation, rainfall, or macro indicators.
+- The workflow is: send request $\rightarrow$ receive response $\rightarrow$ convert to DataFrame.
+
+---
+
+## API call pattern in Python
+
+```{pyodide-python}
+import requests
+import pandas as pd
+
+url = "https://api.worldbank.org/v2/country/IND/indicator/FP.CPI.TOTL?format=json&per_page=5"
+response = requests.get(url)
+print("Status code:", response.status_code)
+
+payload = response.json()
+records = pd.json_normalize(payload[1])
+print(records[['country.value', 'date', 'value']].head())
+```
+
+---
+
+## A simple import-clean-export workflow
+
+- Step 1: import raw data from CSV, Excel, JSON, or API.
+- Step 2: inspect the first rows using `head()`.
+- Step 3: check variable types with `info()`.
+- Step 4: clean names, missing values, and formats.
+- Step 5: export a stable analysis file with `to_csv()`.
+
+::: {.highlight-box}
+A good rule: never run a regression on data you have not inspected.
+:::
+
+---
+
+## Building a small workflow in code
+
+```{pyodide-python}
+import pandas as pd
+from io import StringIO
+
+raw_text = """district;crop;production_ton
+Palakkad;Rice;12000
+Idukki;Pepper;3400
+Ernakulam;Banana;5600
+"""
+
+raw_df = pd.read_csv(StringIO(raw_text), sep=';')
+raw_df.columns = raw_df.columns.str.lower()
+raw_df['production_ton'] = raw_df['production_ton'].astype(int)
+clean_df = raw_df.sort_values('district')
+print(clean_df)
+```
+
+---
+
+## Common problems when importing data
+
+- Numbers may be stored as text because of commas or symbols.
+- Headers may be repeated or shifted down by one row.
+- Missing values may appear as blank cells, `-`, or `n.a.`.
+- JSON data may be nested and need flattening.
+- API calls may fail because of bad URLs, rate limits, or internet problems.
+
+---
+
+## Applied example: Kerala data sources
+
+- Crop data may come from district agriculture offices.
+- Cooperative credit figures may come from annual reports in Excel.
+- India-level macro indicators may come from RBI or World Bank APIs.
+- A research project often combines several sources in one master dataset.
+- Careful import choices affect every later econometric conclusion.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+A cooperative bank officer gives you a semicolon-separated file with columns `branch`, `loans`, and `recovery_rate`. Write code to import the data, convert `loans` to numeric, and export a clean CSV preview without row numbers.
+:::
+
+```{pyodide-python}
+import pandas as pd
+from io import StringIO
+
+text = """branch;loans;recovery_rate
+Alappuzha;1250000;91.5
+Kottayam;980000;94.2
+"""
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ CSV, Excel, JSON, and APIs are the main gateways into econometric work.
+- ✅ `pd.read_csv()`, `pd.read_excel()`, and `pd.read_json()` are core import tools.
+- ✅ `to_csv(index=False)` helps save a clean analysis-ready dataset.
+- ✅ APIs return structured data that can be turned into pandas DataFrames.
+- ✅ Import mistakes in headers, delimiters, or types can distort later results.
+- ✅ A reproducible import-clean-export workflow is essential in applied economics.
+
+---
+
+## Next Lecture
+
+- We move from importing data to **exploratory data analysis (EDA)**.
+- We will summarise variables, inspect distributions, and study relationships visually.
+- The goal is to understand the data before formal econometric modelling begins.
+
