@@ -1,0 +1,228 @@
+---
+title: "Autocorrelation: Detection Tests"
+subtitle: "ECON 3209 · Week 18, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. compute and interpret the Durbin-Watson statistic
+2. understand the logic of the Breusch-Godfrey LM test
+3. compare when DW and BG are appropriate
+4. implement both tests in Python using statsmodels
+5. use test results to guide the next modelling step
+
+---
+
+## How Do We Detect Autocorrelation?
+
+- Start with residual plots over time.
+- Check residual autocorrelation numerically.
+- Then use formal tests.
+- Two classics are:
+  1. the **Durbin-Watson (DW)** statistic,
+  2. the **Breusch-Godfrey (BG)** LM test.
+
+---
+
+## Durbin-Watson Statistic
+
+$$DW = \frac{\sum_{t=2}^T(\hat{e}_t - \hat{e}_{t-1})^2}{\sum_{t=1}^T \hat{e}_t^2} \approx 2(1-\hat{\rho})$$
+
+- DW near 2 suggests little first-order autocorrelation.
+- DW below 2 suggests positive autocorrelation.
+- DW above 2 suggests negative autocorrelation.
+- The test is mainly designed for AR(1)-type residual correlation.
+
+---
+
+## Breusch-Godfrey LM Test
+
+- BG regresses residuals on original regressors and lagged residuals.
+- Null hypothesis: no serial correlation up to the chosen lag order.
+- BG is more flexible than DW because it can test higher-order autocorrelation.
+- It also works better when lagged dependent variables appear in the original model.
+
+---
+
+## Compute DW in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.stattools import durbin_watson
+
+rng = np.random.default_rng(1807)
+T = 100
+trend = np.arange(T)
+rain = rng.normal(95, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.7 * u[t - 1] + rng.normal(0, 2)
+price = 110 + 0.45 * trend - 0.3 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+print('DW statistic:', round(durbin_watson(ols.resid), 4))
+```
+
+---
+
+## Compute BG in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.diagnostic import acorr_breusch_godfrey
+
+rng = np.random.default_rng(1807)
+T = 100
+trend = np.arange(T)
+rain = rng.normal(95, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.7 * u[t - 1] + rng.normal(0, 2)
+price = 110 + 0.45 * trend - 0.3 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+print(acorr_breusch_godfrey(ols, nlags=2))
+```
+
+---
+
+## Reading the Output
+
+- For DW, compare the value with 2 as a quick rule of thumb.
+- For BG, use the LM statistic or F-statistic p-value.
+- A small p-value means rejecting the null of no serial correlation.
+- Rejection tells us we should not trust ordinary OLS standard errors.
+
+---
+
+## Kerala Price Example
+
+::: {.highlight-box}
+Suppose we regress Kerala monthly rubber prices on rainfall, export demand, and a time trend.
+
+If market shocks carry over from one month to the next, both DW and BG may indicate positive residual serial correlation.
+:::
+
+---
+
+## Residual Plot over Time
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1807)
+T = 100
+trend = np.arange(T)
+rain = rng.normal(95, 7, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.7 * u[t - 1] + rng.normal(0, 2)
+price = 110 + 0.45 * trend - 0.3 * rain + u
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+
+plt.figure(figsize=(7, 4))
+plt.plot(ols.resid, color='darkgreen')
+plt.axhline(0, linestyle='--', color='grey')
+plt.xlabel('Time')
+plt.ylabel('Residual')
+plt.title('Residuals over time')
+plt.show()
+```
+
+---
+
+## White Noise Comparison
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.stattools import durbin_watson
+from statsmodels.stats.diagnostic import acorr_breusch_godfrey
+
+rng = np.random.default_rng(1810)
+T = 100
+trend = np.arange(T)
+rain = rng.normal(95, 7, T)
+price = 110 + 0.45 * trend - 0.3 * rain + rng.normal(0, 2, T)
+df = pd.DataFrame({"price": price, "trend": trend, "rain": rain})
+ols = smf.ols("price ~ trend + rain", data=df).fit()
+print('DW:', round(durbin_watson(ols.resid), 4))
+print('BG:', acorr_breusch_godfrey(ols, nlags=2))
+```
+
+---
+
+## DW versus BG
+
+- Use **DW** for a quick first check of first-order residual autocorrelation.
+- Use **BG** when you want more flexibility or suspect higher-order serial correlation.
+- In applied work, it is common to report both a residual plot and a formal test.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Run DW and BG on the starter regression. Then state whether the residuals look positively autocorrelated and which test you would emphasise in a written report.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.stattools import durbin_watson
+from statsmodels.stats.diagnostic import acorr_breusch_godfrey
+
+rng = np.random.default_rng(55)
+T = 90
+trend = np.arange(T)
+rain = rng.normal(100, 8, T)
+u = np.zeros(T)
+for t in range(1, T):
+    u[t] = 0.65 * u[t - 1] + rng.normal(0, 2)
+price = 105 + 0.4 * trend - 0.2 * rain + u
+df = pd.DataFrame({'price': price, 'trend': trend, 'rain': rain})
+ols = smf.ols('price ~ trend + rain', data=df).fit()
+print(durbin_watson(ols.resid))
+print(acorr_breusch_godfrey(ols, nlags=2))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Durbin-Watson is a quick diagnostic for first-order autocorrelation.
+- ✅ Breusch-Godfrey is more flexible and can test serial correlation at higher lags.
+- ✅ Residual plots help translate the statistics into visible time patterns.
+- ✅ Once autocorrelation is detected, we need either corrected inference or a transformed model.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We correct autocorrelation using Cochrane-Orcutt, Prais-Winsten ideas, and HAC robust standard errors.
+- You will see a full Python workflow from detection to correction.
+- This completes the autocorrelation unit before we begin time-series basics.
+:::
+
+
