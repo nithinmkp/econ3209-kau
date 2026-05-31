@@ -1,0 +1,255 @@
+---
+title: "Matplotlib Foundations"
+subtitle: "ECON 3209 · Week 5, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Explain the figure-and-axes model in Matplotlib
+2. Create line, bar, scatter, and histogram charts
+3. Label plots clearly for an economics audience
+4. Choose chart types that match the variable structure
+5. Build basic publication-quality figures with Python
+
+---
+
+## Why Visualisation Matters
+
+- Tables are precise, but charts reveal patterns faster
+- Economists use plots to detect trends, outliers, and relationships
+- Good figures support decisions in agriculture and banking
+- Poor figures can hide the real message of the data
+- Visualisation is part of analysis, not only presentation
+
+---
+
+## Figure and Axes
+
+- A **figure** is the whole canvas
+- An **axes** object is the actual plotting area
+- Most Matplotlib work happens on axes objects
+- This structure makes multi-panel charts easier later
+- Understanding it now will save confusion later
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.set_title("Blank plotting canvas")
+ax.set_xlabel("X-axis")
+ax.set_ylabel("Y-axis")
+plt.show()
+```
+
+---
+
+## Line Charts for Time Trends
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+years = [2020, 2021, 2022, 2023, 2024]
+deposits = [110, 118, 125, 133, 145]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(years, deposits, marker='o', color='darkgreen', linewidth=2)
+ax.set_title("Cooperative Bank Deposits in Kerala")
+ax.set_xlabel("Year")
+ax.set_ylabel("Deposits (₹ crore)")
+ax.grid(True, alpha=0.3)
+plt.show()
+```
+
+- Use line charts when the horizontal axis is ordered, especially time
+- Markers help show the actual data points
+- Titles and labels should explain the units clearly
+- Grid lines can help reading values, but keep them subtle
+
+---
+
+## Bar Charts for Comparisons
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+districts = ["Thrissur", "Ernakulam", "Palakkad", "Kozhikode"]
+rice_yield = [3200, 3500, 2950, 3800]
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.bar(districts, rice_yield, color=['#5DBE50', '#3A8F2B', '#77A33C', '#DAB300'])
+ax.set_title("Rice Yield by District")
+ax.set_ylabel("kg per hectare")
+plt.xticks(rotation=15)
+plt.show()
+```
+
+- Bar charts compare levels across categories
+- Keep the number of categories manageable
+- Labels should be readable without clutter
+- Use consistent colours unless colour itself encodes meaning
+
+---
+
+## Scatter Plots for Relationships
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+rainfall = [2400, 2600, 2850, 3000, 3300]
+yield_kg = [2950, 3100, 3200, 3450, 3600]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.scatter(rainfall, yield_kg, color='maroon', s=80)
+ax.set_title("Rainfall and Rice Yield")
+ax.set_xlabel("Rainfall (mm)")
+ax.set_ylabel("Yield (kg/ha)")
+plt.show()
+```
+
+- Scatter plots show association between two numeric variables
+- They are useful before running regression models
+- Look for trends, clusters, and unusual points
+- A scatter plot suggests relationships; it does not prove causality
+
+---
+
+## Histograms for Distributions
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+loan_sizes = [40, 55, 62, 70, 82, 95, 130, 68, 74, 88, 102, 115]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.hist(loan_sizes, bins=6, color='steelblue', edgecolor='black')
+ax.set_title("Distribution of Cooperative Loan Size")
+ax.set_xlabel("Loan size (₹ thousand)")
+ax.set_ylabel("Frequency")
+plt.show()
+```
+
+- Histograms reveal the shape of a distribution
+- They show concentration, skewness, and possible outliers
+- The choice of bins affects the visual impression
+- Always label the unit clearly on the x-axis
+
+---
+
+## Label Everything Clearly
+
+- A good plot answers: what, where, when, and in what units?
+- Titles should communicate the economic message, not just the variable name
+- Axis labels should include units such as `kg/ha` or `₹ crore`
+- Legends are needed only when multiple series appear
+- Avoid decorative clutter that distracts from the data
+
+::: {.gold-box}
+If a classmate cannot interpret your plot in 10 seconds, the figure needs improvement.
+:::
+
+---
+
+## Choosing the Right Chart Type
+
+::: {.cols-2}
+::: {}
+### Use a Line Chart When
+- Data follows time order
+- You want to emphasise trend
+- Comparison of several series is needed
+:::
+::: {}
+### Use Bar / Scatter / Histogram When
+- Bar: compare categories
+- Scatter: examine relationships
+- Histogram: inspect distributions
+:::
+:::
+
+---
+
+## A Simple Styling Upgrade
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+years = [2020, 2021, 2022, 2023, 2024]
+loans = [90, 94, 99, 105, 112]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(years, loans, marker='o', color='#1A3300', linewidth=2.5)
+ax.set_title("Agricultural Loans Disbursed")
+ax.set_xlabel("Year")
+ax.set_ylabel("Loans (₹ crore)")
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.grid(axis='y', alpha=0.25)
+plt.show()
+```
+
+- Small style changes can make a figure much easier to read
+- Removing extra borders often improves presentation quality
+- Use consistent colours across a lecture or report
+- Simplicity usually beats heavy decoration
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a bar chart of coconut yield for three districts using any sample values you choose.
+
+1. Add a title and y-axis label.
+2. Use KAU-style green shades if possible.
+3. Finish with `plt.show()`.
+:::
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+# Write your solution here
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Matplotlib uses a figure-and-axes model
+- ✅ Line, bar, scatter, and histogram charts answer different questions
+- ✅ Titles, labels, and units are essential for interpretation
+- ✅ Small style choices can greatly improve readability
+- ✅ Plots help economists see patterns before modelling
+- ✅ Every plotting cell in this course should end with `plt.show()`
+
+---
+
+## Next Lecture
+
+### Seaborn Statistical Charts
+
+- We will build richer statistical graphics on top of Matplotlib
+- You will learn boxplots, heatmaps, pairplots, and distribution charts
+- These are especially useful for exploratory data analysis
+
