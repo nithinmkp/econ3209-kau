@@ -1,0 +1,262 @@
+---
+title: "Logit Model"
+subtitle: "ECON 3209 · Week 15, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. write the logistic probability model and connect it to odds and log-odds
+2. explain why maximum likelihood is used instead of OLS
+3. interpret logit coefficients using odds ratios and marginal effects
+4. estimate a logit model in Python with Kerala loan data
+5. compare fitted logit probabilities with LPM intuition
+
+---
+
+## From LPM to Logit
+
+- We want a model that keeps probabilities between 0 and 1.
+- The **logit model** maps any linear index into the unit interval using the logistic function.
+- Let $z_i = \beta_0 + \beta_1 X_{1i} + \cdots + \beta_k X_{ki}$.
+
+$$P(Y_i=1|X_i) = \frac{e^{\beta_0+\beta_1 X_i}}{1+e^{\beta_0+\beta_1 X_i}} = \Lambda(\beta_0+\beta_1 X_i)$$
+
+- As $z_i \to -\infty$, probability approaches 0; as $z_i \to +\infty$, it approaches 1.
+
+---
+
+## Odds and Log-Odds
+
+- If $p_i = P(Y_i=1|X_i)$, then **odds** are $p_i/(1-p_i)$.
+- The logit model assumes the **log-odds** are linear in regressors:
+
+$$\log\left(\frac{p_i}{1-p_i}\right)=\beta_0+\beta_1 X_{1i}+\cdots+\beta_k X_{ki}$$
+
+- A one-unit increase in $X_j$ changes the log-odds by $\beta_j$.
+- Exponentiating $\beta_j$ gives the **odds ratio**.
+
+---
+
+## Estimating Logit with Maximum Likelihood
+
+- OLS is not appropriate because the conditional mean is nonlinear.
+- We choose $\beta$ to maximise the likelihood of observing the sample outcomes.
+- For each observation:
+  - if $Y_i=1$, contribution is $p_i$;
+  - if $Y_i=0$, contribution is $1-p_i$.
+- The MLE uses all sample information and respects the binary nature of the dependent variable.
+
+---
+
+## Python Demo: Fitting Logit
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+print(logit_model.params.round(4))
+print("\nFirst five predicted probabilities")
+print(logit_model.predict(df.head()).round(4))
+```
+
+---
+
+## Reading the Coefficients
+
+- The sign of a coefficient tells us whether the regressor raises or lowers default risk.
+- Magnitude in raw coefficient form is harder to read than in OLS because it affects **log-odds**, not probability directly.
+- That is why we often report:
+  1. **odds ratios** $e^{\beta_j}$,
+  2. **average marginal effects**, or
+  3. predicted probabilities for meaningful borrower profiles.
+
+---
+
+## Odds Ratios in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import numpy as np
+import statsmodels.formula.api as smf
+
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+odds_ratios = np.exp(logit_model.params)
+print("Odds ratios")
+print(odds_ratios.round(3))
+```
+
+---
+
+## Marginal Effects
+
+- In logit, the effect of income on probability depends on the current value of $X$.
+- Marginal effect for regressor $X_j$ is:
+
+$$\frac{\partial P(Y=1|X)}{\partial X_j}=\Lambda(z)(1-\Lambda(z))\beta_j$$
+
+- The slope is largest in the middle of the S-curve and small near 0 or 1.
+- So probability effects are **not constant** across individuals.
+
+---
+
+## Average Marginal Effects in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import statsmodels.formula.api as smf
+
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+me = logit_model.get_margeff(at="overall")
+print(me.summary())
+```
+
+---
+
+## Kerala Example: Borrower Profiles
+
+::: {.highlight-box}
+For a cooperative bank manager, logit is useful because we can compare realistic borrower cases:
+- low income, no collateral, risky district;
+- medium income, collateral, better repayment history;
+- high income, collateral, strong credit score.
+:::
+
+The model translates these profiles into predicted default probabilities for decision-making.
+
+---
+
+## The Logistic Curve
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+z = np.linspace(-8, 8, 200)
+p = np.exp(z) / (1 + np.exp(z))
+
+plt.figure(figsize=(7, 4))
+plt.plot(z, p, color="darkgreen", linewidth=3)
+plt.xlabel("Linear index z")
+plt.ylabel("Probability")
+plt.title("Logistic S-curve")
+plt.axhline(0.5, color="grey", linestyle="--", linewidth=1)
+plt.show()
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Estimate a logit model for default using income, collateral, district, and credit score. Then compute one predicted probability for a borrower with income = 30, collateral = 0, district = 1, and credit score = 55.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import pandas as pd
+import statsmodels.formula.api as smf
+
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+new_borrower = pd.DataFrame({"income": [30], "collateral": [0], "district": [1], "credit_score": [55]})
+print(logit_model.predict(new_borrower))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Logit uses the logistic function to keep probabilities between 0 and 1.
+- ✅ Coefficients are easiest to communicate through odds ratios, marginal effects, and predicted probabilities.
+- ✅ MLE is the natural estimation method for binary outcomes in the logit model.
+- ✅ Compared with LPM, logit gives more realistic probability predictions.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We study the probit model, which uses the normal CDF instead of the logistic function.
+- You will compare logit and probit predictions in Python.
+- We also introduce ROC curves for classification performance.
+:::
+
+
