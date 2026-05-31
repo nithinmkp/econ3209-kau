@@ -1,7 +1,7 @@
 ---
 title: "Autocorrelation: Detection Tests"
 subtitle: "ECON 3209 · Week 18, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -224,5 +224,6 @@ print(acorr_breusch_godfrey(ols, nlags=2))
 - You will see a full Python workflow from detection to correction.
 - This completes the autocorrelation unit before we begin time-series basics.
 :::
+
 
 

@@ -1,7 +1,7 @@
 ---
 title: "Confidence Intervals"
 subtitle: "ECON 3209 · Week 9, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -193,4 +193,5 @@ from scipy import stats
 
 - We will apply **t and F tests in Python**.
 - The goal is to test single coefficients and groups of coefficients using `statsmodels` output.
+
 

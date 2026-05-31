@@ -6,3 +6,6 @@ __pycache__/
 Thumbs.db
 *.html
 !slides/**/*.html
+
+/.quarto/
+**/*.quarto_ipynb

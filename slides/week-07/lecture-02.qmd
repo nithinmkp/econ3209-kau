@@ -1,7 +1,7 @@
 ---
 title: "Economic Data Types"
 subtitle: "ECON 3209 · Week 7, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -207,4 +207,5 @@ import pandas as pd
 
 - We will derive **simple OLS** step by step.
 - The lecture will move from the population regression function to the sample regression line and the formulas for $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
 

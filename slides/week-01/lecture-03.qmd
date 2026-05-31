@@ -1,7 +1,7 @@
 ---
 title: "Operators & Expressions"
 subtitle: "ECON 3209 · Week 1, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -400,5 +400,6 @@ This week you built the foundation of Python programming:
 ::: {.highlight-box}
 **Next Week:** Control Flow & Functions — `if/else`, `for` loops, `while` loops, defining your own functions
 :::
+
 
 

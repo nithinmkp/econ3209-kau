@@ -1,7 +1,7 @@
 ---
 title: "t and F Tests in Python"
 subtitle: "ECON 3209 · Week 9, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -193,4 +193,5 @@ import statsmodels.formula.api as smf
 
 - In the next unit we will extend the regression framework further.
 - The natural next step is **multiple regression and richer model specification**.
+
 

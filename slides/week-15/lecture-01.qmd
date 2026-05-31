@@ -1,7 +1,7 @@
 ---
 title: "Linear Probability Model"
 subtitle: "ECON 3209 · Week 15, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -285,5 +285,6 @@ print("Outside [0,1]:", int(((df["pred_lpm"] < 0) | (df["pred_lpm"] > 1)).sum())
 - You will learn log-odds, maximum likelihood, odds ratios, and marginal effects.
 - Bring today’s intuition about binary outcomes into the logit model.
 :::
+
 
 

@@ -1,7 +1,7 @@
 ---
 title: "Interactive Plots & Publication-Ready Figures"
 subtitle: "ECON 3209 · Week 5, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -43,7 +43,7 @@ deposits = [118, 125, 133, 145]
 loans = [94, 99, 105, 112]
 
 fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-axes[0].plot(years, deposits, marker='o', color='#5DBE50')
+axes[0].plot(years, deposits, marker='o', color='#7AB87A')
 axes[0].set_title("Deposits")
 axes[1].plot(years, loans, marker='s', color='#DAB300')
 axes[1].set_title("Loans")
@@ -72,7 +72,7 @@ categories = ["Rice", "Coconut", "Rubber", "Banana"]
 prices = [28, 36, 165, 22]
 
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.bar(categories, prices, color=['#5DBE50', '#3A8F2B', '#8AA624', '#DAB300'])
+ax.bar(categories, prices, color=['#7AB87A', '#3A8F2B', '#8AA624', '#DAB300'])
 ax.set_title("Average Crop Prices in Kerala")
 ax.set_ylabel("₹ per kg")
 ax.tick_params(axis='x', rotation=15)
@@ -256,4 +256,5 @@ import matplotlib.pyplot as plt
 - In the next block of the course we will begin statistical modelling and inference
 - The coding and plotting foundations from Weeks 1–5 will now support regression-based analysis
 - Keep practicing with the live Pyodide cells before we move onward
+
 

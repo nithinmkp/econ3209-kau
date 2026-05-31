@@ -1,7 +1,7 @@
 ---
 title: "What is Econometrics?"
 subtitle: "ECON 3209 · Week 7, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -201,4 +201,5 @@ import pandas as pd
 
 - We will study **economic data types** in more detail.
 - The focus will be cross-section, time series, and panel data with cooperative banking examples.
+
 

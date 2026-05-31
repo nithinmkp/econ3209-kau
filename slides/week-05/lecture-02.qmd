@@ -1,7 +1,7 @@
 ---
 title: "Seaborn Statistical Charts"
 subtitle: "ECON 3209 · Week 5, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -44,9 +44,9 @@ loan_df = pd.DataFrame({"loan_size": [40, 55, 62, 70, 82, 95, 130, 68, 74, 88, 1
 
 fig, ax = plt.subplots(figsize=(7, 4))
 if hasattr(sns, "distplot"):
-    sns.distplot(loan_df["loan_size"], kde=True, ax=ax, color="#5DBE50")
+    sns.distplot(loan_df["loan_size"], kde=True, ax=ax, color="#7AB87A")
 else:
-    sns.histplot(loan_df["loan_size"], kde=True, ax=ax, color="#5DBE50")
+    sns.histplot(loan_df["loan_size"], kde=True, ax=ax, color="#7AB87A")
 ax.set_title("Distribution of Cooperative Loan Size")
 ax.set_xlabel("Loan size (₹ thousand)")
 plt.show()
@@ -74,7 +74,7 @@ yield_df = pd.DataFrame({
 })
 
 fig, ax = plt.subplots(figsize=(7, 4))
-sns.boxplot(data=yield_df, x="crop", y="yield_kg", ax=ax, palette=["#5DBE50", "#DAB300"])
+sns.boxplot(data=yield_df, x="crop", y="yield_kg", ax=ax, palette=["#7AB87A", "#DAB300"])
 ax.set_title("Yield Distribution by Crop")
 plt.show()
 ```
@@ -183,7 +183,7 @@ df = pd.DataFrame({
 })
 
 fig, ax = plt.subplots(figsize=(7, 4))
-sns.barplot(data=df, x="district", y="deposit_crore", color="#5DBE50", ax=ax)
+sns.barplot(data=df, x="district", y="deposit_crore", color="#7AB87A", ax=ax)
 ax.set_title("District Deposits with Seaborn Style")
 plt.xticks(rotation=15)
 plt.show()
@@ -255,4 +255,5 @@ import seaborn as sns
 - We will build multi-panel charts and improve formatting
 - You will learn saving options, annotations, and presentation standards
 - This turns exploratory plots into polished communication tools
+
 

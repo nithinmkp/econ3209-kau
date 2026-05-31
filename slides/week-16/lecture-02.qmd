@@ -1,7 +1,7 @@
 ---
 title: "RESET Test"
 subtitle: "ECON 3209 · Week 16, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -214,5 +214,6 @@ print(linear_reset(quadratic, power=2, use_f=True))
 - You will learn how information criteria balance fit and parsimony.
 - This connects specification testing with model selection decisions.
 :::
+
 
 

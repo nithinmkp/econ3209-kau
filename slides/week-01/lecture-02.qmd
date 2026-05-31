@@ -1,7 +1,7 @@
 ---
 title: "Variables & Data Types"
 subtitle: "ECON 3209 · Week 1, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -397,5 +397,6 @@ We will cover:
 - Introduction to `None` and truthiness
 - Building compound expressions for data filtering
 :::
+
 
 

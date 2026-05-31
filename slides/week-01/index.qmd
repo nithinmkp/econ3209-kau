@@ -24,3 +24,4 @@ This week introduces the Python programming environment. By the end of this week
 | Lecture 3 | Operators & Expressions | [Open →](lecture-03.qmd) |
 
 
+

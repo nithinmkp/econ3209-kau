@@ -1,11 +1,11 @@
 /*-- scss:defaults --*/
 
-// KAU Brand Colors
-$kau-green:   #5DBE50;
+// KAU Brand Colors — softer/lighter palette
+$kau-green:   #7AB87A;
 $kau-gold:    #DAB300;
 $kau-dark:    #1A3300;
-$kau-light:   #E8F5E2;
-$kau-tint:    #F5FAF3;
+$kau-light:   #EBF5EA;
+$kau-tint:    #F6FBF5;
 $kau-white:   #FFFFFF;
 $kau-gray:    #666666;
 
@@ -24,11 +24,11 @@ $selection-bg:  $kau-gold;
 
 /*-- KAU Color Variables --*/
 :root {
-  --kau-green:   #5DBE50;
+  --kau-green:   #7AB87A;
   --kau-gold:    #DAB300;
   --kau-dark:    #1A3300;
-  --kau-light:   #E8F5E2;
-  --kau-tint:    #F5FAF3;
+  --kau-light:   #EBF5EA;
+  --kau-tint:    #F6FBF5;
   --kau-white:   #FFFFFF;
   --kau-gray:    #666666;
 }
@@ -40,10 +40,23 @@ $selection-bg:  $kau-gold;
   color: #2E2E2E;
 }
 
-/*-- Title slide --*/
-.reveal .slides section.title-slide,
-.reveal .slides section[data-background-color] {
-  background: linear-gradient(135deg, #1A3300 0%, #5DBE50 100%);
+/*-- Title slide only — soft gradient --*/
+.reveal .slides section.title-slide {
+  background: linear-gradient(135deg, #1A3300 0%, #3D6B3A 60%, #5A8F57 100%) !important;
+  color: #fff;
+}
+
+/*-- Dark background slides (exercise, summary) — keep plain dark --*/
+.reveal .slides section[data-background-color="#1A3300"] {
+  background-color: #1A3300 !important;
+  color: #fff;
+}
+
+/*-- Soft green background slides — muted sage, not vivid --*/
+.reveal .slides section[data-background-color="#4A7A47"],
+.reveal .slides section[data-background-color="#7AB87A"],
+.reveal .slides section[data-background-color="#7AB87A"] {
+  background-color: #4A7A47 !important;
   color: #fff;
 }
 
@@ -75,7 +88,7 @@ $selection-bg:  $kau-gold;
 }
 
 .reveal h3, .reveal h4 {
-  color: #5DBE50;
+  color: #7AB87A;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
 }
@@ -91,17 +104,17 @@ $selection-bg:  $kau-gold;
 }
 
 .reveal ul li::marker {
-  color: #5DBE50;
+  color: #7AB87A;
 }
 
 .reveal ol li::marker {
-  color: #5DBE50;
+  color: #7AB87A;
   font-weight: 700;
 }
 
 /*-- Links --*/
 .reveal a {
-  color: #5DBE50;
+  color: #7AB87A;
 }
 
 .reveal a:hover {
@@ -111,7 +124,7 @@ $selection-bg:  $kau-gold;
 /*-- Code --*/
 .reveal pre {
   background: #1e1e1e;
-  border-left: 4px solid #5DBE50;
+  border-left: 4px solid #7AB87A;
   border-radius: 0.3em;
   box-shadow: 0 2px 12px rgba(0,0,0,0.25);
 }
@@ -122,7 +135,7 @@ $selection-bg:  $kau-gold;
   background: #f0f7ee;
   padding: 0.05em 0.3em;
   border-radius: 3px;
-  color: #5DBE50;
+  color: #7AB87A;
 }
 
 .reveal pre code {
@@ -138,8 +151,8 @@ $selection-bg:  $kau-gold;
 }
 
 .pyodide-cell-run-button {
-  background-color: #5DBE50 !important;
-  border-color: #5DBE50 !important;
+  background-color: #7AB87A !important;
+  border-color: #7AB87A !important;
   color: #fff !important;
 }
 
@@ -149,7 +162,7 @@ $selection-bg:  $kau-gold;
 
 .pyodide-cell-output-area {
   background: #f5faf3 !important;
-  border-left: 4px solid #5DBE50 !important;
+  border-left: 4px solid #7AB87A !important;
   font-family: 'Fira Code', monospace;
   font-size: 0.8em;
 }
@@ -160,7 +173,7 @@ $selection-bg:  $kau-gold;
 }
 
 .callout-note {
-  border-left: 4px solid #5DBE50;
+  border-left: 4px solid #7AB87A;
   background: #f0f7ee;
   color: #1A3300 !important;
 }
@@ -187,14 +200,14 @@ $selection-bg:  $kau-gold;
 .kau-divider {
   border: none;
   height: 3px;
-  background: linear-gradient(to right, #5DBE50, #DAB300);
+  background: linear-gradient(to right, #7AB87A, #DAB300);
   margin: 1em 0;
 }
 
 /*-- Highlight box --*/
 .highlight-box {
   background: #E6F5E3;
-  border-left: 5px solid #5DBE50;
+  border-left: 5px solid #7AB87A;
   padding: 0.8em 1.2em;
   border-radius: 0 0.4em 0.4em 0;
   margin: 0.8em 0;
@@ -240,7 +253,7 @@ $selection-bg:  $kau-gold;
 }
 
 .reveal footer {
-  color: #5DBE50;
+  color: #7AB87A;
   font-size: 0.6em;
 }
 
@@ -257,7 +270,7 @@ $selection-bg:  $kau-gold;
 }
 
 .reveal table th {
-  background: #5DBE50;
+  background: #7AB87A;
   color: #fff;
   padding: 0.5em 0.8em;
 }
@@ -278,5 +291,6 @@ $selection-bg:  $kau-gold;
   gap: 1.5rem;
   align-items: start;
 }
+
 
 

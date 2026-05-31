@@ -1,7 +1,7 @@
 ---
 title: "Detection Tests for Heteroscedasticity"
 subtitle: "ECON 3209 · Week 12, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -211,6 +211,7 @@ We will cover:
 - comparison of OLS, robust OLS, and WLS
 - when each remedy is appropriate
 :::
+
 
 
 

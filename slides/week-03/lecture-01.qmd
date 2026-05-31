@@ -1,7 +1,7 @@
 ---
 title: "Arrays & Vectorisation"
 subtitle: "ECON 3209 · Week 3, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -262,4 +262,5 @@ print(improved[mask])
 - We will extend arrays into vectors and matrices
 - You will learn matrix multiplication, solving systems, and eigenvalues
 - These tools connect directly to regression algebra
+
 

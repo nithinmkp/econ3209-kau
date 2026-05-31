@@ -1,7 +1,7 @@
 ---
 title: "Python Curve Fitting"
 subtitle: "ECON 3209 · Week 14, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -228,6 +228,7 @@ We will cover:
 - prepare for later topics such as qualitative response and specification tests
 - practice interpreting models, not just running code
 :::
+
 
 
 

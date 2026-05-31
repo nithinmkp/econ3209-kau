@@ -1,7 +1,7 @@
 ---
 title: "Partial Effects in Python"
 subtitle: "ECON 3209 · Week 10, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -257,6 +257,7 @@ We will cover:
 - why it inflates standard errors
 - how to diagnose and remedy it in Python
 :::
+
 
 
 

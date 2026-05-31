@@ -1,7 +1,7 @@
 ---
 title: "ARIMA Models"
 subtitle: "ECON 3209 · Week 20, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -216,5 +216,6 @@ print('Forecast from ARIMA(1,1,1):', m111.forecast(steps=5))
 - You will compare competing forecasts out-of-sample.
 - Model estimation matters, but forecast evaluation decides usefulness.
 :::
+
 
 

@@ -3,7 +3,7 @@ meta:
 
 color:
   palette:
-    kau-green:   "#5DBE50"
+    kau-green:   "#7AB87A"
     kau-gold:    "#DAB300"
     kau-dark:    "#1A3300"
     kau-light:   "#E8F5E2"
@@ -16,9 +16,9 @@ color:
   # Semantic role mappings
   foreground:  "#2E2E2E"
   background:  "#FFFFFF"
-  primary:     "#5DBE50"
+  primary:     "#7AB87A"
   secondary:   "#1A3300"
-  success:     "#5DBE50"
+  success:     "#7AB87A"
   info:        "#DAB300"
   warning:     "#DAB300"
   danger:      "#C0392B"
@@ -50,11 +50,12 @@ typography:
     size: 0.9em
 
   link:
-    color: "#5DBE50"
+    color: "#7AB87A"
     decoration: none
 
 defaults:
   shiny:
     theme: "flatly"
+
 
 

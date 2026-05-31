@@ -1,7 +1,7 @@
 ---
 title: "Pooled OLS"
 subtitle: "ECON 3209 · Week 17, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -271,5 +271,6 @@ print(smf.ols('productivity ~ fertilizer + rainfall', data=unbalanced).fit().par
 - You will learn demeaning and the LSDV approach in statsmodels.
 - This is the main solution when unobserved unit effects correlate with regressors.
 :::
+
 
 

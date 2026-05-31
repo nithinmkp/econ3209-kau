@@ -1,7 +1,7 @@
 ---
 title: "Matplotlib Foundations"
 subtitle: "ECON 3209 · Week 5, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -90,7 +90,7 @@ districts = ["Thrissur", "Ernakulam", "Palakkad", "Kozhikode"]
 rice_yield = [3200, 3500, 2950, 3800]
 
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.bar(districts, rice_yield, color=['#5DBE50', '#3A8F2B', '#77A33C', '#DAB300'])
+ax.bar(districts, rice_yield, color=['#7AB87A', '#3A8F2B', '#77A33C', '#DAB300'])
 ax.set_title("Rice Yield by District")
 ax.set_ylabel("kg per hectare")
 plt.xticks(rotation=15)
@@ -252,4 +252,5 @@ import matplotlib.pyplot as plt
 - We will build richer statistical graphics on top of Matplotlib
 - You will learn boxplots, heatmaps, pairplots, and distribution charts
 - These are especially useful for exploratory data analysis
+
 

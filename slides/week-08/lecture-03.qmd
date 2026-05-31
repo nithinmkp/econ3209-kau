@@ -1,7 +1,7 @@
 ---
 title: "Python OLS from Scratch"
 subtitle: "ECON 3209 · Week 8, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -187,4 +187,5 @@ import statsmodels.formula.api as smf
 
 - We begin **Inference in OLS**.
 - The next topic is hypothesis testing: nulls, alternatives, test statistics, and p-values.
+
 

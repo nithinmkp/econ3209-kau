@@ -1,7 +1,7 @@
 ---
 title: "Nature & Detection of Multicollinearity"
 subtitle: "ECON 3209 · Week 11, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -227,6 +227,7 @@ We will cover:
 - high R² with weak t-statistics
 - why prediction can still remain acceptable
 :::
+
 
 
 

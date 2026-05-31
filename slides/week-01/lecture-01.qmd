@@ -1,7 +1,7 @@
 ---
 title: "Getting Started with Python"
 subtitle: "ECON 3209 · Week 1, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -93,7 +93,7 @@ For this course we use **Python** — the skills you learn generalise beyond eco
 
 ---
 
-## Your First Python Cell {background-color="#5DBE50"}
+## Your First Python Cell {background-color="#4A7A47"}
 
 ::: {.gold-box}
 **Try it now!** Click **▶ Run** below — Python runs directly in your browser. No installation needed.
@@ -313,5 +313,6 @@ We will cover:
 - Lists, tuples, and dictionaries
 - Type conversion and checking
 :::
+
 
 

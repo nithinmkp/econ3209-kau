@@ -1,7 +1,7 @@
 ---
 title: "Fixed Effects"
 subtitle: "ECON 3209 · Week 17, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -274,5 +274,6 @@ print(smf.ols('productivity ~ fertilizer + rainfall + C(district)', data=df).fit
 - You will see when a random-effects assumption is plausible and how to compare FE with RE.
 - Because Pyodide lacks linearmodels, we will implement the logic manually.
 :::
+
 
 

@@ -1,7 +1,7 @@
 ---
 title: "Course Review"
 subtitle: "ECON 3209 · Week 20, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -280,12 +280,13 @@ print(smf.logit('default ~ income + collateral + credit_score', data=df).fit(dis
 
 ::: {.highlight-box}
 **ECON 3209 · Econometrics with Python**  
-Department of Agricultural Economics  
+Department of Development Economics  
 Kerala Agricultural University
 
 - Thank you for your energy, questions, and coding effort across 20 weeks.
 - Keep practising with real Kerala data: crop yields, prices, credit, and rural livelihoods.
 - Best wishes for your exams, projects, and future research.
 :::
+
 
 

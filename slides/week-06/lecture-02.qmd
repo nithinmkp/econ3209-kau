@@ -1,7 +1,7 @@
 ---
 title: "Exploratory Data Analysis"
 subtitle: "ECON 3209 · Week 6, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -206,4 +206,5 @@ import matplotlib.pyplot as plt
 
 - We will complete a **data cleaning case study** using a Kerala crop dataset.
 - The focus will be missing values, outliers, type conversion, and reproducible cleaning steps.
+
 

@@ -1,7 +1,7 @@
 ---
 title: "Random Effects & Hausman Test"
 subtitle: "ECON 3209 · Week 17, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -235,5 +235,6 @@ print(fe.params)
 - You will see AR(1) processes and why time series errors violate the usual OLS assumptions.
 - From panels we move to dynamics in pure time series data.
 :::
+
 
 

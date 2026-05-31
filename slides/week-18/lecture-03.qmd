@@ -1,7 +1,7 @@
 ---
 title: "Cochrane-Orcutt in Python"
 subtitle: "ECON 3209 · Week 18, Lecture 3 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -238,5 +238,6 @@ print('rho_hat =', rho_hat)
 - You will learn why stable stochastic properties matter before forecasting.
 - Autocorrelation prepares us for the broader time-series toolkit.
 :::
+
 
 

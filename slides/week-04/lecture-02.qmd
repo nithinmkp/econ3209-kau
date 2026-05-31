@@ -1,7 +1,7 @@
 ---
 title: "Merge, Reshape & Groupby"
 subtitle: "ECON 3209 · Week 4, Lecture 2 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -266,4 +266,5 @@ loan_df = pd.DataFrame()
 - We will simulate a realistic agricultural data cleaning workflow
 - You will see missing values, type issues, and simple case-study analysis
 - This brings pandas closer to the kinds of datasets used in practice
+
 

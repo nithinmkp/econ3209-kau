@@ -1,7 +1,7 @@
 ---
 title: "Gauss-Markov Theorem"
 subtitle: "ECON 3209 · Week 8, Lecture 1 · Kerala Agricultural University"
-author: "Department of Agricultural Economics, KAU"
+author: "Department of Development Economics, KAU"
 date: "Autumn 2026"
 format:
   revealjs:
@@ -212,4 +212,5 @@ import statsmodels.formula.api as smf
 
 - We will study the **statistical properties of OLS**.
 - The focus will be unbiasedness, consistency, efficiency, and the sampling distribution of $\hat{\beta}$.
+
 
