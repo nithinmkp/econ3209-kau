@@ -1,0 +1,17 @@
+---
+title: "Week 9 --- Inference in OLS"
+subtitle: "ECON 3209 · Kerala Agricultural University"
+---
+
+## Week 9 Overview
+
+| Lecture | Topic | Slides |
+|---|---|---|
+| Lecture 1 | Hypothesis Testing | [Open →](lecture-01.qmd) |
+| Lecture 2 | Confidence Intervals | [Open →](lecture-02.qmd) |
+| Lecture 3 | t and F Tests in Python | [Open →](lecture-03.qmd) |
+
+::: {.callout-note}
+Slides for this week are being prepared. Check back soon.
+:::
+

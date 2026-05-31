@@ -1,0 +1,201 @@
+---
+title: "Hypothesis Testing"
+subtitle: "ECON 3209 · Week 9, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Define null and alternative hypotheses in regression analysis.
+2. Understand test statistics, critical values, and p-values.
+3. Distinguish Type I and Type II errors.
+4. Apply coefficient significance testing in Python.
+5. Interpret regression tests in economically meaningful language.
+
+---
+
+## Why inference matters
+
+- OLS gives point estimates, but point estimates alone are not enough.
+- We need to know whether an estimated effect could be due to sampling noise.
+- Inference helps us decide whether evidence is strong or weak.
+- Policy conclusions should depend on both effect size and uncertainty.
+- Hypothesis testing is one of the main tools for statistical inference.
+
+---
+
+## Null and alternative hypotheses
+
+- The **null hypothesis** is the benchmark claim we test.
+- The **alternative hypothesis** is what we consider if the null is rejected.
+- In simple regression, a common test is
+  $$H_0: \beta_1 = 0 \quad \text{vs} \quad H_1: \beta_1 \neq 0$$
+- This asks whether the regressor has a statistically detectable linear effect.
+- The null is not “proved true”; it is either rejected or not rejected.
+
+---
+
+## Test statistic for a coefficient
+
+::: {.formula}
+$$t = \frac{\hat{\beta}_1 - \beta_{1,0}}{se(\hat{\beta}_1)}$$
+:::
+
+- $\beta_{1,0}$ is the value under the null hypothesis.
+- Usually $\beta_{1,0} = 0$.
+- A large absolute $t$ value suggests evidence against the null.
+- The p-value translates the test statistic into probability language.
+
+---
+
+## Type I and Type II errors
+
+- **Type I error**: rejecting a true null hypothesis.
+- **Type II error**: failing to reject a false null hypothesis.
+- The significance level $\alpha$ controls the probability of Type I error.
+- Lower $\alpha$ reduces false positives but can increase false negatives.
+- There is always a trade-off between caution and power.
+
+---
+
+## Understanding the p-value
+
+- The p-value is the probability of observing a test statistic at least as extreme as the one obtained, assuming the null is true.
+- A small p-value means the data would be unusual under the null.
+- Common cut-offs are 10%, 5%, and 1%.
+- A p-value is not the probability that the null is true.
+- Statistical significance is not the same as economic importance.
+
+---
+
+## Fitting a model and reading p-values
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(42)
+income = np.random.uniform(1.5, 6.0, 60)
+repayment = 55 + 8 * income + np.random.normal(0, 5, 60)
+
+df = pd.DataFrame({'income': income, 'repayment': repayment})
+model = smf.ols('repayment ~ income', data=df).fit()
+print(model.summary())
+```
+
+---
+
+## Manual t-statistic calculation
+
+```{pyodide-python}
+beta1_hat = model.params['income']
+se_beta1 = model.bse['income']
+t_stat = beta1_hat / se_beta1
+
+print('Estimated slope =', round(beta1_hat, 4))
+print('Standard error =', round(se_beta1, 4))
+print('t statistic =', round(t_stat, 4))
+print('p-value =', model.pvalues['income'])
+```
+
+---
+
+## Decision rule
+
+- Choose a significance level, such as $\alpha = 0.05$.
+- If `p-value < 0.05`, reject the null at the 5% level.
+- If `p-value \ge 0.05`, do not reject the null.
+- Always report the estimated effect as well as significance.
+- Practical significance may matter even when p-values are moderate.
+
+---
+
+## Statistical versus economic significance
+
+- A tiny effect can be statistically significant in a very large sample.
+- A large effect can be statistically insignificant in a very noisy or small sample.
+- Economists care about magnitude, sign, and context.
+- Example: a 0.02 increase in repayment rate may be statistically significant but economically trivial.
+- Never interpret p-values without the coefficient itself.
+
+---
+
+## Comparing stronger and weaker effects
+
+```{pyodide-python}
+np.random.seed(10)
+x = np.random.uniform(0, 10, 50)
+y_weak = 5 + 0.2 * x + np.random.normal(0, 3, 50)
+y_strong = 5 + 1.0 * x + np.random.normal(0, 3, 50)
+
+weak_model = smf.ols('y_weak ~ x', data=pd.DataFrame({'x': x, 'y_weak': y_weak})).fit()
+strong_model = smf.ols('y_strong ~ x', data=pd.DataFrame({'x': x, 'y_strong': y_strong})).fit()
+
+print('Weak effect p-value  :', weak_model.pvalues['x'])
+print('Strong effect p-value:', strong_model.pvalues['x'])
+```
+
+---
+
+## Two-sided and one-sided tests
+
+```{pyodide-python}
+from scipy import stats
+
+p_two_sided = 2 * (1 - stats.t.cdf(abs(t_stat), df=model.df_resid))
+p_one_sided = 1 - stats.t.cdf(t_stat, df=model.df_resid)
+
+print('Two-sided p-value:', p_two_sided)
+print('One-sided p-value:', p_one_sided)
+```
+
+---
+
+## Common mistakes in hypothesis testing
+
+- Treating `p < 0.05` as proof of a large effect.
+- Ignoring the sign and size of the coefficient.
+- Confusing failure to reject with proof that the null is true.
+- Running many tests without clear hypotheses.
+- Forgetting that bad data can make “significant” results meaningless.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Estimate a regression of `yield_` on `fertilizer` using simulated data. Print the slope, its standard error, the t-statistic, and the p-value. Then state whether you reject $H_0: \beta_1 = 0$ at the 5% level.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Hypothesis testing helps decide whether an observed effect is statistically credible.
+- ✅ The null and alternative hypotheses formalise the question.
+- ✅ The t-statistic compares the estimate with its standard error.
+- ✅ Type I and Type II errors describe different testing mistakes.
+- ✅ P-values guide decisions but do not measure economic importance.
+- ✅ Good inference combines significance, magnitude, and context.
+
+---
+
+## Next Lecture
+
+- We will study **confidence intervals** for regression coefficients.
+- These intervals give a range of plausible values for the true parameter.
+
