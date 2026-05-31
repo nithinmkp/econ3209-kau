@@ -1,0 +1,401 @@
+---
+title: "Variables & Data Types"
+subtitle: "ECON 3209 · Week 1, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Assign and name variables following Python conventions
+2. Identify and use the core scalar types: `int`, `float`, `str`, `bool`
+3. Create and manipulate `list`, `tuple`, and `dict` objects
+4. Convert between types and check types with `type()` and `isinstance()`
+
+---
+
+## Variables
+
+A **variable** is a named storage location in memory.
+
+```{pyodide-python}
+# Assignment: name = value
+crop_yield = 3500          # kg/hectare (integer)
+price_per_kg = 45.75       # rupees (float)
+crop_name = "Rice"         # text (string)
+is_irrigated = True        # boolean
+
+# Print all variables
+print(f"Crop: {crop_name}")
+print(f"Yield: {crop_yield} kg/ha")
+print(f"Price: ₹{price_per_kg}/kg")
+print(f"Irrigated: {is_irrigated}")
+```
+
+::: {.highlight-box}
+Python uses **dynamic typing** — you don't declare the type; Python infers it.
+:::
+
+---
+
+## Variable Naming Rules
+
+```{pyodide-python}
+# ✅ Valid names
+crop_yield = 3500          # snake_case (preferred in Python)
+cropYield = 3500           # camelCase (acceptable)
+_private = "internal"      # leading underscore = convention for private
+yield2024 = 4100           # numbers allowed (not at start)
+
+# ❌ Invalid names (will cause SyntaxError)
+# 2024yield = 4100         # starts with digit
+# crop-yield = 3500        # hyphen not allowed
+# crop yield = 3500        # space not allowed
+
+# 🚫 Reserved keywords — cannot be used as variable names
+# for, if, else, while, def, class, import, return, True, False, None
+print("Variable names are valid!")
+```
+
+---
+
+## Integers (`int`)
+
+```{pyodide-python}
+# Integers: whole numbers, no decimal point, unlimited precision
+cooperative_members = 1250
+annual_profit = 4_500_000     # underscores improve readability
+deficit = -75000
+big_number = 10 ** 100        # googol — Python handles big integers!
+
+print(type(cooperative_members))   # <class 'int'>
+print(type(annual_profit))
+print(f"Members: {cooperative_members:,}")      # thousands separator
+print(f"Profit: ₹{annual_profit:,}")
+print(f"Googol digits: {len(str(big_number))}")
+```
+
+---
+
+## Floats (`float`)
+
+```{pyodide-python}
+# Floats: decimal numbers (64-bit IEEE 754 double precision)
+interest_rate = 0.0875        # 8.75%
+inflation = 6.2
+land_area = 2.5               # hectares
+
+print(type(interest_rate))   # <class 'float'>
+
+# Floating point precision — a famous Python quirk!
+print(0.1 + 0.2)             # Not exactly 0.3!
+print(round(0.1 + 0.2, 10))  # Better
+
+# Scientific notation
+avogadro = 6.022e23          # 6.022 × 10²³
+electron = 1.6e-19           # 1.6 × 10⁻¹⁹
+print(f"Avogadro: {avogadro:.3e}")
+```
+
+---
+
+## Strings (`str`)
+
+```{pyodide-python}
+# Strings: sequences of characters
+district = "Thrissur"
+message = 'Kerala Agricultural University'
+multiline = """ECON 3209
+Econometrics with Python
+6th Semester"""
+
+# String operations
+print(len(district))                    # length
+print(district.upper())                 # uppercase
+print(message.replace("University", "Univ."))
+print(district + ", Kerala")            # concatenation
+print(district * 2)                     # repetition
+print("KAU" in message)                # membership test
+```
+
+---
+
+## String Formatting (f-strings)
+
+```{pyodide-python}
+# f-strings (Python 3.6+) — most readable way to format output
+name = "Arjun"
+gpa = 8.75
+semester = 6
+
+# Basic f-string
+print(f"Student: {name}, Semester: {semester}, SGPA: {gpa}")
+
+# Format specifiers
+print(f"SGPA: {gpa:.1f}")               # 1 decimal place
+print(f"Members: {12500:,}")            # thousands separator
+print(f"Rate: {0.0875:.2%}")           # percentage
+print(f"Padded: {'KAU':>15}")          # right-align in 15 chars
+print(f"Padded: {'KAU':<15}|")         # left-align
+```
+
+---
+
+## Booleans (`bool`)
+
+```{pyodide-python}
+# Booleans: True or False (capital T and F!)
+is_member = True
+has_defaulted = False
+
+# Boolean operations
+print(is_member and not has_defaulted)  # eligible for loan?
+print(True or False)
+print(not True)
+
+# Comparison operators return booleans
+x = 85
+print(x > 80)           # True
+print(x == 100)         # False (== is equality, = is assignment)
+print(x != 100)         # True
+print(50 <= x <= 100)   # True — chained comparison!
+
+# Falsy values in Python
+print(bool(0), bool(""), bool(None), bool([]))   # all False
+print(bool(1), bool("a"), bool([0]))             # all True
+```
+
+---
+
+## Lists
+
+```{pyodide-python}
+# Lists: ordered, mutable sequences — the workhorse of Python
+districts = ["Thrissur", "Ernakulam", "Kozhikode", "Thiruvananthapuram"]
+yields = [3200, 3500, 2900, 4100, 3750]
+mixed = [1, "Rice", 3.14, True, None]    # can mix types
+
+# Indexing (0-based!)
+print(districts[0])      # first element
+print(districts[-1])     # last element
+print(yields[1:4])       # slice [index 1, 2, 3]
+
+# Modifying lists
+yields.append(4200)      # add to end
+yields.insert(0, 2800)   # insert at position
+districts[0] = "Palakkad"  # update in place
+print(f"Updated: {yields}")
+```
+
+---
+
+## List Methods
+
+```{pyodide-python}
+# Useful list methods for data work
+prices = [45, 32, 67, 23, 89, 45, 12, 67, 45]
+
+print(len(prices))          # number of elements: 9
+print(sum(prices))          # total
+print(min(prices))          # minimum
+print(max(prices))          # maximum
+print(sorted(prices))       # sorted copy
+print(prices.count(45))     # count occurrences of 45
+print(prices.index(67))     # first position of 67
+
+# List comprehension (preview — covered in Week 2)
+squared = [x**2 for x in [1,2,3,4,5]]
+print(f"Squares: {squared}")
+```
+
+---
+
+## Tuples
+
+```{pyodide-python}
+# Tuples: ordered, IMMUTABLE sequences (use () or just commas)
+location = (10.52, 76.21)    # latitude, longitude — should not change
+rgb_green = (38, 122, 27)    # KAU green colour
+months = ("Jan", "Feb", "Mar", "Apr", "May", "Jun")
+
+print(location[0])           # access like a list
+print(len(months))
+
+# Tuples are immutable — this would raise a TypeError:
+# location[0] = 11.0
+
+# Tuple unpacking — very useful!
+lat, lon = location
+print(f"Latitude: {lat}, Longitude: {lon}")
+
+# Return multiple values from a function
+def min_max(data):
+    return min(data), max(data)   # returns a tuple
+
+lo, hi = min_max([3, 1, 4, 1, 5, 9, 2, 6])
+print(f"Min: {lo}, Max: {hi}")
+```
+
+---
+
+## Dictionaries
+
+```{pyodide-python}
+# Dictionaries: key → value mapping, unordered (insertion order in 3.7+)
+cooperative = {
+    "name": "Thrissur District Cooperative Bank",
+    "established": 1913,
+    "members": 125000,
+    "branches": 47,
+    "npa_ratio": 0.032
+}
+
+# Access values by key
+print(cooperative["name"])
+print(cooperative["members"])
+
+# Add / update
+cooperative["ceo"] = "Dr. M. Suresh"
+cooperative["members"] = 126500    # update
+
+# Safe access with default
+print(cooperative.get("revenue", "Data not available"))
+print(list(cooperative.keys()))
+print(list(cooperative.values()))
+```
+
+---
+
+## Dictionary Operations
+
+```{pyodide-python}
+# Working with dictionaries in economics
+crop_prices = {
+    "Rice": 2200,
+    "Wheat": 2015,
+    "Coconut": 32,    # per nut
+    "Rubber": 180,    # per kg
+    "Banana": 25
+}
+
+# Iteration
+for crop, price in crop_prices.items():
+    print(f"  {crop:<12}: ₹{price:>6,}")
+
+# Dictionary comprehension
+high_value = {k: v for k, v in crop_prices.items() if v > 100}
+print("\nHigh-value crops:", high_value)
+
+# Membership test
+print("Rice" in crop_prices)   # True
+```
+
+---
+
+## Type Conversion
+
+```{pyodide-python}
+# Explicit type conversion (casting)
+x = "42"              # string
+print(type(x))
+
+n = int(x)            # string → integer
+print(type(n), n + 10)
+
+f = float("3.14")     # string → float
+print(f * 2)
+
+s = str(1234)         # integer → string
+print("₹" + s)
+
+b = bool(0)           # integer → bool (0 = False, anything else = True)
+print(b)
+
+# Careful — this raises ValueError:
+# int("3.14")    # can't convert "3.14" directly to int
+print(int(float("3.14")))   # workaround: float first, then int
+```
+
+---
+
+## Checking Types
+
+```{pyodide-python}
+# type() — returns the exact type
+data = [42, 3.14, "KAU", True, None]
+for item in data:
+    print(f"{str(item):<8} → {type(item).__name__}")
+
+print()
+
+# isinstance() — preferred for type checking (respects inheritance)
+x = 42
+print(isinstance(x, int))       # True
+print(isinstance(x, float))     # False
+print(isinstance(x, (int, float)))  # True — check multiple types
+
+# A gotcha: bool is a subclass of int!
+print(isinstance(True, int))    # True — surprising but correct!
+print(type(True) is int)        # False — type() is exact
+```
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a Python dictionary for a cooperative society with these details, then compute and print the **loan-to-deposit ratio**:
+
+- Name: "Palakkad Primary Agricultural Credit Society"
+- Total deposits: ₹8,50,00,000
+- Total loans outstanding: ₹6,20,00,000
+- Number of members: 3,450
+- Year established: 1962
+
+Print each detail with proper formatting. The loan-to-deposit ratio is `loans / deposits`.
+:::
+
+```{pyodide-python}
+# Exercise: Create the cooperative dictionary and compute LDR
+
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+::: {.gold-box}
+### Key Takeaways — Lecture 2
+:::
+
+✅ Variables store data; Python infers types **dynamically**
+
+✅ **Scalar types:** `int` (whole numbers), `float` (decimals), `str` (text), `bool` (True/False)
+
+✅ **Collections:** `list` (mutable, ordered), `tuple` (immutable, ordered), `dict` (key-value pairs)
+
+✅ **f-strings** are the cleanest way to format output: `f"GDP: ₹{gdp:,.0f}"`
+
+✅ Use `type()` to inspect, `isinstance()` to check types in code
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 3 — Operators & Expressions**
+
+We will cover:
+- Arithmetic, comparison, and logical operators
+- String operators
+- Introduction to `None` and truthiness
+- Building compound expressions for data filtering
+:::
+
+
