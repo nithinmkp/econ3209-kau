@@ -1,0 +1,239 @@
+---
+title: "Random Effects & Hausman Test"
+subtitle: "ECON 3209 · Week 17, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. state the random-effects model and the key exogeneity assumption behind it
+2. understand quasi-demeaning and the GLS intuition of random effects
+3. compare manual FE and RE estimates in Python without linearmodels
+4. explain the logic of the Hausman test
+5. decide when FE or RE is more credible in an applied panel setting
+
+---
+
+## Random Effects Model
+
+- In random effects (RE), the unit-specific effect $\alpha_i$ is part of the composite error:
+
+$$y_{it}=\beta_0 + x_{it}'\beta + \alpha_i + u_{it}$$
+
+- RE assumes $\alpha_i$ is **uncorrelated** with the regressors for all time periods.
+- This is stronger than FE, but if true, RE is more efficient and can estimate time-invariant regressors.
+
+---
+
+## GLS and Quasi-Demeaning
+
+- RE uses feasible GLS to account for the error structure.
+- The transformed variables subtract a fraction $\theta$ of each unit mean rather than the full mean:
+
+$$y^*_{it}=y_{it}-\theta \bar{y}_i$$
+
+- If $\theta=1$, we get FE demeaning.
+- If $\theta=0$, we get pooled OLS.
+- So RE lies between pooled OLS and FE.
+
+---
+
+## Why FE versus RE Is an Assumption Choice
+
+- If district effects are correlated with fertilizer, RE is inconsistent and FE is safer.
+- If district effects are truly uncorrelated with the regressors, RE is attractive because it is more efficient.
+- Applied work often estimates both and then compares them.
+
+---
+
+## Simulated Panel for FE and RE
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1730)
+N, T = 30, 5
+rows = []
+for i in range(N):
+    alpha = rng.normal(0, 3)
+    coastal = 1 if i < 10 else 0
+    for t in range(T):
+        x = 10 + 0.8 * alpha + rng.normal(0, 1.2)
+        y = 5 + 1.5 * x + 1.2 * coastal + alpha + rng.normal(0, 1.0)
+        rows.append((i, t, x, coastal, y))
+df = pd.DataFrame(rows, columns=['district_id', 'year', 'fertilizer', 'coastal', 'productivity'])
+print(df.head())
+```
+
+---
+
+## Manual FE and RE Estimation
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+rng = np.random.default_rng(1730)
+N, T = 30, 5
+rows = []
+for i in range(N):
+    alpha = rng.normal(0, 3)
+    coastal = 1 if i < 10 else 0
+    for t in range(T):
+        x = 10 + 0.8 * alpha + rng.normal(0, 1.2)
+        y = 5 + 1.5 * x + 1.2 * coastal + alpha + rng.normal(0, 1.0)
+        rows.append((i, t, x, coastal, y))
+df = pd.DataFrame(rows, columns=['district_id', 'year', 'fertilizer', 'coastal', 'productivity'])
+
+# FE
+for var in ['productivity', 'fertilizer']:
+    df[f'{var}_dm'] = df[var] - df.groupby('district_id')[var].transform('mean')
+fe = sm.OLS(df['productivity_dm'], df[['fertilizer_dm']]).fit()
+
+# RE with known variance components from the simulation setup
+sigma_u2 = 1.0**2
+sigma_a2 = 3.0**2
+theta = 1 - np.sqrt(sigma_u2 / (T * sigma_a2 + sigma_u2))
+for var in ['productivity', 'fertilizer', 'coastal']:
+    df[f'{var}_re'] = df[var] - theta * df.groupby('district_id')[var].transform('mean')
+re = sm.OLS(df['productivity_re'], sm.add_constant(df[['fertilizer_re', 'coastal_re']])).fit()
+
+print('FE slope:', fe.params.round(4))
+print('RE slopes:', re.params.round(4))
+print('theta:', round(theta, 4))
+```
+
+---
+
+## Hausman Test Logic
+
+- Null hypothesis: RE is consistent, so FE and RE should be close except for sampling noise.
+- Alternative: RE is inconsistent because unit effects are correlated with regressors.
+- If FE and RE differ systematically, prefer FE.
+- Hausman is therefore a test of the **RE exogeneity assumption**.
+
+---
+
+## A Simple Hausman Calculation
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from scipy.stats import chi2
+
+rng = np.random.default_rng(1730)
+N, T = 30, 5
+rows = []
+for i in range(N):
+    alpha = rng.normal(0, 3)
+    coastal = 1 if i < 10 else 0
+    for t in range(T):
+        x = 10 + 0.8 * alpha + rng.normal(0, 1.2)
+        y = 5 + 1.5 * x + 1.2 * coastal + alpha + rng.normal(0, 1.0)
+        rows.append((i, t, x, coastal, y))
+df = pd.DataFrame(rows, columns=['district_id', 'year', 'fertilizer', 'coastal', 'productivity'])
+for var in ['productivity', 'fertilizer']:
+    df[f'{var}_dm'] = df[var] - df.groupby('district_id')[var].transform('mean')
+fe = sm.OLS(df['productivity_dm'], df[['fertilizer_dm']]).fit()
+
+sigma_u2 = 1.0**2
+sigma_a2 = 3.0**2
+theta = 1 - np.sqrt(sigma_u2 / (T * sigma_a2 + sigma_u2))
+for var in ['productivity', 'fertilizer']:
+    df[f'{var}_re'] = df[var] - theta * df.groupby('district_id')[var].transform('mean')
+re = sm.OLS(df['productivity_re'], sm.add_constant(df[['fertilizer_re']])).fit()
+
+b_diff = np.array([fe.params['fertilizer_dm'] - re.params['fertilizer_re']])
+V_diff = np.array([[fe.cov_params().loc['fertilizer_dm', 'fertilizer_dm'] - re.cov_params().loc['fertilizer_re', 'fertilizer_re']]])
+hausman = float(b_diff.T @ np.linalg.inv(V_diff) @ b_diff)
+p_value = 1 - chi2.cdf(hausman, df=1)
+print({'Hausman statistic': round(hausman, 4), 'p_value': round(p_value, 4)})
+```
+
+---
+
+## When RE Has an Advantage
+
+- RE can estimate time-invariant regressors such as coastal location or a permanent branch category.
+- FE drops such regressors automatically.
+- So if the RE assumption is credible, it can deliver more information than FE.
+
+---
+
+## Kerala Interpretation
+
+::: {.highlight-box}
+If permanent district characteristics such as soil quality or irrigation culture are correlated with fertilizer use, FE is safer.
+
+If those permanent effects are unrelated to the regressors, RE may be efficient and can estimate time-invariant factors like coastal location.
+:::
+
+---
+
+## Decision Rule for Applied Work
+
+- Estimate pooled OLS for a benchmark.
+- Estimate FE when correlation between unit effects and regressors is plausible.
+- Estimate RE when the strict exogeneity assumption appears reasonable and time-invariant regressors matter.
+- Use the Hausman test as supporting evidence, not as a substitute for economic judgement.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Using the starter code, compute FE and RE estimates for the fertilizer effect. If the Hausman p-value is small, which model would you trust and why?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from scipy.stats import chi2
+
+rng = np.random.default_rng(1730)
+N, T = 25, 5
+rows = []
+for i in range(N):
+    alpha = rng.normal(0, 3)
+    for t in range(T):
+        x = 9 + 0.9 * alpha + rng.normal(0, 1.1)
+        y = 4 + 1.4 * x + alpha + rng.normal(0, 1.0)
+        rows.append((i, t, x, y))
+df = pd.DataFrame(rows, columns=['district_id', 'year', 'fertilizer', 'productivity'])
+for var in ['productivity', 'fertilizer']:
+    df[f'{var}_dm'] = df[var] - df.groupby('district_id')[var].transform('mean')
+fe = sm.OLS(df['productivity_dm'], df[['fertilizer_dm']]).fit()
+print(fe.params)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Random effects treat the unit effect as uncorrelated with regressors and use GLS-style quasi-demeaning.
+- ✅ FE is more robust when that exogeneity assumption is doubtful.
+- ✅ The Hausman test checks whether FE and RE differ more than sampling noise would suggest.
+- ✅ Model choice in panel data depends on both statistical evidence and the economics of the setting.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We begin autocorrelation by studying serially correlated errors over time.
+- You will see AR(1) processes and why time series errors violate the usual OLS assumptions.
+- From panels we move to dynamics in pure time series data.
+:::
+
+
