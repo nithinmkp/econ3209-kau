@@ -1,0 +1,275 @@
+---
+title: "Pooled OLS"
+subtitle: "ECON 3209 · Week 17, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. define panel data and distinguish balanced from unbalanced panels
+2. write the pooled OLS model for repeated observations over units and time
+3. explain the assumptions behind pooled OLS and why they may fail
+4. organise and analyse Kerala district panel data in Python
+5. recognise when ignoring unit heterogeneity becomes problematic
+
+---
+
+## What is Panel Data?
+
+- Panel data track the same units across time.
+- In this course, units may be households, bank branches, or Kerala districts.
+- A panel combines **cross-sectional variation** and **time variation**.
+- Notation: $i$ indexes units and $t$ indexes time.
+
+---
+
+## Balanced and Unbalanced Panels
+
+- A **balanced panel** has the same number of time observations for every unit.
+- An **unbalanced panel** has some missing years or periods.
+- Balanced panels are simpler for teaching and computation.
+- Unbalanced panels are common in real research because data collection is imperfect.
+
+---
+
+## The Pooled OLS Model
+
+- Pooled OLS ignores the panel structure and estimates one regression for all observations:
+
+$$y_{it}=\beta_0 + x_{it}'\beta + u_{it}$$
+
+- It treats the stacked sample like an ordinary cross-section.
+- This is valid only if unobserved unit-specific factors are uncorrelated with the regressors and error assumptions are otherwise reasonable.
+
+---
+
+## Creating a Kerala Panel in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+print(df.head())
+print("\nObservations:", len(df))
+print("Districts:", df['district'].nunique())
+print("Years:", sorted(df['year'].unique()))
+```
+
+---
+
+## Estimating Pooled OLS
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import statsmodels.formula.api as smf
+
+pooled = smf.ols("productivity ~ fertilizer + rainfall", data=df).fit()
+print(pooled.summary().tables[1])
+```
+
+---
+
+## What Can Go Wrong?
+
+- Districts differ in soil quality, irrigation access, and farmer networks.
+- If these unobserved district characteristics affect both productivity and fertilizer use, pooled OLS becomes biased.
+- Standard errors may also be misleading because panel errors may be serially correlated within districts.
+
+---
+
+## Balanced versus Unbalanced in Practice
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import pandas as pd
+
+unbalanced = df.drop(df[(df['district'] == 'Idukki') & (df['year'] == 2021)].index)
+unbalanced = unbalanced.drop(unbalanced[(unbalanced['district'] == 'Kasaragod') & (unbalanced['year'] == 2023)].index)
+print("Balanced counts")
+print(df.groupby('district').size().head())
+print("\nUnbalanced counts")
+print(unbalanced.groupby('district').size().sort_values().head())
+```
+
+---
+
+## Kerala District Example
+
+::: {.highlight-box}
+Suppose we observe crop productivity for 14 Kerala districts over 5 years.
+
+Regressors might include rainfall, fertilizer use, irrigation coverage, and price incentives. Pooled OLS is the first benchmark, but it may ignore persistent district differences such as soil quality.
+:::
+
+---
+
+## Visualising District Trends
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+selected = df[df['district'].isin(['Palakkad', 'Kottayam', 'Wayanad'])]
+
+plt.figure(figsize=(7, 4))
+for district, group in selected.groupby('district'):
+    plt.plot(group['year'], group['productivity'], marker='o', linewidth=2, label=district)
+plt.xlabel('Year')
+plt.ylabel('Productivity index')
+plt.title('Productivity trends for selected Kerala districts')
+plt.legend()
+plt.show()
+```
+
+---
+
+## When Pooled OLS Is Acceptable
+
+- As a simple benchmark before richer panel methods.
+- When unit-specific unobserved effects are plausibly unimportant.
+- When the goal is descriptive correlation rather than strong causal interpretation.
+- In most panel applications, however, we next consider **fixed effects** or **random effects**.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create an unbalanced version of the panel by dropping one year for two districts. Re-estimate pooled OLS and compare the fertilizer coefficient with the balanced-panel estimate.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1717)
+districts = [
+    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam",
+    "Idukki", "Ernakulam", "Thrissur", "Palakkad", "Malappuram",
+    "Kozhikode", "Wayanad", "Kannur", "Kasaragod"
+]
+years = np.arange(2019, 2024)
+rows = []
+for i, district in enumerate(districts):
+    district_effect = rng.normal(0, 4)
+    soil_quality = 55 + 2 * (i % 4) + rng.normal(0, 1)
+    coastal = 1 if district in {"Alappuzha", "Ernakulam", "Kollam", "Kannur", "Kasaragod", "Kozhikode", "Thiruvananthapuram"} else 0
+    for year in years:
+        rainfall = 240 + 8 * (year - 2019) + rng.normal(0, 18)
+        fertilizer = 90 + 0.18 * soil_quality + 2.5 * (year - 2019) + district_effect + rng.normal(0, 4)
+        productivity = 24 + 0.11 * fertilizer + 0.018 * rainfall + 0.2 * coastal + district_effect + rng.normal(0, 2.5)
+        rows.append((district, year, rainfall, fertilizer, soil_quality, coastal, productivity))
+df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
+import statsmodels.formula.api as smf
+
+unbalanced = df.drop(df[(df['district'] == 'Idukki') & (df['year'] == 2021)].index)
+unbalanced = unbalanced.drop(unbalanced[(unbalanced['district'] == 'Kasaragod') & (unbalanced['year'] == 2023)].index)
+print(smf.ols('productivity ~ fertilizer + rainfall', data=df).fit().params)
+print(smf.ols('productivity ~ fertilizer + rainfall', data=unbalanced).fit().params)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Panel data combine observations across units and over time.
+- ✅ Pooled OLS stacks the panel and ignores unit-specific heterogeneity.
+- ✅ Balanced and unbalanced panels differ in data completeness but use the same core logic.
+- ✅ Pooled OLS is a useful benchmark, but omitted unit effects can create bias.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We remove time-invariant district effects using fixed effects.
+- You will learn demeaning and the LSDV approach in statsmodels.
+- This is the main solution when unobserved unit effects correlate with regressors.
+:::
+
+
