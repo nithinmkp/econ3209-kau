@@ -1,0 +1,276 @@
+---
+title: "MLR Setup & Estimation"
+subtitle: "ECON 3209 · Week 10, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. write the multiple linear regression model in matrix and scalar form
+2. explain why adding regressors helps us isolate ceteris paribus effects
+3. compute the OLS estimator using both matrix algebra and statsmodels
+4. compare simple and multiple regression estimates in a Kerala-style dataset
+5. state the key assumptions needed for OLS estimation in MLR
+
+---
+
+## Why Move Beyond Simple Regression?
+
+::: {.cols-2}
+::: {}
+### Simple regression limitation
+- A one-variable model is often too narrow for economic data.
+- Crop yield depends on **fertilizer, rainfall, irrigation, soil quality**, and more.
+- Loan default depends on **income, collateral, loan size, repayment history**.
+:::
+::: {}
+### Multiple regression advantage
+- Controls for several factors at once
+- Reduces omitted-variable bias
+- Produces **partial effects**: the effect of one variable holding others fixed
+- Improves empirical relevance for policy analysis
+:::
+:::
+
+::: {.highlight-box}
+In agricultural economics, most relationships are **multifactor** relationships. MLR is therefore the standard workhorse model.
+:::
+
+---
+
+## The MLR Model in Scalar and Matrix Form
+
+::: {.formula}
+$$Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \cdots + \beta_k X_{ki} + \varepsilon_i$$
+:::
+
+::: {.formula}
+$$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+:::
+
+- $\mathbf{Y}$ is an $n \times 1$ vector of outcomes.
+- $\mathbf{X}$ is an $n \times (k+1)$ matrix containing a column of ones and all regressors.
+- $\boldsymbol{\beta}$ is a $(k+1) \times 1$ vector of unknown parameters.
+- $\boldsymbol{\varepsilon}$ collects unobserved factors.
+
+---
+
+## Dimensions Matter
+
+| Object | Meaning | Dimension |
+|---|---|---|
+| $\mathbf{Y}$ | dependent variable vector | $n \times 1$ |
+| $\mathbf{X}$ | design matrix | $n \times (k+1)$ |
+| $\boldsymbol{\beta}$ | coefficient vector | $(k+1) \times 1$ |
+| $\boldsymbol{\varepsilon}$ | error vector | $n \times 1$ |
+
+::: {.gold-box}
+The intercept is included by placing a column of ones inside $\mathbf{X}$. Without that column, the fitted plane is forced through the origin.
+:::
+
+---
+
+## OLS Estimation
+
+We choose $\hat{\boldsymbol{\beta}}$ to minimise the sum of squared residuals:
+
+::: {.formula}
+$$S(\boldsymbol{\beta})=(\mathbf{Y}-\mathbf{X}\boldsymbol{\beta})'(\mathbf{Y}-\mathbf{X}\boldsymbol{\beta})$$
+:::
+
+The first-order condition gives the **normal equations**:
+
+::: {.formula}
+$$\mathbf{X}'\mathbf{X}\hat{\boldsymbol{\beta}}=\mathbf{X}'\mathbf{Y}$$
+$$\hat{\boldsymbol{\beta}}=(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}$$
+:::
+
+- We need $\mathbf{X}'\mathbf{X}$ to be invertible.
+- This fails under **perfect multicollinearity**.
+
+---
+
+## Adding Regressors Changes the Question
+
+::: {.cols-2}
+::: {}
+### Simple model
+$$Yield_i = \alpha_0 + \alpha_1 Fertilizer_i + u_i$$
+
+Here $\alpha_1$ mixes together:
+- direct fertilizer effect
+- rainfall differences
+- irrigation differences
+:::
+::: {}
+### Multiple model
+$$Yield_i = \beta_0 + \beta_1 Fertilizer_i + \beta_2 Rainfall_i + \beta_3 Irrigation_i + \varepsilon_i$$
+
+Now $\beta_1$ is the fertilizer effect **holding rainfall and irrigation constant**.
+:::
+:::
+
+::: {.highlight-box}
+MLR changes the interpretation from a raw association to a **conditional association**.
+:::
+
+---
+
+## Python Demo: Simulate Kerala Farm Data
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(42)
+n = 120
+df = pd.DataFrame({
+    'fertilizer': np.random.uniform(50, 200, n),
+    'rainfall': np.random.uniform(900, 1600, n),
+    'irrigation': np.random.uniform(0, 1, n)
+})
+eps = np.random.normal(0, 12, n)
+df['yield_'] = 18 + 0.11*df['fertilizer'] + 0.035*df['rainfall'] + 14*df['irrigation'] + eps
+
+simple = smf.ols('yield_ ~ fertilizer', data=df).fit()
+multiple = smf.ols('yield_ ~ fertilizer + rainfall + irrigation', data=df).fit()
+
+print(simple.params)
+print(multiple.params)
+```
+
+---
+
+## Python Demo: Matrix Calculation of $\hat{\beta}$
+
+```{pyodide-python}
+import numpy as np
+
+X = np.column_stack([
+    np.ones(len(df)),
+    df['fertilizer'],
+    df['rainfall'],
+    df['irrigation']
+])
+y = df['yield_'].to_numpy().reshape(-1, 1)
+
+beta_hat = np.linalg.inv(X.T @ X) @ (X.T @ y)
+print('Matrix OLS estimates:')
+print(beta_hat.round(4))
+```
+
+---
+
+## Python Demo: Comparing Matrix OLS and statsmodels
+
+```{pyodide-python}
+sm_beta = multiple.params.to_numpy().reshape(-1, 1)
+labels = ['Intercept', 'fertilizer', 'rainfall', 'irrigation']
+
+for name, b1, b2 in zip(labels, beta_hat.flatten(), sm_beta.flatten()):
+    print(f'{name:>10}  matrix={b1:8.4f}  statsmodels={b2:8.4f}')
+```
+
+::: {.gold-box}
+Both methods solve the same normal equations. `statsmodels` adds standard errors, tests, confidence intervals, and fitted values.
+:::
+
+---
+
+## Key Assumptions Behind MLR Estimation
+
+1. **Linearity in parameters**: the model is linear in the unknown coefficients.
+2. **Random sampling**: observations are drawn from the relevant population.
+3. **No perfect multicollinearity**: no regressor is an exact linear combination of the others.
+4. **Zero conditional mean**: $E(\varepsilon_i \mid X_{1i},\ldots,X_{ki})=0$.
+
+::: {.highlight-box}
+Under these conditions, OLS is unbiased. Later lectures add homoskedasticity and normality when we discuss inference.
+:::
+
+---
+
+## Python Demo: Nested Models and Fit
+
+```{pyodide-python}
+add_rain = smf.ols('yield_ ~ fertilizer + rainfall', data=df).fit()
+
+results = pd.DataFrame({
+    'model': ['simple', 'add rainfall', 'full MLR'],
+    'fertilizer_coef': [simple.params['fertilizer'], add_rain.params['fertilizer'], multiple.params['fertilizer']],
+    'R2': [simple.rsquared, add_rain.rsquared, multiple.rsquared]
+})
+print(results.round(4))
+```
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Use a simulated farm dataset with `fertilizer`, `rainfall`, and `irrigation`.
+2. Compute $\hat{\boldsymbol{\beta}}$ using the matrix formula.
+3. Estimate the same model with `statsmodels`.
+4. Explain why the fertilizer coefficient changes when rainfall is added.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(7)
+n = 80
+df = pd.DataFrame({
+    'fertilizer': np.random.uniform(40, 180, n),
+    'rainfall': np.random.uniform(850, 1550, n),
+    'irrigation': np.random.uniform(0, 1, n)
+})
+
+# Add your own yield equation here
+df['yield_'] = 10
+
+# Estimate the model below
+# model = smf.ols('yield_ ~ fertilizer + rainfall + irrigation', data=df).fit()
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ MLR writes the outcome as $\mathbf{Y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}$.
+
+✅ OLS chooses $\hat{\boldsymbol{\beta}}=(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}$ when $\mathbf{X}'\mathbf{X}$ is invertible.
+
+✅ Adding regressors changes coefficient interpretation to a **ceteris paribus** interpretation.
+
+✅ Matrix OLS and `statsmodels` produce the same coefficient estimates.
+
+✅ Nested models help us see how omitted factors can alter estimated slopes.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 2 — Interpretation of Coefficients**
+
+We will cover:
+- partial effects in MLR
+- ceteris paribus language
+- standardized coefficients
+- R² versus adjusted R²
+:::
+
+
+
