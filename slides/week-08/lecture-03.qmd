@@ -1,0 +1,190 @@
+---
+title: "Python OLS from Scratch"
+subtitle: "ECON 3209 · Week 8, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Build a simple regression dataset in NumPy and pandas.
+2. Compute OLS manually using matrix algebra.
+3. Calculate fitted values, residuals, and $R^2$ by hand.
+4. Estimate the same model with `statsmodels` and compare results.
+5. Understand how theory maps into practical Python code.
+
+---
+
+## The matrix form of OLS
+
+::: {.formula}
+$$\hat{\beta} = (X'X)^{-1}X'Y$$
+:::
+
+- Here $X$ is the design matrix containing a column of ones and the regressor values.
+- $Y$ is the vector of observed outcomes.
+- Matrix notation scales easily to multiple regression.
+- Today we compute each step directly in Python.
+
+---
+
+## Generating a simple dataset
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+n = 50
+fertilizer = np.random.uniform(50, 200, n)
+yield_ = 20 + 0.30 * fertilizer + np.random.normal(0, 8, n)
+
+df = pd.DataFrame({'fertilizer': fertilizer, 'yield_': yield_})
+print(df.head())
+```
+
+---
+
+## Building the design matrix
+
+- The first column of $X$ is a column of ones for the intercept.
+- The second column contains the regressor `fertilizer`.
+- In simple regression,
+  $$X = \begin{bmatrix}1 & X_1 \\ 1 & X_2 \\ \vdots & \vdots \\ 1 & X_n\end{bmatrix}$$
+- Once $X$ and $Y$ are defined, matrix OLS is mechanical.
+
+---
+
+## Manual OLS with NumPy
+
+```{pyodide-python}
+X = np.column_stack([np.ones(n), fertilizer])
+Y = yield_.reshape(-1, 1)
+
+beta_hat = np.linalg.inv(X.T @ X) @ X.T @ Y
+print('Intercept =', round(beta_hat[0, 0], 4))
+print('Slope =', round(beta_hat[1, 0], 4))
+```
+
+---
+
+## Fitted values and residuals
+
+- Fitted values are
+  $$\hat{Y} = X\hat{\beta}$$
+- Residuals are
+  $$\hat{u} = Y - \hat{Y}$$
+- These are the building blocks for SSR and $R^2$.
+- Good coding practice makes each object explicit.
+
+---
+
+## Computing fit statistics manually
+
+```{pyodide-python}
+y_hat = X @ beta_hat
+resid = Y - y_hat
+ssr = float((resid.T @ resid)[0, 0])
+sst = float(((Y - Y.mean()).T @ (Y - Y.mean()))[0, 0])
+r2 = 1 - ssr / sst
+
+print('SSR =', round(ssr, 4))
+print('R-squared =', round(r2, 4))
+```
+
+---
+
+## Estimating the same model with statsmodels
+
+- `statsmodels.formula.api` lets us write models in a readable formula style.
+- It also provides standard errors, tests, and confidence intervals automatically.
+- Manual OLS helps intuition; `statsmodels` helps practical analysis.
+- We should understand both.
+
+---
+
+## OLS with formula API
+
+```{pyodide-python}
+import statsmodels.formula.api as smf
+
+model = smf.ols('yield_ ~ fertilizer', data=df).fit()
+print(model.params)
+print('\nR-squared =', round(model.rsquared, 4))
+```
+
+---
+
+## Comparing manual and package results
+
+- The manual slope and intercept should match the `statsmodels` estimates up to rounding.
+- The same is true for fitted values and residuals.
+- Matching results confirm that the matrix formula and package implementation are consistent.
+- This is a good debugging habit when learning econometrics.
+
+---
+
+## Plotting data and fitted line
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(7, 4))
+plt.scatter(df['fertilizer'], df['yield_'], color='darkgreen', alpha=0.8)
+plt.plot(df['fertilizer'], model.fittedvalues, color='goldenrod')
+plt.xlabel('Fertilizer')
+plt.ylabel('Yield')
+plt.title('OLS fitted line')
+plt.show()
+```
+
+---
+
+## Why this matters for econometrics students
+
+- Manual computation shows where coefficients really come from.
+- Matrix notation prepares you for multiple regression later.
+- `statsmodels` output becomes easier to interpret when you know the mechanics.
+- Coding OLS from scratch connects theory, algebra, and software.
+- This is one of the best ways to internalise regression logic.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Generate 20 observations for `income` and `repayment_rate`. Compute the OLS coefficients manually using $\hat{\beta} = (X'X)^{-1}X'Y$, then fit the same model with `statsmodels` and compare the two slopes.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Matrix OLS uses $\hat{\beta} = (X'X)^{-1}X'Y$.
+- ✅ The design matrix includes a column of ones for the intercept.
+- ✅ Fitted values, residuals, SSR, and $R^2$ can all be computed manually.
+- ✅ `statsmodels` reproduces the same coefficient estimates.
+- ✅ Manual coding improves intuition and debugging ability.
+- ✅ Python allows us to move smoothly from algebra to empirical analysis.
+
+---
+
+## Next Lecture
+
+- We begin **Inference in OLS**.
+- The next topic is hypothesis testing: nulls, alternatives, test statistics, and p-values.
+
