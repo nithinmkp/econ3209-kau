@@ -5303,7 +5303,7 @@
     "href": "slides/week-06/lecture-01.html#learning-outcomes",
     "title": "Import, Export & APIs",
     "section": "Learning Outcomes",
-    "text": "Learning Outcomes\n\nUse pd.read_csv(), pd.read_excel(), and pd.read_json() to bring data into Python.\nExport cleaned data with to_csv() for future analysis and reporting.\nUnderstand the logic of API calls and JSON responses in applied economics.\nRecognise common import problems such as bad delimiters, headers, and data types.\nBuild a simple data workflow using Kerala agriculture and India-level public data examples."
+    "text": "Learning Outcomes\n\nUse pd.read_csv(), pd.read_excel(), and pd.read_json() to bring data into Python.\nExport cleaned data with to_csv() for future analysis and reporting.\nUnderstand the logic of API calls and JSON responses in applied economics.\nRecognise common import problems such as bad delimiters, headers, and data types.\nBuild a simple data workflow using Kerala agriculture and India-level public data examples.\nNavigate MOSPI Unit Data and eSankhyiki portal to access Indian micro and macro data."
   },
   {
     "objectID": "slides/week-06/lecture-01.html#why-data-import-matters",
@@ -5390,6 +5390,27 @@
     "text": "Applied example: Kerala data sources\n\nCrop data may come from district agriculture offices.\nCooperative credit figures may come from annual reports in Excel.\nIndia-level macro indicators may come from RBI or World Bank APIs.\nA research project often combines several sources in one master dataset.\nCareful import choices affect every later econometric conclusion."
   },
   {
+    "objectID": "slides/week-06/lecture-01.html#mospi-indias-official-micro-data-source",
+    "href": "slides/week-06/lecture-01.html#mospi-indias-official-micro-data-source",
+    "title": "Import, Export & APIs",
+    "section": "MOSPI: India’s Official Micro-data Source",
+    "text": "MOSPI: India’s Official Micro-data Source\n\nMOSPI (Ministry of Statistics & Programme Implementation) is India’s apex statistical body.\nPublishes large-scale unit-level surveys used in empirical economics research.\n\n\n\n\n\n\n\n\n\nDataset\nCoverage\nKey Variables\n\n\n\n\nNSS (National Sample Survey)\nHouseholds, consumption, employment\nExpenditure, MPCE, employment status\n\n\nPLFS (Periodic Labour Force Survey)\nWorkers 15+\nWPR, LFPR, wages, industry\n\n\nASI (Annual Survey of Industries)\nFormal manufacturing plants\nOutput, employment, capital\n\n\nNSSO Debt & Investment\nRural/urban households\nAssets, liabilities, interest rates\n\n\n\n\nUnit-level data → one row per household or worker → essential for microeconometrics."
+  },
+  {
+    "objectID": "slides/week-06/lecture-01.html#accessing-mospi-data-in-python",
+    "href": "slides/week-06/lecture-01.html#accessing-mospi-data-in-python",
+    "title": "Import, Export & APIs",
+    "section": "Accessing MOSPI Data in Python",
+    "text": "Accessing MOSPI Data in Python\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nActual download: mospi.gov.in → Surveys → Unit Level Data → Register (free)"
+  },
+  {
+    "objectID": "slides/week-06/lecture-01.html#mospi-esankhyiki-the-data-portal",
+    "href": "slides/week-06/lecture-01.html#mospi-esankhyiki-the-data-portal",
+    "title": "Import, Export & APIs",
+    "section": "MOSPI eSankhyiki: The Data Portal",
+    "text": "MOSPI eSankhyiki: The Data Portal\n\neSankhyiki (esankhyiki.mospi.gov.in) is MOSPI’s open-access portal.\nProvides aggregate tables (not unit-level) downloadable as CSV/Excel — no registration needed.\n\nWhat you can get directly:\n\n\n\nIndicator\nFrequency\nFormat\n\n\n\n\nState Domestic Product (GSDP)\nAnnual\nExcel\n\n\nCPI by state and commodity group\nMonthly\nCSV\n\n\nIndex of Industrial Production (IIP)\nMonthly\nExcel\n\n\nEmployment (Quarterly Bulletin)\nQuarterly\nPDF/Excel\n\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\neSankhyiki = ready-to-use aggregate tables · Unit Data Portal = raw micro-data for research"
+  },
+  {
     "objectID": "slides/week-06/lecture-01.html#exercise",
     "href": "slides/week-06/lecture-01.html#exercise",
     "title": "Import, Export & APIs",
@@ -5401,7 +5422,7 @@
     "href": "slides/week-06/lecture-01.html#summary",
     "title": "Import, Export & APIs",
     "section": "Summary",
-    "text": "Summary\n\n✅ CSV, Excel, JSON, and APIs are the main gateways into econometric work.\n✅ pd.read_csv(), pd.read_excel(), and pd.read_json() are core import tools.\n✅ to_csv(index=False) helps save a clean analysis-ready dataset.\n✅ APIs return structured data that can be turned into pandas DataFrames.\n✅ Import mistakes in headers, delimiters, or types can distort later results.\n✅ A reproducible import-clean-export workflow is essential in applied economics."
+    "text": "Summary\n\n✅ CSV, Excel, JSON, and APIs are the main gateways into econometric work.\n✅ pd.read_csv(), pd.read_excel(), and pd.read_json() are core import tools.\n✅ to_csv(index=False) helps save a clean analysis-ready dataset.\n✅ APIs return structured data that can be turned into pandas DataFrames.\n✅ Import mistakes in headers, delimiters, or types can distort later results.\n✅ MOSPI Unit Data (NSS, PLFS, ASI) provides household and firm-level micro-data for India.\n✅ eSankhyiki portal gives free access to aggregate tables (GSDP, CPI, IIP) in CSV/Excel.\n✅ A reproducible import-clean-export workflow is essential in applied economics."
   },
   {
     "objectID": "slides/week-06/lecture-01.html#next-lecture",
