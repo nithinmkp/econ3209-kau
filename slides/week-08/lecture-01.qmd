@@ -1,0 +1,215 @@
+---
+title: "Gauss-Markov Theorem"
+subtitle: "ECON 3209 · Week 8, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. State the classical linear regression assumptions clearly.
+2. Explain what BLUE means in the Gauss-Markov theorem.
+3. Understand how violations affect OLS precision or validity.
+4. Simulate assumption violations in Python.
+5. Connect theory to practical regression work in applied economics.
+
+---
+
+## The linear regression model revisited
+
+::: {.formula}
+$$Y_i = \beta_0 + \beta_1 X_i + u_i$$
+:::
+
+- OLS provides estimates of $\beta_0$ and $\beta_1$.
+- But its good properties depend on assumptions.
+- The Gauss-Markov theorem tells us when OLS is especially desirable.
+- The key result is that OLS becomes **BLUE** under the classical assumptions.
+
+---
+
+## Assumption 1: linear in parameters
+
+- The model must be linear in the unknown coefficients.
+- The variable itself may be transformed, such as $\log X$, but the coefficients must enter linearly.
+- Example:
+  $$Y_i = \beta_0 + \beta_1 \log(X_i) + u_i$$
+  is still linear in parameters.
+- This assumption is about the form of the model, not about straight lines only.
+
+---
+
+## Assumption 2: random sampling
+
+- The sample should be drawn randomly from the population.
+- Each observation should represent the population fairly.
+- Non-random samples can create systematic bias.
+- Example: surveying only high-performing societies would distort inference.
+- Random sampling supports generalisation beyond the sample.
+
+---
+
+## Assumption 3: sample variation and no perfect collinearity
+
+- The regressor must vary in the sample.
+- If every farmer uses exactly the same fertilizer level, slope estimation is impossible.
+- In multiple regression, one regressor must not be an exact linear combination of others.
+- OLS needs information in the data to identify coefficients.
+- No variation means no slope estimate.
+
+---
+
+## Assumption 4: zero conditional mean
+
+::: {.formula}
+$$E(u_i \mid X_i) = 0$$
+:::
+
+- This is the most important assumption for unbiasedness.
+- It says the error term is unrelated to the explanatory variable.
+- Omitted variables that are correlated with $X_i$ violate this assumption.
+- Example: soil quality omitted from a fertilizer-yield regression may bias the slope.
+
+---
+
+## Assumption 5: homoskedasticity
+
+::: {.formula}
+$$Var(u_i \mid X_i) = \sigma^2$$
+:::
+
+- The variance of the error term is constant for all observations.
+- If dispersion changes with income, farm size, or district size, errors are heteroskedastic.
+- Heteroskedasticity does not usually bias OLS coefficients.
+- But it makes the usual standard errors unreliable.
+
+---
+
+## What does BLUE mean?
+
+- **Best**: minimum variance among linear unbiased estimators.
+- **Linear**: estimator is linear in the observed $Y_i$ values.
+- **Unbiased**: average estimate equals the true parameter.
+- **Estimator**: a rule that maps sample data into a numerical estimate.
+- So under the assumptions, OLS is the most precise linear unbiased estimator.
+
+---
+
+## Homoskedastic example in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(42)
+n = 80
+fertilizer = np.random.uniform(50, 200, n)
+errors = np.random.normal(0, 12, n)
+yield_ = 20 + 0.25 * fertilizer + errors
+
+df_homo = pd.DataFrame({'fertilizer': fertilizer, 'yield_': yield_})
+model_homo = smf.ols('yield_ ~ fertilizer', data=df_homo).fit()
+print(model_homo.params)
+print(model_homo.bse)
+```
+
+---
+
+## When assumptions fail
+
+- Violation of zero conditional mean causes biased and inconsistent estimates.
+- Heteroskedasticity mainly distorts standard errors and tests.
+- Non-random sampling reduces external validity.
+- Perfect collinearity makes estimation impossible.
+- The remedy depends on the assumption being violated.
+
+---
+
+## Heteroskedastic data simulation
+
+```{pyodide-python}
+hetero_errors = np.random.normal(0, fertilizer / 20, n)
+yield_hetero = 20 + 0.25 * fertilizer + hetero_errors
+
+df_hetero = pd.DataFrame({'fertilizer': fertilizer, 'yield_': yield_hetero})
+model_hetero = smf.ols('yield_ ~ fertilizer', data=df_hetero).fit()
+print(model_hetero.bse)
+```
+
+---
+
+## Residual plot for changing variance
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(7, 4))
+plt.scatter(model_hetero.fittedvalues, model_hetero.resid, color='darkgreen')
+plt.axhline(0, color='black', linestyle='--')
+plt.xlabel('Fitted values')
+plt.ylabel('Residuals')
+plt.title('Residual spread increases with fitted values')
+plt.show()
+```
+
+---
+
+## Practical checklist for applied work
+
+- Inspect the sample design.
+- Check whether explanatory variables vary enough.
+- Think carefully about omitted variables and simultaneity.
+- Plot residuals to detect changing variance.
+- Use robust standard errors when heteroskedasticity is a concern.
+
+---
+
+## Robust standard errors in Python
+
+```{pyodide-python}
+robust_results = model_hetero.get_robustcov_results(cov_type='HC1')
+print('Usual SEs:', model_hetero.bse)
+print('Robust SEs:', robust_results.bse)
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Write one sentence for each CLR assumption explaining what it means in a fertilizer-yield regression. Then fit a simple OLS model and compare the usual standard error with the robust standard error.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ The Gauss-Markov theorem relies on the CLR assumptions.
+- ✅ The five core assumptions are linearity, random sampling, variation/no perfect collinearity, zero conditional mean, and homoskedasticity.
+- ✅ Under these assumptions, OLS is BLUE.
+- ✅ Zero conditional mean is central for unbiasedness.
+- ✅ Heteroskedasticity affects standard errors more than coefficients.
+- ✅ Diagnostics and robust standard errors are part of practical econometrics.
+
+---
+
+## Next Lecture
+
+- We will study the **statistical properties of OLS**.
+- The focus will be unbiasedness, consistency, efficiency, and the sampling distribution of $\hat{\beta}$.
+
