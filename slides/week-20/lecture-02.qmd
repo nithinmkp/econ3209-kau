@@ -1,0 +1,255 @@
+---
+title: "Forecast Evaluation"
+subtitle: "ECON 3209 · Week 20, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. compute MAE, RMSE, and MAPE for forecast comparison
+2. distinguish in-sample fit from out-of-sample forecast performance
+3. set up train-test splits and rolling-window evaluation in Python
+4. compare naïve and ARIMA forecasts on a Kerala-style series
+5. choose a forecasting model using evidence rather than fit alone
+
+---
+
+## Why Forecast Evaluation Matters
+
+- A model can fit historical data well but forecast poorly.
+- Forecasting focuses on future accuracy, not just in-sample explanation.
+- We therefore evaluate models on observations not used in estimation.
+
+---
+
+## Common Accuracy Measures
+
+- **MAE**: average absolute error.
+- **RMSE**: square root of mean squared error; penalises large mistakes more heavily.
+- **MAPE**: average absolute percentage error.
+
+Lower values indicate better forecast accuracy, subject to context and scale.
+
+---
+
+## Train-Test and Rolling Windows
+
+- **Train-test split:** estimate on earlier data, evaluate on later data.
+- **Rolling window:** move through time, re-estimating or updating as new data arrive.
+- Rolling evaluation mimics real forecasting practice more closely.
+
+---
+
+## Set Up a Hold-Out Sample
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+train = df.iloc[:-5].copy()
+test = df.iloc[-5:].copy()
+print(train.tail())
+print(test)
+```
+
+---
+
+## Compare Naive and ARIMA Forecasts
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+import numpy as np
+from statsmodels.tsa.arima.model import ARIMA
+
+train = df.iloc[:-5].copy()
+test = df.iloc[-5:].copy()
+naive_forecast = np.repeat(train['paddy_production'].iloc[-1], len(test))
+arima_forecast = ARIMA(train['paddy_production'], order=(1, 1, 1)).fit().forecast(steps=len(test))
+print('Actual:', test['paddy_production'].round(2).to_list())
+print('Naive:', np.round(naive_forecast, 2).tolist())
+print('ARIMA:', np.round(arima_forecast, 2).tolist())
+```
+
+---
+
+## Compute MAE, RMSE, and MAPE
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+import numpy as np
+from statsmodels.tsa.arima.model import ARIMA
+
+train = df.iloc[:-5].copy()
+test = df.iloc[-5:].copy()
+naive_forecast = np.repeat(train['paddy_production'].iloc[-1], len(test))
+arima_forecast = ARIMA(train['paddy_production'], order=(1, 1, 1)).fit().forecast(steps=len(test))
+
+def metrics(actual, forecast):
+    mae = np.mean(np.abs(actual - forecast))
+    rmse = np.sqrt(np.mean((actual - forecast) ** 2))
+    mape = np.mean(np.abs((actual - forecast) / actual)) * 100
+    return mae, rmse, mape
+
+print('Naive:', np.round(metrics(test['paddy_production'].to_numpy(), naive_forecast), 3))
+print('ARIMA:', np.round(metrics(test['paddy_production'].to_numpy(), arima_forecast), 3))
+```
+
+---
+
+## Kerala Forecasting Context
+
+::: {.highlight-box}
+A cooperative department may forecast monthly procurement, paddy arrivals, or loan demand.
+
+The best forecasting model is the one that predicts future observations reliably, not necessarily the one with the best-looking in-sample fit.
+:::
+
+---
+
+## Rolling Window Example
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+import numpy as np
+from statsmodels.tsa.arima.model import ARIMA
+
+errors = []
+for end in range(15, len(df) - 1):
+    train = df['paddy_production'].iloc[:end]
+    actual = df['paddy_production'].iloc[end]
+    forecast = ARIMA(train, order=(1, 1, 1)).fit().forecast(steps=1).iloc[0]
+    errors.append(actual - forecast)
+print('Rolling MAE:', round(np.mean(np.abs(errors)), 3))
+print('Rolling RMSE:', round(np.sqrt(np.mean(np.array(errors) ** 2)), 3))
+```
+
+---
+
+## Visual Forecast Comparison
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+import numpy as np
+from statsmodels.tsa.arima.model import ARIMA
+
+train = df.iloc[:-5].copy()
+test = df.iloc[-5:].copy()
+naive_forecast = np.repeat(train['paddy_production'].iloc[-1], len(test))
+arima_forecast = ARIMA(train['paddy_production'], order=(1, 1, 1)).fit().forecast(steps=len(test))
+
+plt.figure(figsize=(7, 4))
+plt.plot(train['year'], train['paddy_production'], label='Train')
+plt.plot(test['year'], test['paddy_production'], marker='o', label='Actual test')
+plt.plot(test['year'], naive_forecast, marker='o', linestyle='--', label='Naive forecast')
+plt.plot(test['year'], arima_forecast, marker='o', linestyle='--', label='ARIMA forecast')
+plt.legend()
+plt.title('Out-of-sample forecast comparison')
+plt.show()
+```
+
+---
+
+## Choosing the Best Forecast
+
+- Start with a sensible benchmark such as the naïve forecast.
+- Compare models on the same hold-out period.
+- Report multiple metrics when possible.
+- Simpler models often perform surprisingly well, so do not assume complexity always wins.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use the starter code to compare a naïve forecast with ARIMA on the last five observations. Which model wins on RMSE, and would your answer change if you cared more about percentage errors?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(1919)
+years = np.arange(2000, 2025)
+trend = 520 - 6 * (years - 2000)
+climate_shock = rng.normal(0, 12, len(years))
+production = trend + 18 * np.sin(2 * np.pi * np.arange(len(years)) / 5) + climate_shock
+df = pd.DataFrame({"year": years, "paddy_production": production})
+import numpy as np
+from statsmodels.tsa.arima.model import ARIMA
+
+train = df.iloc[:-5].copy()
+test = df.iloc[-5:].copy()
+naive_forecast = np.repeat(train['paddy_production'].iloc[-1], len(test))
+arima_forecast = ARIMA(train['paddy_production'], order=(1, 1, 1)).fit().forecast(steps=len(test))
+rmse_naive = np.sqrt(np.mean((test['paddy_production'] - naive_forecast) ** 2))
+rmse_arima = np.sqrt(np.mean((test['paddy_production'] - arima_forecast) ** 2))
+print(rmse_naive, rmse_arima)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Forecast evaluation must be out-of-sample whenever possible.
+- ✅ MAE, RMSE, and MAPE capture different aspects of forecast accuracy.
+- ✅ Rolling-window evaluation mimics real forecasting decisions over time.
+- ✅ The preferred forecasting model is the one that performs best on future data, not merely past data.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We conclude the course with a full review of all 20 weeks.
+- The final class summarises core formulas, workflows, and research applications.
+- Be ready for a mini-project that brings the course together.
+:::
+
+
