@@ -1,0 +1,197 @@
+---
+title: "Data Cleaning Case Study"
+subtitle: "ECON 3209 · Week 6, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Diagnose typical quality problems in raw datasets used for econometrics.
+2. Clean missing values, inconsistent labels, and wrong data types in pandas.
+3. Detect and handle outliers using simple rules and economic judgment.
+4. Build a reproducible cleaning pipeline for a Kerala crop dataset.
+5. Prepare a final analysis-ready dataset for regression and visualisation.
+
+---
+
+## Case study: a messy Kerala crop dataset
+
+- Imagine district-level crop records collected from multiple offices.
+- Some rows contain missing values, text instead of numbers, and inconsistent names.
+- Econometric analysis requires a dataset that is internally consistent.
+- Cleaning is not cosmetic; it changes the credibility of all later results.
+- Today we move from raw data to a usable analytical file.
+
+---
+
+## Typical data quality issues
+
+- Missing production values for some districts.
+- Area stored as text such as `"1,250"` instead of numeric values.
+- Inconsistent crop labels like `Rice`, `rice`, and ` Paddy `.
+- Implausible values caused by entry mistakes.
+- Dates or years saved as text instead of integers.
+
+---
+
+## Creating a messy raw dataset
+
+```{pyodide-python}
+import pandas as pd
+import numpy as np
+
+raw = pd.DataFrame({
+    'district': ['Palakkad', 'Thrissur', 'Wayanad', 'Idukki', 'Kottayam'],
+    'crop': ['Rice', ' Paddy ', 'coffee', 'Pepper', 'Rice'],
+    'area_ha': ['2100', '1,450', '900', None, '1300'],
+    'production_ton': [11130, None, '1530', 420, 62000],
+    'year': ['2023', '2023', '2023', '2023', '2023']
+})
+
+print(raw)
+print(raw.dtypes)
+```
+
+---
+
+## Handling missing values systematically
+
+- First, identify where missing values occur using `isna().sum()`.
+- Decide whether to drop, fill, or investigate each missing value.
+- Use domain knowledge: dropping one district may be costly in a small sample.
+- For administrative data, some missing values indicate reporting delay rather than zero.
+- Document every cleaning choice.
+
+---
+
+## Cleaning names, types, and missing values
+
+```{pyodide-python}
+clean1 = raw.copy()
+clean1['crop'] = clean1['crop'].str.strip().str.title().replace({'Paddy': 'Rice'})
+clean1['area_ha'] = clean1['area_ha'].str.replace(',', '', regex=False)
+clean1['area_ha'] = pd.to_numeric(clean1['area_ha'], errors='coerce')
+clean1['production_ton'] = pd.to_numeric(clean1['production_ton'], errors='coerce')
+clean1['year'] = clean1['year'].astype(int)
+
+print(clean1.isna().sum())
+print(clean1)
+```
+
+---
+
+## Outliers: error or economically meaningful?
+
+- An outlier is an observation far from the rest of the sample.
+- Outliers may come from input errors or from genuinely unusual cases.
+- We should compare suspicious values with economic logic.
+- Example: 62,000 tonnes of rice for one district may be plausible only if area is also very high.
+- Never delete outliers mechanically without explanation.
+
+---
+
+## Flagging suspicious observations
+
+```{pyodide-python}
+clean2 = clean1.copy()
+clean2['yield_ton_per_ha'] = clean2['production_ton'] / clean2['area_ha']
+clean2['outlier_flag'] = clean2['yield_ton_per_ha'] > 10
+
+print(clean2[['district', 'crop', 'yield_ton_per_ha', 'outlier_flag']])
+
+filtered = clean2.loc[~clean2['outlier_flag']].copy()
+print("\nAfter removing flagged outlier rows")
+print(filtered)
+```
+
+---
+
+## A reproducible cleaning pipeline
+
+- Start from the raw DataFrame and apply the same steps every time.
+- Keep transformations ordered and readable.
+- Create new variables only after types are corrected.
+- Save intermediate checks such as missing-value counts and outlier flags.
+- Reproducibility matters for assignments, audits, and thesis work.
+
+---
+
+## Full cleaning pipeline in one block
+
+```{pyodide-python}
+final_df = (
+    raw.assign(
+        crop=lambda d: d['crop'].str.strip().str.title().replace({'Paddy': 'Rice'}),
+        area_ha=lambda d: pd.to_numeric(d['area_ha'].str.replace(',', '', regex=False), errors='coerce'),
+        production_ton=lambda d: pd.to_numeric(d['production_ton'], errors='coerce'),
+        year=lambda d: d['year'].astype(int)
+    )
+    .dropna(subset=['area_ha', 'production_ton'])
+)
+
+final_df['yield_ton_per_ha'] = final_df['production_ton'] / final_df['area_ha']
+final_df = final_df.loc[final_df['yield_ton_per_ha'] <= 10].reset_index(drop=True)
+print(final_df)
+```
+
+---
+
+## Cleaning log: what should we record?
+
+- Number of observations before and after cleaning.
+- Variables recoded or standardised.
+- Missing values dropped or imputed.
+- Outlier rules applied and why.
+- Final file name used for analysis.
+
+::: {.highlight-box}
+A good cleaning script is a transparent record of decisions, not just a shortcut to a neat table.
+:::
+
+---
+
+## From cleaning to econometrics
+
+- After cleaning, we can calculate descriptive statistics safely.
+- Regression coefficients are only meaningful if the underlying variables are reliable.
+- Wrong types can cause silent errors in models and plots.
+- Cleaning turns raw information into economic evidence.
+- This is why data preparation is part of econometrics, not a separate chore.
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a DataFrame with one missing value, one text-formatted number, and one inconsistent crop label. Write code to standardise the crop names, convert the numeric column properly, and drop rows with missing output.
+:::
+
+```{pyodide-python}
+import pandas as pd
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Raw datasets often contain missing values, wrong types, and inconsistent labels.
+- ✅ `pd.to_numeric()` and string methods are basic cleaning tools in pandas.
+- ✅ Outliers should be checked using both statistics and economic reasoning.
+- ✅ A reproducible pipeline makes future analysis easier and more credible.
+- ✅ Cleaning decisions should be recorded, not hidden.
+- ✅ Econometric results are only as trustworthy as the cleaned data behind them.
+
+---
+
+## Next Lecture
+
+- Next week we begin **Introduction to Econometrics**.
+- We will define econometrics, distinguish correlation from causation, and study major data types.
+
