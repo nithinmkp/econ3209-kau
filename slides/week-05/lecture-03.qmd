@@ -1,0 +1,259 @@
+---
+title: "Interactive Plots & Publication-Ready Figures"
+subtitle: "ECON 3209 · Week 5, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Build multi-panel plots with `subplots()`
+2. Add formatting, annotations, and reference lines effectively
+3. Save figures for reports and assignments using `savefig()`
+4. Apply simple design rules for publication-ready visuals
+5. Use live notebook-style plotting to refine figures interactively
+
+---
+
+## What Makes a Plot “Interactive” in Class?
+
+- In this course, plots are interactive because you can edit code and rerun instantly
+- Small changes in colour, scale, or labels produce immediate visual feedback
+- This makes the notebook a laboratory for visual reasoning
+- Interactivity helps students test economic storytelling choices
+- Publication quality starts with iterative refinement
+
+---
+
+## Building Subplots
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+years = [2021, 2022, 2023, 2024]
+deposits = [118, 125, 133, 145]
+loans = [94, 99, 105, 112]
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+axes[0].plot(years, deposits, marker='o', color='#5DBE50')
+axes[0].set_title("Deposits")
+axes[1].plot(years, loans, marker='s', color='#DAB300')
+axes[1].set_title("Loans")
+for ax in axes:
+    ax.set_xlabel("Year")
+    ax.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+```
+
+- `subplots()` creates multiple axes in one figure
+- This helps compare related series side by side
+- Shared formatting gives visual consistency
+- Multi-panel plots are common in reports and presentations
+
+---
+
+## Formatting for Readability
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+categories = ["Rice", "Coconut", "Rubber", "Banana"]
+prices = [28, 36, 165, 22]
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.bar(categories, prices, color=['#5DBE50', '#3A8F2B', '#8AA624', '#DAB300'])
+ax.set_title("Average Crop Prices in Kerala")
+ax.set_ylabel("₹ per kg")
+ax.tick_params(axis='x', rotation=15)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+plt.show()
+```
+
+- Formatting choices shape how quickly an audience understands the figure
+- Remove unnecessary visual noise when possible
+- Rotate crowded tick labels for readability
+- Use consistent fonts, colours, and units across related figures
+
+---
+
+## Adding Reference Lines and Annotations
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+years = [2020, 2021, 2022, 2023, 2024]
+recovery = [82, 85, 88, 91, 93]
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(years, recovery, marker='o', color='navy')
+ax.axhline(90, color='red', linestyle='--', label='Target')
+ax.annotate('Target achieved', xy=(2023, 91), xytext=(2021.7, 92.5),
+            arrowprops=dict(arrowstyle='->', color='black'))
+ax.set_title("Loan Recovery Rate")
+ax.set_ylabel("Percent")
+ax.legend()
+plt.show()
+```
+
+- Reference lines help compare data against targets or policy thresholds
+- Annotations can call attention to important events
+- Use them sparingly so the plot remains uncluttered
+- Good annotations direct the audience to the economic message
+
+---
+
+## Saving Figures
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot([2021, 2022, 2023, 2024], [3200, 3300, 3450, 3600], marker='o')
+ax.set_title("Rice Yield Trend")
+ax.set_xlabel("Year")
+ax.set_ylabel("kg per hectare")
+fig.savefig("rice_yield_trend.png", dpi=300, bbox_inches="tight")
+print("Saved: rice_yield_trend.png")
+plt.show()
+```
+
+- `savefig()` exports figures for assignments and reports
+- `dpi=300` is a common standard for print-quality output
+- `bbox_inches="tight"` helps avoid clipped labels
+- Choose meaningful file names so outputs stay organised
+
+---
+
+## Publication-Ready Plot Checklist
+
+- Clear title with economic meaning
+- Axis labels include units
+- Colour palette is readable and consistent
+- No unnecessary 3D effects or distracting backgrounds
+- Font sizes are large enough for projection and print
+
+::: {.highlight-box}
+Publication-ready does not mean “fancy”; it means accurate, readable, and audience-focused.
+:::
+
+---
+
+## Combining Several Design Choices
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+years = [2020, 2021, 2022, 2023, 2024]
+deposits = [110, 118, 125, 133, 145]
+loans = [90, 94, 99, 105, 112]
+
+fig, ax = plt.subplots(figsize=(8, 4.5))
+ax.plot(years, deposits, marker='o', linewidth=2.5, label='Deposits', color='#1A3300')
+ax.plot(years, loans, marker='s', linewidth=2.5, label='Loans', color='#DAB300')
+ax.set_title("Kerala Cooperative Banking Trends")
+ax.set_xlabel("Year")
+ax.set_ylabel("₹ crore")
+ax.grid(axis='y', alpha=0.25)
+ax.legend(frameon=False)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+plt.show()
+```
+
+- This figure combines labels, grid control, colour consistency, and a clean legend
+- The message is comparative change over time
+- Every design choice should support that message
+- Good figures are built through iteration, not by chance
+
+---
+
+## When to Use Multi-Panel vs Single-Panel Plots
+
+::: {.cols-2}
+::: {}
+### Multi-Panel Helps When
+- Variables have different scales
+- You want side-by-side comparison
+- Several related stories belong together
+:::
+::: {}
+### Single-Panel Helps When
+- One message is central
+- Comparison can be shown clearly in one axes
+- The audience needs a quick takeaway
+:::
+:::
+
+---
+
+## Common Presentation Mistakes
+
+- Too many colours with no meaning
+- Tiny labels that are unreadable in class
+- Overlapping text and crowded legends
+- Mixing different units without explanation
+- Saving low-resolution images for final reports
+
+::: {.gold-box}
+A figure should survive three tests: readable on screen, readable in print, and interpretable without the speaker talking over it.
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a two-panel figure:
+
+1. Left panel: a line plot of deposits over four years.
+2. Right panel: a line plot of loans over the same years.
+3. Add titles and call `plt.tight_layout()` before `plt.show()`.
+:::
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+# Write your solution here
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Live plotting becomes interactive when you edit and rerun code quickly
+- ✅ `subplots()` helps organise related charts in one figure
+- ✅ Formatting, annotations, and reference lines strengthen interpretation
+- ✅ `savefig()` exports figures for assignments and reports
+- ✅ Publication-ready figures prioritise clarity over decoration
+- ✅ Strong visuals make econometric arguments easier to follow
+
+---
+
+## Next Lecture
+
+### Looking Ahead
+
+- In the next block of the course we will begin statistical modelling and inference
+- The coding and plotting foundations from Weeks 1–5 will now support regression-based analysis
+- Keep practicing with the live Pyodide cells before we move onward
+
