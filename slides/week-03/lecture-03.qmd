@@ -1,0 +1,255 @@
+---
+title: "Statistical Operations"
+subtitle: "ECON 3209 · Week 3, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Compute descriptive statistics with NumPy
+2. Work with percentiles, standard deviation, and correlation
+3. Generate random numbers from common distributions
+4. Use seeds for reproducible simulation results
+5. Interpret statistical output in agricultural and banking contexts
+
+---
+
+## NumPy as a Statistics Toolkit
+
+- NumPy is not only for arrays and algebra
+- It also provides fast descriptive statistics
+- These tools are useful before any regression analysis
+- Economists begin by summarising data, looking for variation and patterns
+- The same functions work on small examples and large datasets
+
+---
+
+## Mean, Median, and Standard Deviation
+
+```{pyodide-python}
+import numpy as np
+
+rice_yield = np.array([3200, 3450, 3100, 3800, 3600], dtype=float)
+
+print("Mean:", np.mean(rice_yield))
+print("Median:", np.median(rice_yield))
+print("Std dev:", np.std(rice_yield, ddof=1))
+print("Minimum:", np.min(rice_yield))
+print("Maximum:", np.max(rice_yield))
+```
+
+- The mean is the average value
+- The median is the middle observation after sorting
+- Standard deviation measures dispersion
+- `ddof=1` gives the sample standard deviation
+
+---
+
+## Percentiles and Quantiles
+
+```{pyodide-python}
+import numpy as np
+
+loan_sizes = np.array([40000, 55000, 62000, 70000, 82000, 95000, 130000])
+
+print("25th percentile:", np.percentile(loan_sizes, 25))
+print("50th percentile:", np.percentile(loan_sizes, 50))
+print("75th percentile:", np.percentile(loan_sizes, 75))
+```
+
+- Percentiles show the position of observations within the distribution
+- They are useful when averages hide skewed data
+- Banks often study medians and upper quantiles of loan exposure
+- Agricultural incomes are also often better summarised with quantiles
+
+---
+
+## Axis-Based Statistics
+
+```{pyodide-python}
+import numpy as np
+
+crop_matrix = np.array([
+    [3200, 28],
+    [3500, 32],
+    [3000, 30]
+], dtype=float)
+
+print("Column means:", np.mean(crop_matrix, axis=0))
+print("Row means:", np.mean(crop_matrix, axis=1))
+```
+
+- `axis=0` means compute down each column
+- `axis=1` means compute across each row
+- This is useful for panel-like data and multivariable summaries
+- Understanding axes is essential when working with matrices
+
+---
+
+## Correlation and Covariance
+
+```{pyodide-python}
+import numpy as np
+
+price = np.array([28, 30, 31, 29, 33], dtype=float)
+yield_kg = np.array([3200, 3300, 3400, 3250, 3500], dtype=float)
+
+print("Covariance matrix:\n", np.cov(price, yield_kg))
+print("Correlation matrix:\n", np.corrcoef(price, yield_kg))
+```
+
+- Covariance measures whether variables move together
+- Correlation rescales that relationship between `-1` and `1`
+- Positive correlation means the variables tend to rise together
+- Correlation does **not** imply causation
+
+---
+
+## Random Numbers and Reproducibility
+
+```{pyodide-python}
+import numpy as np
+
+np.random.seed(3209)
+print("Uniform sample:", np.random.rand(5))
+print("Normal sample:", np.random.normal(loc=0, scale=1, size=5))
+```
+
+- Random draws are central in simulation and resampling
+- `seed()` makes results reproducible for teaching and research
+- Uniform draws lie between `0` and `1`
+- Normal draws follow the bell-shaped distribution
+
+---
+
+## Simulating Crop Yield Shocks
+
+```{pyodide-python}
+import numpy as np
+
+np.random.seed(42)
+base_yield = 3200
+shock = np.random.normal(loc=0, scale=220, size=10)
+simulated_yield = base_yield + shock
+
+print(np.round(simulated_yield, 1))
+print("Simulated mean:", np.round(np.mean(simulated_yield), 2))
+```
+
+- Simulation helps us think about uncertainty
+- Here random weather shocks affect paddy yield
+- We can study possible outcomes without collecting new data first
+- Monte Carlo logic is widely used in modern econometrics
+
+---
+
+## Common Distributions in Applied Work
+
+::: {.cols-2}
+::: {}
+### Useful Distributions
+- Uniform for random assignment ideas
+- Normal for measurement error and shocks
+- Binomial for success/failure counts
+- Poisson for event counts
+:::
+::: {}
+### Economic Examples
+- Rainfall shock simulations
+- Loan default events
+- Crop pest incidents
+- Sampling variation in surveys
+:::
+:::
+
+```{pyodide-python}
+import numpy as np
+
+np.random.seed(11)
+print("Binomial defaults:", np.random.binomial(n=1, p=0.08, size=12))
+print("Poisson pest counts:", np.random.poisson(lam=2.5, size=8))
+```
+
+---
+
+## Standardising Data with Z-Scores
+
+```{pyodide-python}
+import numpy as np
+
+deposits = np.array([110, 118, 125, 140, 155], dtype=float)
+z_scores = (deposits - np.mean(deposits)) / np.std(deposits, ddof=1)
+
+print("Deposits:", deposits)
+print("Z-scores:", np.round(z_scores, 2))
+```
+
+- Z-scores show how far an observation is from the mean
+- They are measured in standard deviations
+- Standardisation helps compare variables on different scales
+- This idea appears in data cleaning and index construction
+
+---
+
+## Interpreting Summary Statistics Carefully
+
+- The mean can be distorted by outliers
+- The standard deviation depends on the scale of the variable
+- Correlation shows association, not policy effect
+- Simulations depend on assumptions about the distribution
+- Statistical summaries guide the next step; they do not replace economic reasoning
+
+::: {.gold-box}
+Always combine numerical summaries with domain knowledge about crops, climate, markets, and institutions.
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a NumPy array of coconut yields: `9000, 10400, 9800, 11200, 10750`.
+
+1. Compute the mean and sample standard deviation.
+2. Compute the 25th and 75th percentiles.
+3. Generate 5 random normal shocks with mean `0` and standard deviation `150` using a fixed seed.
+:::
+
+```{pyodide-python}
+import numpy as np
+
+# Write your solution here
+coconut = np.array([])
+np.random.seed(0)
+
+print()
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ NumPy computes core descriptive statistics quickly
+- ✅ Percentiles reveal distribution shape beyond the mean
+- ✅ `axis` lets us summarise rows or columns of matrices
+- ✅ Correlation and covariance describe co-movement
+- ✅ Random seeds make simulation reproducible
+- ✅ Statistical summaries are the first step in serious econometric analysis
+
+---
+
+## Next Lecture
+
+### Series & DataFrames with pandas
+
+- We will move from arrays to labelled tabular data
+- pandas will let us organise observations and variables more naturally
+- This is the standard toolkit for applied data wrangling
+
