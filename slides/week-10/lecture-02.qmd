@@ -1,0 +1,259 @@
+---
+title: "Interpretation of Coefficients"
+subtitle: "ECON 3209 · Week 10, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. interpret slopes in a multiple regression as partial effects
+2. use ceteris paribus language for economic explanations
+3. distinguish raw and standardized coefficients
+4. compare R² and adjusted R² when regressors are added
+5. avoid common mistakes when interpreting intercepts and dummy slopes
+
+---
+
+## What Does a Coefficient Mean in MLR?
+
+In the model
+
+::: {.formula}
+$$Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \cdots + \beta_k X_{ki} + \varepsilon_i$$
+:::
+
+the coefficient $\beta_j$ measures the expected change in $Y$ from a **one-unit increase** in $X_j$, **holding all other regressors fixed**.
+
+::: {.highlight-box}
+This is the core idea of **partial effect** and **ceteris paribus** interpretation.
+:::
+
+---
+
+## Kerala Example: Loan Default Risk
+
+Suppose we estimate
+
+::: {.formula}
+$$Default_i = \beta_0 + \beta_1 Income_i + \beta_2 Collateral_i + \beta_3 LoanSize_i + \varepsilon_i$$
+:::
+
+- If $\hat\beta_1=-0.012$, then a ₹1,000 increase in monthly income is associated with a **1.2 percentage-point lower** default probability, holding collateral and loan size fixed.
+- If $\hat\beta_3=0.021$, larger loans are associated with greater default risk, other things equal.
+
+::: {.gold-box}
+Always say what is held constant. Without that phrase, the interpretation is incomplete.
+:::
+
+---
+
+## Intercepts, Units, and Economic Meaning
+
+::: {.cols-2}
+::: {}
+### Intercept $\beta_0$
+- Predicted value of $Y$ when all regressors equal zero
+- Sometimes meaningful
+- Sometimes only a mathematical anchor
+:::
+::: {}
+### Slopes $\beta_j$
+- Must be interpreted in the **units** of $X_j$ and $Y$
+- Unit changes matter: kilograms, millimetres, rupees, hectares
+- Rescaling changes the number but not the economic content
+:::
+:::
+
+---
+
+## Standardized Coefficients
+
+A standardized coefficient asks: what happens to $Y$ in **standard deviation units** when $X_j$ changes by one standard deviation?
+
+::: {.formula}
+$$\beta_j^{std}=\hat\beta_j\left(\frac{s_{X_j}}{s_Y}ight)$$
+:::
+
+Use standardized coefficients when:
+- regressors are measured in very different units
+- you want a rough comparison of relative importance
+
+Do **not** use them to replace substantive interpretation in original units.
+
+---
+
+## Python Demo: Fit and Interpret an MLR
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(123)
+n = 100
+df = pd.DataFrame({
+    'income': np.random.uniform(12, 40, n),
+    'collateral': np.random.uniform(1, 15, n),
+    'loan_size': np.random.uniform(30, 180, n)
+})
+e = np.random.normal(0, 2.5, n)
+df['repayment_score'] = 65 + 0.9*df['income'] + 1.4*df['collateral'] - 0.08*df['loan_size'] + e
+
+model = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()
+print(model.params.round(4))
+```
+
+---
+
+## Python Demo: Standardize Variables
+
+```{pyodide-python}
+        z = (df - df.mean()) / df.std(ddof=0)
+        z_model = smf.ols('repayment_score ~ income + collateral + loan_size', data=z).fit()
+        print('Raw coefficients:')
+        print(model.params.round(4))
+        print('
+Standardized coefficients:')
+        print(z_model.params.round(4))
+        ```
+
+---
+
+## R² versus Adjusted R²
+
+::: {.formula}
+$$R^2 = 1 - \frac{SSR}{SST}$$
+:::
+
+- $R^2$ never falls when you add regressors.
+- A useless regressor can still increase $R^2$ slightly.
+
+::: {.formula}
+$$\bar{R}^2 = 1 - \frac{SSR/(n-k-1)}{SST/(n-1)}$$
+:::
+
+- Adjusted $R^2$ penalizes adding weak regressors.
+- It is often more informative for comparing models with different numbers of covariates.
+
+---
+
+## Python Demo: Irrelevant Regressor and Fit Measures
+
+```{pyodide-python}
+df['noise'] = np.random.normal(0, 1, n)
+model_noise = smf.ols('repayment_score ~ income + collateral + loan_size + noise', data=df).fit()
+
+compare = pd.DataFrame({
+    'model': ['baseline', 'with noise'],
+    'R2': [model.rsquared, model_noise.rsquared],
+    'Adj_R2': [model.rsquared_adj, model_noise.rsquared_adj]
+})
+print(compare.round(4))
+```
+
+---
+
+## Python Demo: Partial Effect with Prediction Grid
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+grid = pd.DataFrame({
+    'income': np.linspace(df['income'].min(), df['income'].max(), 40),
+    'collateral': df['collateral'].mean(),
+    'loan_size': df['loan_size'].mean()
+})
+grid['pred'] = model.predict(grid)
+
+plt.figure(figsize=(7, 4))
+plt.scatter(df['income'], df['repayment_score'], alpha=0.5)
+plt.plot(grid['income'], grid['pred'], color='darkgreen', linewidth=2)
+plt.xlabel('Income (₹ thousand per month)')
+plt.ylabel('Predicted repayment score')
+plt.title('Partial effect of income, holding others fixed')
+plt.show()
+```
+
+---
+
+## Common Interpretation Mistakes
+
+- **Mistake 1:** forgetting the phrase “holding other variables constant”.
+- **Mistake 2:** interpreting the intercept when zero values are impossible or unrealistic.
+- **Mistake 3:** comparing raw coefficients measured in different units.
+- **Mistake 4:** treating a high $R^2$ as proof of causality.
+- **Mistake 5:** saying a coefficient is “important” without checking its scale, sign, and precision.
+
+::: {.highlight-box}
+Econometric interpretation is about **meaning + units + conditioning set**.
+:::
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Fit a model for `repayment_score` using income, collateral, and loan size.
+2. Write a one-sentence interpretation for each slope.
+3. Standardize the variables and compare raw and standardized slopes.
+4. Add a random noise variable and report the change in $R^2$ and adjusted $R^2$.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(321)
+n = 90
+df = pd.DataFrame({
+    'income': np.random.uniform(10, 35, n),
+    'collateral': np.random.uniform(1, 12, n),
+    'loan_size': np.random.uniform(40, 160, n)
+})
+
+# Create your own outcome and estimate a model
+# df['repayment_score'] = ...
+# model = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ MLR coefficients are **partial effects**: they describe one regressor's effect holding the rest fixed.
+
+✅ Interpretation always depends on the units of both the dependent variable and the regressor.
+
+✅ Standardized coefficients are useful for rough comparisons, not as a substitute for economic meaning.
+
+✅ $R^2$ always rises weakly with extra regressors, but adjusted $R^2$ penalizes unnecessary complexity.
+
+✅ Clear reporting uses ceteris paribus language and avoids overclaiming.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 3 — Partial Effects in Python**
+
+We will cover:
+- building MLR models in statsmodels
+- reading every part of the summary table
+- plotting partial effects
+- computing scenario-based marginal effects
+:::
+
+
+
