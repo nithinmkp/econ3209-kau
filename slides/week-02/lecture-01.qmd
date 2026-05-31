@@ -1,0 +1,271 @@
+---
+title: "Conditionals & Loops"
+subtitle: "ECON 3209 · Week 2, Lecture 1 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Use `if`, `elif`, and `else` to make economic decisions in code
+2. Write `for` and `while` loops to process repeated calculations
+3. Control loops with `break` and `continue`
+4. Trace how indentation determines program logic in Python
+5. Apply control flow to Kerala agricultural and cooperative banking examples
+
+---
+
+## Why Control Flow Matters
+
+- Economists rarely analyse one observation at a time
+- We often classify villages, crops, borrowers, or districts using rules
+- We also repeat the same calculation across many years or households
+- **Control flow** tells Python *when* to run code and *how many times*
+- It is the bridge from simple arithmetic to real data analysis
+
+::: {.highlight-box}
+A loan officer deciding whether to approve, reject, or review an application is using the same logic as an `if/elif/else` block.
+:::
+
+---
+
+## Conditional Statements: `if`, `elif`, `else`
+
+```{pyodide-python}
+# Basic structure of a conditional statement
+interest_rate = 0.082
+
+if interest_rate < 0.07:
+    print("Low interest regime")
+elif interest_rate < 0.09:
+    print("Moderate interest regime")
+else:
+    print("High interest regime")
+```
+
+- `if` checks the first condition
+- `elif` means “else if” and handles additional cases
+- `else` runs when no earlier condition is true
+- The colon `:` starts a code block
+- Indentation shows which lines belong to each branch
+
+---
+
+## Example: Classifying NPA Risk
+
+```{pyodide-python}
+# NPA = non-performing assets ratio
+npa_ratio = 0.041
+
+if npa_ratio < 0.03:
+    category = "Healthy cooperative bank"
+elif npa_ratio < 0.06:
+    category = "Watch list"
+else:
+    category = "High-risk portfolio"
+
+print(f"NPA ratio: {npa_ratio:.1%}")
+print("Classification:", category)
+```
+
+- The same variable can lead to different outputs
+- Conditions are checked from top to bottom
+- Put the **most specific or most urgent rule first**
+- Once Python finds a true branch, it skips the rest
+
+---
+
+## Combining Conditions
+
+- Use `and` when **all** conditions must be true
+- Use `or` when **any one** condition is enough
+- Use `not` to reverse a condition
+- Complex rules are common in credit screening and crop classification
+- Parentheses improve readability when conditions become long
+
+::: {.formula}
+Loan approved if:
+
+$$(\text{income} \geq 30000) \; \text{and} \; (\text{credit score} \geq 700) \; \text{and} \; (\text{default history} = \text{False})$$
+:::
+
+---
+
+## Example: Screening Borrowers
+
+```{pyodide-python}
+income = 42000
+credit_score = 715
+has_default = False
+
+if income >= 30000 and credit_score >= 700 and not has_default:
+    print("Approve the cooperative bank loan")
+else:
+    print("Send application for manual review")
+```
+
+- This is a **compound boolean expression**
+- Each sub-condition returns `True` or `False`
+- The entire `if` statement depends on the combined result
+- Clear rules make economic decisions reproducible
+
+---
+
+## Repetition with `for` Loops
+
+- A `for` loop repeats code over a sequence
+- Typical sequences are lists, strings, ranges, or arrays
+- Use `for` when you know what items you want to iterate over
+- In economics, this is useful for districts, crops, or years
+- Python reads the loop body one item at a time
+
+```{pyodide-python}
+districts = ["Thrissur", "Ernakulam", "Palakkad"]
+
+for district in districts:
+    print(f"Collecting deposit data for {district}")
+```
+
+---
+
+## Example: Summing District Deposits
+
+```{pyodide-python}
+deposits = [125, 140, 118, 132]  # in ₹ crore
+
+total = 0
+for value in deposits:
+    total = total + value
+
+print("Total deposits (₹ crore):", total)
+print("Average deposits (₹ crore):", total / len(deposits))
+```
+
+- Start with an accumulator such as `total = 0`
+- Update it inside the loop
+- After the loop ends, the final value is available
+- This pattern appears everywhere in statistics and accounting
+
+---
+
+## `range()` and Counting Loops
+
+```{pyodide-python}
+# range(start, stop, step)
+for year in range(2021, 2026):
+    print("Financial year:", year)
+```
+
+- `range(5)` gives `0, 1, 2, 3, 4`
+- `range(2021, 2026)` gives `2021` to `2025`
+- The `stop` value is **not included**
+- `range()` is ideal for fixed-number repetition
+- Use it when looping over time periods or index positions
+
+---
+
+## `while` Loops
+
+- A `while` loop continues **as long as** a condition remains true
+- Use it when the stopping point is not known in advance
+- `while` loops are common in simulations and iterative finance problems
+- Make sure something changes inside the loop
+- Otherwise you create an **infinite loop**
+
+```{pyodide-python}
+savings = 0
+year = 0
+
+while savings < 50000:
+    year += 1
+    savings += 12000
+    print(f"Year {year}: savings = ₹{savings:,}")
+```
+
+---
+
+## `break` and `continue`
+
+```{pyodide-python}
+rainfall = [220, 0, 180, -1, 205]
+
+for value in rainfall:
+    if value == -1:
+        print("Stop: sensor error detected")
+        break
+    if value == 0:
+        print("Skip zero rainfall observation")
+        continue
+    print("Valid rainfall observation:", value)
+```
+
+- `break` exits the loop immediately
+- `continue` skips the rest of the current iteration
+- These commands help clean messy real-world datasets
+- Use them carefully so your logic stays readable
+
+---
+
+## Common Loop Mistakes
+
+- Forgetting the colon `:` after `if`, `for`, or `while`
+- Mixing tabs and spaces in indentation
+- Updating the wrong variable inside a loop
+- Writing a `while` loop with no progress toward stopping
+- Reusing unclear variable names like `x`, `y`, and `z`
+
+::: {.gold-box}
+**Debugging tip:** read your loop aloud — “for each district, do this calculation” — and then check whether the code matches that sentence.
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+A cooperative bank reviews annual loan recovery rates: `92, 88, 95, 76, 90`.
+
+1. Use a `for` loop to print each rate.
+2. If a rate is below `80`, print `Needs field visit`.
+3. At the end, print how many rates are below `90`.
+:::
+
+```{pyodide-python}
+recovery_rates = [92, 88, 95, 76, 90]
+
+# Write your solution here
+below_90 = 0
+
+for rate in recovery_rates:
+    pass
+
+print("Rates below 90:", below_90)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ `if/elif/else` lets Python choose between alternatives
+- ✅ `for` loops repeat code across known sequences
+- ✅ `while` loops repeat until a condition becomes false
+- ✅ `break` stops a loop; `continue` skips one iteration
+- ✅ Indentation is part of Python syntax, not just style
+- ✅ Control flow is essential for classifying, filtering, and aggregating economic data
+
+---
+
+## Next Lecture
+
+### Functions & Scope
+
+- We will package repeated logic into reusable functions
+- You will learn about parameters, return values, and variable scope
+- This will help you write cleaner and more modular econometrics code
+
