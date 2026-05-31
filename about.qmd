@@ -36,8 +36,8 @@ All course materials are open and freely accessible.
 
 The Python programming sections of this course draw heavily from the freely available notes of:
 
-- **Kevin Sheppard** (University of Oxford) — *Introduction to Python for Econometrics, Statistics and Data Analysis* — an outstanding resource for economists learning Python, available at [kevinsheppard.com](https://www.kevinsheppard.com/teaching/python/notes/).
-- **Weijie Chen** (QuantEcon / ANU) — *Python Programming for Economics and Finance* — part of the QuantEcon lecture series, available at [python-programming.quantecon.org](https://python-programming.quantecon.org).
+- **Kevin Sheppard** (University of Oxford) — *Introduction to Python for Econometrics, Statistics and Data Analysis* — an outstanding resource for economists learning Python, available on GitHub at [bashtage/python-introduction](https://github.com/bashtage/python-introduction).
+- **Weijie Chen** — *Econometrics with Python* — a comprehensive open-source econometrics course in Python, available on GitHub at [weijie-chen/Econometrics-With-Python](https://github.com/weijie-chen/Econometrics-With-Python).
 
 The econometrics content follows the treatment in **Maddala & Lahiri** (*Introduction to Econometrics*, 4th ed., Wiley) and **Wooldridge** (*Introductory Econometrics*, 7th ed., Cengage). Students are encouraged to consult both texts alongside the course slides.
 
