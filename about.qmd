@@ -36,8 +36,8 @@ All course materials are open and freely accessible.
 
 The Python programming sections of this course draw heavily from the freely available notes of:
 
-- **Kevin Sheppard** (University of Oxford) — *Introduction to Python for Econometrics, Statistics and Data Analysis* — an outstanding resource for economists learning Python, available on GitHub at [bashtage/python-introduction](https://github.com/bashtage/python-introduction).
-- **Weijie Chen** — *Econometrics with Python* — a comprehensive open-source econometrics course in Python, available on GitHub at [weijie-chen/Econometrics-With-Python](https://github.com/weijie-chen/Econometrics-With-Python).
+- **Kevin Sheppard** (University of Oxford) — *Introduction to Python for Econometrics, Statistics and Data Analysis* — a Jupyter notebook–based course covering Python for Finance and Econometrics, with accompanying [YouTube lectures](https://www.youtube.com/playlist?list=PLVR_rJLcetzkqoeuhpIXmG9uQCtSoGBz1). Available at [github.com/bashtage/python-introduction](https://github.com/bashtage/python-introduction).
+- **Weijie Chen** — *Econometrics with Python* — lecture notes covering econometrics from simple regression through panel data and time series, implemented in Python. Originally developed for quantitative analyst training and suitable for graduate students. Available at [github.com/weijie-chen/Econometrics-With-Python](https://github.com/weijie-chen/Econometrics-With-Python).
 
 The econometrics content follows the treatment in **Maddala & Lahiri** (*Introduction to Econometrics*, 4th ed., Wiley) and **Wooldridge** (*Introductory Econometrics*, 7th ed., Cengage). Students are encouraged to consult both texts alongside the course slides.
 

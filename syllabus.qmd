@@ -47,8 +47,8 @@ Upon successful completion of this course, students will be able to:
 - Wooldridge, J.M. (2020). *Introductory Econometrics: A Modern Approach* (7th ed.). Cengage.
 
 ### Python Resources
-- Sheppard, K. *Introduction to Python for Econometrics, Statistics and Data Analysis*. University of Oxford. [GitHub: bashtage/python-introduction](https://github.com/bashtage/python-introduction)
-- Chen, W. *Econometrics with Python*. [GitHub: weijie-chen/Econometrics-With-Python](https://github.com/weijie-chen/Econometrics-With-Python)
+- Sheppard, K. *Introduction to Python for Econometrics, Statistics and Data Analysis*. University of Oxford. Jupyter notebooks with YouTube lectures. [github.com/bashtage/python-introduction](https://github.com/bashtage/python-introduction)
+- Chen, W. *Econometrics with Python*. Lecture notes covering regression, panel data, and time series in Python. [github.com/weijie-chen/Econometrics-With-Python](https://github.com/weijie-chen/Econometrics-With-Python)
 - VanderPlas, J. (2023). *Python Data Science Handbook* (2nd ed.). O'Reilly.
 
 ### Supplementary
