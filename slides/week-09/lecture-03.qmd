@@ -1,0 +1,196 @@
+---
+title: "t and F Tests in Python"
+subtitle: "ECON 3209 · Week 9, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Run a t-test for a single regression coefficient in Python.
+2. Understand joint significance and the logic of an F-test.
+3. Use `statsmodels` methods such as `.t_test()` and `.f_test()`.
+4. Compare restricted and unrestricted models conceptually.
+5. Report t and F test results in clear econometric language.
+
+---
+
+## Review: the t-test for one coefficient
+
+- A t-test checks a null hypothesis about a single coefficient.
+- Example:
+  $$H_0: \beta_{fertilizer} = 0$$
+- The test uses the coefficient estimate, its standard error, and the t distribution.
+- In practice, regression tables already report the t statistic and p-value.
+- Python also allows explicit hypothesis testing commands.
+
+---
+
+## Why do we need an F-test?
+
+- Sometimes we want to test several restrictions together.
+- Example: are fertilizer and rainfall jointly irrelevant in explaining yield?
+- Testing them one at a time misses the joint question.
+- The F-test evaluates combined restrictions on multiple coefficients.
+- It is a standard tool in multiple regression.
+
+---
+
+## Estimating a multiple regression model
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(42)
+n = 80
+fertilizer = np.random.uniform(50, 200, n)
+rainfall = np.random.uniform(800, 1800, n)
+labour = np.random.uniform(20, 60, n)
+yield_ = 12 + 0.12 * fertilizer + 0.01 * rainfall + 0.25 * labour + np.random.normal(0, 6, n)
+
+df = pd.DataFrame({'yield_': yield_, 'fertilizer': fertilizer, 'rainfall': rainfall, 'labour': labour})
+model = smf.ols('yield_ ~ fertilizer + rainfall + labour', data=df).fit()
+print(model.summary())
+```
+
+---
+
+## Running a t-test in `statsmodels`
+
+- Suppose we want to test whether fertilizer has any effect.
+- The null is
+  $$H_0: \beta_{fertilizer} = 0$$
+- We can read the p-value from the summary table.
+- Or we can call `.t_test()` directly for an explicit restriction.
+
+---
+
+## t-test for one coefficient
+
+```{pyodide-python}
+test_fert = model.t_test('fertilizer = 0')
+print(test_fert)
+```
+
+---
+
+## Joint significance with an F-test
+
+- Now test the joint null
+  $$H_0: \beta_{fertilizer} = 0 \; \text{and} \; \beta_{rainfall} = 0$$
+- This asks whether both variables are irrelevant together.
+- The F-statistic compares model fit under the null and the unrestricted model.
+- A small p-value rejects the joint null.
+
+---
+
+## F-test in Python
+
+```{pyodide-python}
+joint_test = model.f_test('fertilizer = 0, rainfall = 0')
+print(joint_test)
+```
+
+---
+
+## Interpreting t and F results
+
+- The t-test is about one coefficient at a time.
+- The F-test is about multiple coefficients jointly.
+- If the F-test rejects, at least one of the tested restrictions fails.
+- Joint significance is especially important when variables work together.
+- Interpretation should always return to the economic question.
+
+---
+
+## Restricted versus unrestricted models
+
+- The unrestricted model estimates all coefficients freely.
+- The restricted model imposes the null hypothesis.
+- Example: set fertilizer and rainfall coefficients to zero.
+- The F-test compares fit across these two situations.
+- This logic extends to many econometric specifications.
+
+---
+
+## Comparing models in code
+
+```{pyodide-python}
+restricted = smf.ols('yield_ ~ labour', data=df).fit()
+print('Unrestricted R-squared:', round(model.rsquared, 4))
+print('Restricted R-squared  :', round(restricted.rsquared, 4))
+print('Model F-statistic     :', round(model.fvalue, 4))
+print('Model F p-value       :', model.f_pvalue)
+```
+
+---
+
+## Reporting test results well
+
+- Say which null hypothesis was tested.
+- Report the test statistic and p-value.
+- Mention the significance level used.
+- Translate the result into economic language.
+- Example: “Fertilizer and rainfall are jointly significant predictors of rice yield.”
+
+---
+
+## Common pitfalls
+
+- Forgetting that rejection of the overall model F-test does not mean every coefficient is individually significant.
+- Ignoring multicollinearity when interpreting individual t-tests.
+- Testing too many hypotheses without a clear research plan.
+- Treating significance as proof of causality.
+- Reporting p-values without the underlying coefficient estimates.
+
+---
+
+## Extracting key test information
+
+```{pyodide-python}
+print('t statistic for fertilizer:', model.tvalues['fertilizer'])
+print('p-value for fertilizer    :', model.pvalues['fertilizer'])
+print('Overall model F-statistic :', model.fvalue)
+print('Overall model F p-value   :', model.f_pvalue)
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Simulate a multiple regression with `yield_` as the dependent variable and `fertilizer`, `rainfall`, and `labour` as regressors. Then run a t-test for `labour = 0` and an F-test for `fertilizer = 0` and `rainfall = 0` jointly.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ A t-test examines one coefficient at a time.
+- ✅ An F-test examines several restrictions jointly.
+- ✅ `statsmodels` provides `.t_test()` and `.f_test()` for explicit hypothesis testing.
+- ✅ Joint significance matters in multiple regression.
+- ✅ Restricted and unrestricted model logic underlies the F-test.
+- ✅ Good reporting states the null, test statistic, p-value, and economic meaning.
+
+---
+
+## Next Lecture
+
+- In the next unit we will extend the regression framework further.
+- The natural next step is **multiple regression and richer model specification**.
+
