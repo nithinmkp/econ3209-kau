@@ -187,89 +187,109 @@ print(clean_df)
 
 ---
 
-## MOSPI: India's Official Micro-data Source
+## MOSPI: Two Python Packages for Indian Data
 
-- **MOSPI** (Ministry of Statistics & Programme Implementation) is India's apex statistical body.
-- Publishes large-scale unit-level surveys used in empirical economics research.
-
-| Dataset | Coverage | Key Variables |
-|---------|----------|---------------|
-| **NSS** (National Sample Survey) | Households, consumption, employment | Expenditure, MPCE, employment status |
-| **PLFS** (Periodic Labour Force Survey) | Workers 15+ | WPR, LFPR, wages, industry |
-| **ASI** (Annual Survey of Industries) | Formal manufacturing plants | Output, employment, capital |
-| **NSSO Debt & Investment** | Rural/urban households | Assets, liabilities, interest rates |
+| Package | Install | What it gives you |
+|---------|---------|-------------------|
+| `mospi-unitdata` | `pip install mospi-unitdata` | **Unit-level microdata** — download raw NSS, PLFS, ASI datasets from [microdata.gov.in](https://microdata.gov.in) |
+| `mospi-esankhyiki` | `pip install mospi-esankhyiki` | **Aggregate indicators** — 500+ statistical series across 22 datasets (PLFS, CPI, IIP, NAS, WPI …) |
 
 ::: {.highlight-box}
-Unit-level data → one row per household or worker → essential for microeconometrics.
+Both packages are official MOSPI/NSO tools (MIT licence). `mospi-unitdata` requires a free API key; `mospi-esankhyiki` is fully open.
+:::
+
+**Run these in a local Python environment** (Jupyter / terminal) — they call live government APIs that are not available inside the browser sandbox.
+
+---
+
+## mospi-unitdata: Downloading Microdata
+
+```python
+# pip install mospi-unitdata
+from MospiUnitdata import list_datasets, list_files, download_file
+
+API_KEY = "YOUR_KEY"   # get free key at microdata.gov.in → Profile
+
+# 1. Search available surveys
+datasets = list_datasets(API_KEY, query="labour force")
+for d in datasets:
+    print(f"{d['idno']}: {d['title']}")
+# DDI-IND-NSO-PLFS-2023-24: Periodic Labour Force Survey 2023-24
+# DDI-IND-NSO-PLFS-2022-23: Periodic Labour Force Survey 2022-23
+
+# 2. See files in a dataset
+files = list_files("DDI-IND-NSO-PLFS-2023-24", API_KEY)
+for f in files:
+    print(f['name'], f.get('size', '?'))
+
+# 3. Download to your project
+download_file("DDI-IND-NSO-PLFS-2023-24",
+              "PLFS_2023_24_Visit1_CSV.zip", "./data", API_KEY)
+```
+
+::: {.highlight-box}
+Once downloaded: `pd.read_csv("./data/PLFS_2023_24_Visit1_CSV.zip")` — one row per household member.
 :::
 
 ---
 
-## Accessing MOSPI Data in Python
+## mospi-esankhyiki: Statistical Indicators
 
-```{pyodide-python}
-import pandas as pd
-from io import StringIO
+```python
+# pip install mospi-esankhyiki
+import esankhyiki
 
-# Simulated PLFS-style unit data (actual data downloaded from mospi.gov.in)
-# Variables: state, sector (rural/urban), usual_activity, weekly_wage
-plfs_text = """state,sector,usual_activity,weekly_wage
-Kerala,Rural,Self-employed,3200
-Kerala,Urban,Regular wage,8500
-Tamil Nadu,Rural,Casual labour,1800
-Karnataka,Urban,Regular wage,9200
-Kerala,Rural,Regular wage,6100
-Kerala,Urban,Self-employed,7400
-"""
+# Step 1 – discover the 22 datasets
+datasets_df = esankhyiki.list_datasets(format="df")
 
-plfs = pd.read_csv(StringIO(plfs_text))
+# Step 2 – see indicators for PLFS (Periodic Labour Force Survey)
+indicators = esankhyiki.get_indicators("PLFS")
 
-# State-level wage summary (typical PLFS analysis)
-summary = plfs.groupby(['state', 'sector'])['weekly_wage'].agg(['mean', 'count'])
-summary.columns = ['avg_wage', 'n_workers']
-print(summary.round(0))
+# Step 3 – find valid filter codes (years, states, sectors …)
+meta = esankhyiki.get_metadata("PLFS", indicator_code=3, frequency_code=1)
+
+# Step 4 – fetch as DataFrame
+df = esankhyiki.get_data("PLFS", {
+    "indicator_code": 3,   # Unemployment Rate
+    "frequency_code": 1,   # Annual
+    "year": "2023-24",
+    "state_code": 99,      # All India
+    "gender_code": 3,      # Persons (all)
+    "age_code": 1,
+    "sector_code": 3,      # Rural + Urban
+}, format="df")
+print(df)
 ```
 
-::: {.highlight-box}
-**Actual download:** [mospi.gov.in](https://mospi.gov.in) → Surveys → Unit Level Data → Register (free)
-:::
+**Other useful datasets:** `"CPI"`, `"NAS"` (GDP), `"IIP"`, `"HCES"` (consumption/poverty), `"ASI"`, `"WPI"`
 
 ---
 
-## MOSPI eSankhyiki: The Data Portal
-
-- **eSankhyiki** ([esankhyiki.mospi.gov.in](https://esankhyiki.mospi.gov.in)) is MOSPI's open-access portal.
-- Provides **aggregate tables** (not unit-level) downloadable as CSV/Excel — no registration needed.
-
-**What you can get directly:**
-
-| Indicator | Frequency | Format |
-|-----------|-----------|--------|
-| State Domestic Product (GSDP) | Annual | Excel |
-| CPI by state and commodity group | Monthly | CSV |
-| Index of Industrial Production (IIP) | Monthly | Excel |
-| Employment (Quarterly Bulletin) | Quarterly | PDF/Excel |
+## Working with esankhyiki output in Python
 
 ```{pyodide-python}
+# Simulate what esankhyiki.get_data("PLFS", ...) returns
+# (run this in browser — for real data use esankhyiki in local Python)
 import pandas as pd
 from io import StringIO
 
-# Simulated eSankhyiki-style GSDP download (CSV from portal)
-gsdp_text = """state,year,gsdp_cr,growth_pct
-Kerala,2021,920340,8.1
-Kerala,2022,1012400,10.0
-Tamil Nadu,2021,1985600,9.3
-Tamil Nadu,2022,2198000,10.7
-Karnataka,2021,2102800,9.8
-Karnataka,2022,2334500,11.0
+plfs_csv = """year,state,sector,gender,indicator,value,unit
+2017-18,All India,Rural+Urban,Persons,Unemployment Rate,6.1,%
+2018-19,All India,Rural+Urban,Persons,Unemployment Rate,5.8,%
+2019-20,All India,Rural+Urban,Persons,Unemployment Rate,4.8,%
+2020-21,All India,Rural+Urban,Persons,Unemployment Rate,4.2,%
+2021-22,All India,Rural+Urban,Persons,Unemployment Rate,4.1,%
+2022-23,All India,Rural+Urban,Persons,Unemployment Rate,3.2,%
+2023-24,All India,Rural+Urban,Persons,Unemployment Rate,3.1,%
 """
 
-gsdp = pd.read_csv(StringIO(gsdp_text))
-print(gsdp.pivot(index='state', columns='year', values='growth_pct'))
+df = pd.read_csv(StringIO(plfs_csv))
+print(df[['year', 'value']].to_string(index=False))
+print(f"\nUnemployment trend: {df['value'].iloc[0]}% → {df['value'].iloc[-1]}%")
 ```
 
 ::: {.highlight-box}
-eSankhyiki = ready-to-use aggregate tables · Unit Data Portal = raw micro-data for research
+Once you call `esankhyiki.get_data(..., format="df")` locally, the DataFrame has this same structure — ready for regression or visualisation.
 :::
 
 ---
@@ -301,8 +321,8 @@ Kottayam;980000;94.2
 - ✅ `to_csv(index=False)` helps save a clean analysis-ready dataset.
 - ✅ APIs return structured data that can be turned into pandas DataFrames.
 - ✅ Import mistakes in headers, delimiters, or types can distort later results.
-- ✅ **MOSPI Unit Data** (NSS, PLFS, ASI) provides household and firm-level micro-data for India.
-- ✅ **eSankhyiki** portal gives free access to aggregate tables (GSDP, CPI, IIP) in CSV/Excel.
+- ✅ **`mospi-unitdata`** — downloads raw NSS/PLFS/ASI unit-level microdata from microdata.gov.in via Python API.
+- ✅ **`mospi-esankhyiki`** — fetches 500+ aggregate indicators (PLFS, CPI, NAS, IIP …) directly as DataFrames in 4 steps.
 - ✅ A reproducible import-clean-export workflow is essential in applied economics.
 
 ---
