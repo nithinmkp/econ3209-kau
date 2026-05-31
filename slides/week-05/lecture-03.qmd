@@ -2,7 +2,7 @@
 title: "Interactive Plots & Publication-Ready Figures"
 subtitle: "ECON 3209 · Week 5, Lecture 3 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -256,5 +256,6 @@ import matplotlib.pyplot as plt
 - In the next block of the course we will begin statistical modelling and inference
 - The coding and plotting foundations from Weeks 1–5 will now support regression-based analysis
 - Keep practicing with the live Pyodide cells before we move onward
+
 
 

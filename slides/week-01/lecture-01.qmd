@@ -2,7 +2,7 @@
 title: "Getting Started with Python"
 subtitle: "ECON 3209 · Week 1, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -313,6 +313,7 @@ We will cover:
 - Lists, tuples, and dictionaries
 - Type conversion and checking
 :::
+
 
 
 

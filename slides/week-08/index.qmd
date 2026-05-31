@@ -1,18 +1,14 @@
 ---
-title: "Week 8 --- OLS: Theory & Properties"
+title: "Week 8 — OLS: Theory & Properties"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 8 Overview
 
+Study the Gauss-Markov theorem, statistical properties of OLS, and implement OLS from scratch in Python.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Gauss-Markov Theorem | [Open →](lecture-01.qmd) |
 | Lecture 2 | Statistical Properties of OLS | [Open →](lecture-02.qmd) |
 | Lecture 3 | Python OLS from Scratch | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

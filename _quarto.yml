@@ -6,15 +6,15 @@ brand: brand.yml
 
 website:
   title: "ECON 3209 — Econometrics with Python"
-  site-url: "https://kau-econ3209.github.io"
+  site-url: "https://nithinmkp.github.io/econ3209-kau"
   description: "BSc Hons Cooperation & Banking, 6th Semester | Kerala Agricultural University"
-  favicon: assets/kau-logo.png
+  favicon: assets/kau-logo.jpg
 
   navbar:
-    logo: assets/kau-logo.png
+    logo: assets/kau-logo.jpg
     logo-alt: "KAU Logo"
     title: "ECON 3209"
-    background: "#267A1B"
+    background: "#1A3300"
     foreground: "#FFFFFF"
     pinned: true
     left:

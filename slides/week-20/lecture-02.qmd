@@ -2,7 +2,7 @@
 title: "Forecast Evaluation"
 subtitle: "ECON 3209 · Week 20, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -251,6 +251,7 @@ print(rmse_naive, rmse_arima)
 - The final class summarises core formulas, workflows, and research applications.
 - Be ready for a mini-project that brings the course together.
 :::
+
 
 
 

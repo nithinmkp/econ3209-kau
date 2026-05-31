@@ -1,18 +1,14 @@
 ---
-title: "Week 13 --- Dummy Variables"
+title: "Week 13 — Dummy Variables"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 13 Overview
 
+Incorporate qualitative predictors through dummy variables, interaction terms, and test for structural breaks in Python.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Qualitative Predictors | [Open →](lecture-01.qmd) |
 | Lecture 2 | Interaction Terms | [Open →](lecture-02.qmd) |
 | Lecture 3 | Structural Breaks in Python | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

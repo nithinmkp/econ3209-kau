@@ -2,7 +2,7 @@
 title: "Simple OLS Derivation"
 subtitle: "ECON 3209 · Week 7, Lecture 3 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -213,5 +213,6 @@ import numpy as np
 
 - We move to **OLS theory and properties**.
 - The next lecture introduces the Gauss-Markov assumptions and the meaning of BLUE.
+
 
 

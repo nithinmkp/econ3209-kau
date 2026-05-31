@@ -2,7 +2,7 @@
 title: "Consequences of Multicollinearity"
 subtitle: "ECON 3209 · Week 11, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -207,6 +207,7 @@ We will cover:
 - remedies such as dropping or combining variables
 - a preview of ridge regression
 :::
+
 
 
 

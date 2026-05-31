@@ -2,7 +2,7 @@
 title: "Series & DataFrames"
 subtitle: "ECON 3209 · Week 4, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -269,5 +269,6 @@ print(df)
 - We will learn how to combine datasets and summarise groups
 - These skills are essential for turning raw data into analysis-ready tables
 - They also mirror common tasks in official statistics and banking data systems
+
 
 

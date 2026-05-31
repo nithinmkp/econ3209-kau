@@ -1,18 +1,14 @@
 ---
-title: "Week 17 --- Panel Data Analysis"
+title: "Week 17 — Panel Data Methods"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 17 Overview
 
+Analyse panel data using pooled OLS, fixed effects, and random effects. Includes the Hausman test in Python.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Pooled OLS | [Open →](lecture-01.qmd) |
 | Lecture 2 | Fixed Effects | [Open →](lecture-02.qmd) |
 | Lecture 3 | Random Effects & Hausman Test | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

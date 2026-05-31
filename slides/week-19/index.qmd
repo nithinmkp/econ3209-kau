@@ -1,18 +1,14 @@
 ---
-title: "Week 19 --- Time Series: Basics"
+title: "Week 19 — Time Series: Stationarity"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 19 Overview
 
+Study stationarity, unit roots, and the ADF test. Visualise autocorrelation with ACF/PACF plots in Python.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Stationarity | [Open →](lecture-01.qmd) |
 | Lecture 2 | Unit Roots & ADF Test | [Open →](lecture-02.qmd) |
 | Lecture 3 | ACF/PACF in Python | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

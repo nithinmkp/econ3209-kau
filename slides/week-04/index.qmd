@@ -1,18 +1,14 @@
 ---
-title: "Week 4 --- Pandas & Data Wrangling"
+title: "Week 4 — Pandas & Data Wrangling"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 4 Overview
 
+Work with tabular economic data using Pandas. Covers Series, DataFrames, merge/reshape/groupby, and a real agricultural data case study.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Series & DataFrames | [Open →](lecture-01.qmd) |
 | Lecture 2 | Merge, Reshape & Groupby | [Open →](lecture-02.qmd) |
 | Lecture 3 | Real Agricultural Data | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

@@ -2,7 +2,7 @@
 title: "Autocorrelation: Nature & Causes"
 subtitle: "ECON 3209 · Week 18, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -213,6 +213,7 @@ print('White-noise lag-1 autocorr:', round(pd.Series(white).autocorr(lag=1), 3))
 - You will implement both tests in Python.
 - Today’s intuition about persistence becomes formal diagnostic practice.
 :::
+
 
 
 

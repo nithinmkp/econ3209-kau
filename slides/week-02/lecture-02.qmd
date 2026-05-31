@@ -2,7 +2,7 @@
 title: "Functions & Scope"
 subtitle: "ECON 3209 · Week 2, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -260,5 +260,6 @@ for revenue, cost in examples:
 - We will learn compact ways to transform data
 - You will see how comprehensions and anonymous functions speed up data preparation
 - These tools are especially useful before moving into NumPy and pandas
+
 
 

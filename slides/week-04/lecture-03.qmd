@@ -2,7 +2,7 @@
 title: "Real Agricultural Data"
 subtitle: "ECON 3209 · Week 4, Lecture 3 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -263,5 +263,6 @@ print(df)
 - We now turn cleaned data into clear visual evidence
 - You will learn the basic grammar of figures, axes, and chart types
 - Strong visualisation makes your descriptive analysis persuasive
+
 
 

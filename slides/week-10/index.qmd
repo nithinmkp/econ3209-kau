@@ -1,18 +1,14 @@
 ---
-title: "Week 10 --- Multiple Linear Regression"
+title: "Week 10 — Multiple Linear Regression"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 10 Overview
 
+Extend OLS to multiple regressors — setup, estimation, interpretation of coefficients, and partial effects in Python.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | MLR Setup & Estimation | [Open →](lecture-01.qmd) |
 | Lecture 2 | Interpretation of Coefficients | [Open →](lecture-02.qmd) |
 | Lecture 3 | Partial Effects in Python | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

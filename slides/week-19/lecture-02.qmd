@@ -2,7 +2,7 @@
 title: "Unit Roots & ADF Test"
 subtitle: "ECON 3209 · Week 19, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -214,6 +214,7 @@ print('KPSS diff:', kpss(first_diff, nlags='auto')[1])
 - You will learn how lag patterns guide order selection.
 - This is the bridge from stationarity testing to ARIMA design.
 :::
+
 
 
 

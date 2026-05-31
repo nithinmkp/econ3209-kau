@@ -1,18 +1,14 @@
 ---
-title: "Week 18 --- Autocorrelation"
+title: "Week 18 — Autocorrelation"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 18 Overview
 
+Understand autocorrelation, detect it with Durbin-Watson and Breusch-Godfrey tests, and apply Cochrane-Orcutt correction in Python.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Nature & Causes | [Open →](lecture-01.qmd) |
-| Lecture 2 | DW & BG Tests | [Open →](lecture-02.qmd) |
+| Lecture 2 | Detection Tests | [Open →](lecture-02.qmd) |
 | Lecture 3 | Cochrane-Orcutt in Python | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

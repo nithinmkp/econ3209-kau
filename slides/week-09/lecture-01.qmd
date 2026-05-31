@@ -2,7 +2,7 @@
 title: "Hypothesis Testing"
 subtitle: "ECON 3209 · Week 9, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -198,5 +198,6 @@ import statsmodels.formula.api as smf
 
 - We will study **confidence intervals** for regression coefficients.
 - These intervals give a range of plausible values for the true parameter.
+
 
 

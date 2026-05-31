@@ -2,7 +2,7 @@
 title: "Stationarity"
 subtitle: "ECON 3209 · Week 19, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -199,6 +199,7 @@ print(df[['year', 'paddy_production', 'roll_mean']].tail(8).round(2))
 - You will learn how to interpret apparently contradictory test outcomes.
 - Stationarity intuition now becomes formal testing practice.
 :::
+
 
 
 

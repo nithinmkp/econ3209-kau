@@ -1,18 +1,14 @@
 ---
-title: "Week 6 --- Working with Real Data"
+title: "Week 6 — Working with Real Data"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 6 Overview
 
+Handle real-world data workflows — importing from files and APIs, exploratory data analysis, and a full data-cleaning case study.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | Import, Export & APIs | [Open →](lecture-01.qmd) |
 | Lecture 2 | Exploratory Data Analysis | [Open →](lecture-02.qmd) |
 | Lecture 3 | Data Cleaning Case Study | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

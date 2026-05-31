@@ -2,7 +2,7 @@
 title: "Course Review"
 subtitle: "ECON 3209 · Week 20, Lecture 3 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -287,6 +287,7 @@ Kerala Agricultural University
 - Keep practising with real Kerala data: crop yields, prices, credit, and rural livelihoods.
 - Best wishes for your exams, projects, and future research.
 :::
+
 
 
 

@@ -2,7 +2,7 @@
 title: "Qualitative Predictors"
 subtitle: "ECON 3209 · Week 13, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -201,6 +201,7 @@ We will cover:
 - graphical interpretation
 - marginal effects by group
 :::
+
 
 
 

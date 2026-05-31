@@ -2,7 +2,7 @@
 title: "Matplotlib Foundations"
 subtitle: "ECON 3209 · Week 5, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -252,5 +252,6 @@ import matplotlib.pyplot as plt
 - We will build richer statistical graphics on top of Matplotlib
 - You will learn boxplots, heatmaps, pairplots, and distribution charts
 - These are especially useful for exploratory data analysis
+
 
 

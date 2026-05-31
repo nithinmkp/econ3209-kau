@@ -2,7 +2,7 @@
 title: "Seaborn Statistical Charts"
 subtitle: "ECON 3209 · Week 5, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -255,5 +255,6 @@ import seaborn as sns
 - We will build multi-panel charts and improve formatting
 - You will learn saving options, annotations, and presentation standards
 - This turns exploratory plots into polished communication tools
+
 
 

@@ -1,18 +1,14 @@
 ---
-title: "Week 7 --- Introduction to Econometrics"
+title: "Week 7 — Introduction to Econometrics"
 subtitle: "ECON 3209 · Kerala Agricultural University"
 ---
 
 ## Week 7 Overview
 
+Understand what econometrics is, the types of economic data, and derive the simple OLS estimator from first principles.
+
 | Lecture | Topic | Slides |
-|---|---|---|
+|---------|-------|--------|
 | Lecture 1 | What is Econometrics? | [Open →](lecture-01.qmd) |
 | Lecture 2 | Economic Data Types | [Open →](lecture-02.qmd) |
 | Lecture 3 | Simple OLS Derivation | [Open →](lecture-03.qmd) |
-
-::: {.callout-note}
-Slides for this week are being prepared. Check back soon.
-:::
-
-

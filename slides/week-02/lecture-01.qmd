@@ -2,7 +2,7 @@
 title: "Conditionals & Loops"
 subtitle: "ECON 3209 · Week 2, Lecture 1 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -268,5 +268,6 @@ print("Rates below 90:", below_90)
 - We will package repeated logic into reusable functions
 - You will learn about parameters, return values, and variable scope
 - This will help you write cleaner and more modular econometrics code
+
 
 

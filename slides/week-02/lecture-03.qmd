@@ -2,7 +2,7 @@
 title: "List Comprehensions & Lambda"
 subtitle: "ECON 3209 · Week 2, Lecture 3 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -260,5 +260,6 @@ print(sorted_rates)
 - We now move from core Python objects to numerical arrays
 - NumPy will let us compute faster and more naturally with data vectors
 - This is the foundation for econometrics in Python
+
 
 

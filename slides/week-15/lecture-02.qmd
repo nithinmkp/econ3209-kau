@@ -2,7 +2,7 @@
 title: "Logit Model"
 subtitle: "ECON 3209 · Week 15, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -258,6 +258,7 @@ print(logit_model.predict(new_borrower))
 - You will compare logit and probit predictions in Python.
 - We also introduce ROC curves for classification performance.
 :::
+
 
 
 

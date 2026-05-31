@@ -2,7 +2,7 @@
 title: "Linear Algebra with NumPy"
 subtitle: "ECON 3209 · Week 3, Lecture 2 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
-date: "Autumn 2026"
+date: "2026-09-01"
 format:
   revealjs:
     title-slide-attributes:
@@ -243,5 +243,6 @@ print(solution)
 - We will move from matrix algebra to descriptive statistics and random numbers
 - You will learn how NumPy supports simulation and exploratory data analysis
 - These ideas lead directly to inference and econometric modelling
+
 
 
