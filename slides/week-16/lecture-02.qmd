@@ -1,0 +1,218 @@
+---
+title: "RESET Test"
+subtitle: "ECON 3209 · Week 16, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. explain what the Ramsey RESET test checks in a regression model
+2. connect RESET to functional-form and omitted-nonlinearity problems
+3. estimate a baseline model and run RESET in Python
+4. interpret the null hypothesis, p-value, and model implications
+5. know the limits of RESET and why theory still matters
+
+---
+
+## Why Specification Tests Are Useful
+
+- Even if coefficients are significant, the model may still be wrong.
+- Common problems include:
+  - missing nonlinear terms,
+  - omitted interactions,
+  - incorrect transformations,
+  - broader misspecification.
+- The **Ramsey RESET** test asks whether powers of the fitted values add explanatory power.
+
+---
+
+## RESET Idea
+
+- First estimate the baseline model and compute fitted values $\hat{y}$.
+- Then augment the regression with terms such as $\hat{y}^2$ and $\hat{y}^3$.
+- Null hypothesis: the added terms are jointly irrelevant.
+- If the added powers matter, the original model may have a functional-form problem.
+
+---
+
+## What RESET Does and Does Not Do
+
+- RESET is a **general misspecification test**.
+- It can detect omitted nonlinearities or interactions.
+- It does **not** tell us the exact correct model.
+- A rejection means: “the current specification is incomplete or wrongly shaped.”
+
+---
+
+## Simulating a Misspecified Relationship
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1602)
+n = 220
+rainfall = rng.normal(240, 40, n)
+fertilizer = rng.normal(95, 15, n)
+yield_index = 12 + 0.12 * fertilizer + 0.08 * rainfall - 0.00018 * rainfall**2 + rng.normal(0, 3, n)
+df = pd.DataFrame({"yield_index": yield_index, "rainfall": rainfall, "fertilizer": fertilizer})
+linear_model = smf.ols("yield_index ~ rainfall + fertilizer", data=df).fit()
+print(linear_model.params.round(4))
+```
+
+---
+
+## Running RESET in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.diagnostic import linear_reset
+
+rng = np.random.default_rng(1602)
+n = 220
+rainfall = rng.normal(240, 40, n)
+fertilizer = rng.normal(95, 15, n)
+yield_index = 12 + 0.12 * fertilizer + 0.08 * rainfall - 0.00018 * rainfall**2 + rng.normal(0, 3, n)
+df = pd.DataFrame({"yield_index": yield_index, "rainfall": rainfall, "fertilizer": fertilizer})
+linear_model = smf.ols("yield_index ~ rainfall + fertilizer", data=df).fit()
+reset_result = linear_reset(linear_model, power=2, use_f=True)
+print(reset_result)
+```
+
+---
+
+## Interpreting the Result
+
+- If the p-value is small, reject the null that the baseline linear functional form is adequate.
+- In our simulated crop-yield example, rainfall enters nonlinearly, so RESET should often reject.
+- The next step is not to stop at the p-value: use theory to decide whether to add squares, logs, or interactions.
+
+---
+
+## Kerala Illustration
+
+::: {.highlight-box}
+Imagine modelling crop yield in Kerala as a linear function of rainfall and fertilizer.
+
+Too little rainfall hurts crops. Too much rainfall also hurts crops. That suggests a **curved** relationship, so a pure linear model may be misspecified.
+:::
+
+---
+
+## Residual Plot for a Clue
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+rng = np.random.default_rng(1602)
+n = 220
+rainfall = rng.normal(240, 40, n)
+fertilizer = rng.normal(95, 15, n)
+yield_index = 12 + 0.12 * fertilizer + 0.08 * rainfall - 0.00018 * rainfall**2 + rng.normal(0, 3, n)
+df = pd.DataFrame({"yield_index": yield_index, "rainfall": rainfall, "fertilizer": fertilizer})
+linear_model = smf.ols("yield_index ~ rainfall + fertilizer", data=df).fit()
+
+plt.figure(figsize=(7, 4))
+plt.scatter(linear_model.fittedvalues, linear_model.resid, alpha=0.45)
+plt.axhline(0, color="grey", linestyle="--")
+plt.xlabel("Fitted values")
+plt.ylabel("Residuals")
+plt.title("Residual pattern can hint at misspecification")
+plt.show()
+```
+
+---
+
+## Correcting the Model
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.diagnostic import linear_reset
+
+rng = np.random.default_rng(1602)
+n = 220
+rainfall = rng.normal(240, 40, n)
+fertilizer = rng.normal(95, 15, n)
+yield_index = 12 + 0.12 * fertilizer + 0.08 * rainfall - 0.00018 * rainfall**2 + rng.normal(0, 3, n)
+df = pd.DataFrame({"yield_index": yield_index, "rainfall": rainfall, "fertilizer": fertilizer})
+linear_model = smf.ols("yield_index ~ rainfall + fertilizer", data=df).fit()
+quadratic_model = smf.ols("yield_index ~ rainfall + I(rainfall**2) + fertilizer", data=df).fit()
+print("Linear AIC:", round(linear_model.aic, 2))
+print("Quadratic AIC:", round(quadratic_model.aic, 2))
+print("RESET on corrected model:", linear_reset(quadratic_model, power=2, use_f=True))
+```
+
+---
+
+## Practical Workflow
+
+- Estimate the theory-based baseline model.
+- Check plots and economic logic.
+- Run RESET as a broad warning signal.
+- If RESET rejects, try reasonable alternatives: logs, squares, interactions, or missing variables.
+- Re-test and compare fit without becoming mechanically “test-driven.”
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Use the starter code to run a baseline linear model and then a quadratic model. Which model passes RESET more comfortably, and why does that make economic sense for rainfall?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from statsmodels.stats.diagnostic import linear_reset
+
+rng = np.random.default_rng(42)
+n = 180
+rainfall = rng.normal(230, 35, n)
+fertilizer = rng.normal(90, 14, n)
+yield_index = 10 + 0.10 * fertilizer + 0.07 * rainfall - 0.00015 * rainfall**2 + rng.normal(0, 3, n)
+df = pd.DataFrame({"yield_index": yield_index, "rainfall": rainfall, "fertilizer": fertilizer})
+
+baseline = smf.ols("yield_index ~ rainfall + fertilizer", data=df).fit()
+quadratic = smf.ols("yield_index ~ rainfall + I(rainfall**2) + fertilizer", data=df).fit()
+print(linear_reset(baseline, power=2, use_f=True))
+print(linear_reset(quadratic, power=2, use_f=True))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ RESET is a general test for functional-form and broader specification problems.
+- ✅ A rejection suggests the model is misspecified, often because nonlinearities or interactions are missing.
+- ✅ RESET does not reveal the exact correction; economic theory must guide the repair.
+- ✅ Python makes it easy to combine RESET with residual plots and model comparisons.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We compare competing models with AIC and BIC.
+- You will learn how information criteria balance fit and parsimony.
+- This connects specification testing with model selection decisions.
+:::
+
+
