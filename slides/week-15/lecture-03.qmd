@@ -1,0 +1,314 @@
+---
+title: "Probit Model in Python"
+subtitle: "ECON 3209 · Week 15, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you should be able to:
+
+1. write the probit probability model using the standard normal CDF
+2. compare probit intuition with logit and understand why coefficients differ in scale
+3. estimate probit and logit models in Python using statsmodels
+4. evaluate classification quality with a ROC curve and AUC
+5. decide when logit and probit give practically similar conclusions
+
+---
+
+## What is the Probit Model?
+
+- Probit is another binary response model.
+- Instead of the logistic CDF, it uses the **standard normal CDF** $\Phi(\cdot)$:
+
+$$P(Y_i=1|X_i)=\Phi(\beta_0+\beta_1X_{1i}+\cdots+\beta_kX_{ki})$$
+
+- The probability still stays in $[0,1]$.
+- The latent-variable story is often intuitive: a hidden propensity crosses a threshold.
+
+---
+
+## Logit versus Probit
+
+- Both models are nonlinear and fitted by maximum likelihood.
+- Both usually give **very similar predicted probabilities** in practice.
+- Logit has slightly fatter tails; probit is linked to the normal distribution.
+- Coefficients are on different scales, so compare **signs, significance, marginal effects, and predictions**, not raw magnitudes alone.
+
+---
+
+## Statsmodels versus scikit-learn
+
+- In applied econometrics, **statsmodels** is preferred when you want coefficients, standard errors, hypothesis tests, and marginal effects.
+- In machine learning workflows, **scikit-learn** focuses on prediction pipelines and classification accuracy.
+- In this browser-based course, Pyodide gives us **statsmodels**, so that is our main tool for probit.
+- The econometric logic remains the same even if software differs.
+
+---
+
+## Estimate Probit and Logit Together
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import pandas as pd
+import statsmodels.formula.api as smf
+
+probit_model = smf.probit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+comparison = pd.DataFrame({
+    "probit": probit_model.params,
+    "logit": logit_model.params,
+})
+print(comparison.round(4))
+```
+
+---
+
+## Comparing Predicted Probabilities
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import pandas as pd
+import statsmodels.formula.api as smf
+
+probit_model = smf.probit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+profiles = pd.DataFrame({
+    "income": [24, 32, 40],
+    "collateral": [0, 1, 1],
+    "district": [1, 1, 0],
+    "credit_score": [50, 62, 74],
+})
+profiles["probit_p"] = probit_model.predict(profiles)
+profiles["logit_p"] = logit_model.predict(profiles)
+print(profiles.round(4))
+```
+
+---
+
+## How to Interpret Probit
+
+- Like logit, the sign of a coefficient shows the direction of the effect.
+- Raw coefficients are changes in the latent index, not direct probability changes.
+- Marginal effects depend on the value of the normal density at the relevant index value.
+- In class reporting, focus on **predicted probabilities** and **marginal effects**.
+
+---
+
+## ROC Curve Logic
+
+- A classifier turns predicted probabilities into decisions using a cutoff.
+- The **ROC curve** plots:
+  - true positive rate (sensitivity),
+  - false positive rate (1 - specificity),
+  across many thresholds.
+- A curve closer to the top-left corner indicates better classification performance.
+- The area under the curve (AUC) summarises overall discrimination ability.
+
+---
+
+## ROC Curve in Python
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import numpy as np
+import statsmodels.formula.api as smf
+
+probit_model = smf.probit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+pred = probit_model.predict(df)
+thresholds = np.linspace(0, 1, 101)
+roc_points = []
+for c in thresholds:
+    yhat = (pred >= c).astype(int)
+    tp = ((yhat == 1) & (df["default"] == 1)).sum()
+    fp = ((yhat == 1) & (df["default"] == 0)).sum()
+    fn = ((yhat == 0) & (df["default"] == 1)).sum()
+    tn = ((yhat == 0) & (df["default"] == 0)).sum()
+    tpr = tp / (tp + fn)
+    fpr = fp / (fp + tn)
+    roc_points.append((fpr, tpr))
+roc = np.array(sorted(roc_points))
+auc = np.trapz(roc[:, 1], roc[:, 0])
+
+plt.figure(figsize=(6.5, 4.5))
+plt.plot(roc[:, 0], roc[:, 1], color="darkgreen", linewidth=2.5, label=f"Probit ROC (AUC={auc:.3f})")
+plt.plot([0, 1], [0, 1], linestyle="--", color="grey")
+plt.xlabel("False positive rate")
+plt.ylabel("True positive rate")
+plt.title("ROC curve for loan default classification")
+plt.legend()
+plt.show()
+```
+
+---
+
+## Kerala Interpretation
+
+::: {.highlight-box}
+Suppose your model predicts a higher default probability for borrowers in districts with weaker repayment climate, lower income, and no collateral.
+
+For a bank officer, the value of logit/probit is not only estimation — it is better **screening, pricing, and monitoring** of risk.
+:::
+
+---
+
+## Visual Comparison of Logit and Probit
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+probit_model = smf.probit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+grid = pd.DataFrame({
+    "income": np.linspace(20, 50, 80),
+    "collateral": 0,
+    "district": 1,
+    "credit_score": 58,
+})
+plt.figure(figsize=(7, 4))
+plt.plot(grid["income"], logit_model.predict(grid), label="Logit", linewidth=2.5)
+plt.plot(grid["income"], probit_model.predict(grid), label="Probit", linewidth=2.5)
+plt.xlabel("Income")
+plt.ylabel("Predicted default probability")
+plt.title("Logit and probit predictions are usually close")
+plt.legend()
+plt.show()
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Fit both a logit and a probit model. Which model gives the higher predicted default probability for a low-income borrower without collateral? Does the ranking of risky borrowers change?
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(3209)
+n = 240
+income = rng.normal(35, 8, n)
+collateral = rng.binomial(1, 0.45, n)
+district = rng.binomial(1, 0.35, n)
+credit_score = 58 + 0.9 * income + 8 * collateral - 5 * district + rng.normal(0, 6, n)
+latent = 1.2 - 0.065 * income - 0.85 * collateral + 0.45 * district - 0.02 * credit_score + rng.normal(0, 0.8, n)
+default = (latent > 0).astype(int)
+df = pd.DataFrame({
+    "income": income,
+    "collateral": collateral,
+    "district": district,
+    "credit_score": credit_score,
+    "default": default,
+})
+import pandas as pd
+import statsmodels.formula.api as smf
+
+probit_model = smf.probit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+logit_model = smf.logit("default ~ income + collateral + district + credit_score", data=df).fit(disp=False)
+case = pd.DataFrame({"income": [25], "collateral": [0], "district": [1], "credit_score": [52]})
+print("Probit:", probit_model.predict(case))
+print("Logit:", logit_model.predict(case))
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Probit uses the normal CDF and logit uses the logistic CDF, but both usually tell a similar story.
+- ✅ Raw coefficients should not be compared across models without caution because scales differ.
+- ✅ Predicted probabilities, marginal effects, ROC curves, and AUC are more useful for interpretation.
+- ✅ In Pyodide, statsmodels is the main tool for binary econometric models.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+- We shift to model specification problems, starting with omitted variable bias.
+- You will learn how missing regressors distort OLS coefficients.
+- Keep binary-model intuition, but return to the logic of causal interpretation.
+:::
+
+
