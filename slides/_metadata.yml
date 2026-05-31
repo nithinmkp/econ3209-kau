@@ -41,20 +41,20 @@ format:
             pointer-events: none;
           }
           /* ── Pyodide output text — key fix ── */
-          /* Extension sets color:#111 on dark .reveal pre background → invisible */
+          /* White background, blue text */
           .reveal pre div code.qpyodide-output-code-stdout,
           .qpyodide-output-code-stdout {
-            color: #d4d4d4 !important;
+            color: #1a5276 !important;
           }
           .reveal pre div code.qpyodide-output-code-stderr,
           .qpyodide-output-code-stderr {
-            color: #f48771 !important;
+            color: #c0392b !important;
           }
-          /* Output container inherits .reveal pre dark bg; keep it consistent */
+          /* Output container — white bg, blue-tinted border */
           .reveal div.qpyodide-output-code-area pre {
-            background: #1e1e1e !important;
-            border-left: 4px solid #7AB87A !important;
-            color: #d4d4d4 !important;
+            background: #ffffff !important;
+            border-left: 4px solid #1a5276 !important;
+            color: #1a5276 !important;
           }
           /* ── Pyodide Monaco Editor — dark theme ── */
           /* Editor container */
