@@ -1,0 +1,225 @@
+---
+title: "WLS & Robust SE in Python"
+subtitle: "ECON 3209 · Week 12, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. distinguish robust standard errors from weighted least squares
+2. estimate HC3-robust standard errors in `statsmodels`
+3. fit a weighted least squares model when a variance pattern is known
+4. compare coefficient tables across OLS, robust OLS, and WLS
+5. decide which remedy fits a particular empirical problem
+
+---
+
+## Two Main Responses to Heteroscedasticity
+
+::: {.cols-2}
+::: {}
+### Robust standard errors
+- keep the OLS coefficients
+- correct the estimated uncertainty
+- easy default in many applied papers
+:::
+::: {}
+### Weighted Least Squares
+- change both coefficients and standard errors
+- give less weight to high-variance observations
+- useful when the variance model is well understood
+:::
+:::
+
+---
+
+## HC3 Robust Standard Errors
+
+HC3 is a popular heteroscedasticity-robust correction, especially in moderate samples.
+
+It leaves $\hat\beta$ unchanged but recomputes the covariance matrix.
+
+::: {.gold-box}
+In practice, robust SEs are often the safest first remedy when you do not trust the homoskedasticity assumption.
+:::
+
+---
+
+## Weighted Least Squares
+
+If $Var(\varepsilon_i|X_i) \propto h_i$, use weights proportional to $1/h_i$.
+
+::: {.formula}
+$$\min_{\beta} \sum_{i=1}^n w_i (Y_i - X_i'\beta)^2$$
+:::
+
+with larger weights on observations having smaller error variance.
+
+---
+
+## When Is WLS Sensible?
+
+WLS is most useful when variance grows in a known way, such as:
+- variance proportional to farm size
+- sampling design weights
+- grouped data with known precision differences
+
+If the variance model is wrong, WLS can mislead.
+
+---
+
+## Python Demo: Baseline OLS
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+
+np.random.seed(101)
+n = 180
+wealth = np.random.uniform(20, 200, n)
+sigma = 3 + 0.09 * wealth
+income = 25 + 1.7*wealth + np.random.normal(0, sigma, n)
+df = pd.DataFrame({'income': income, 'wealth': wealth, 'sigma': sigma})
+
+ols = smf.ols('income ~ wealth', data=df).fit()
+print(ols.summary().tables[1])
+```
+
+---
+
+## Python Demo: HC3 Robust Standard Errors
+
+```{pyodide-python}
+ols_hc3 = ols.get_robustcov_results(cov_type='HC3')
+robust_table = pd.DataFrame({
+    'coef': ols_hc3.params,
+    'robust_se': ols_hc3.bse,
+    'p_value': ols_hc3.pvalues
+}, index=ols.model.exog_names)
+print(robust_table.round(4))
+```
+
+---
+
+## Python Demo: Weighted Least Squares
+
+```{pyodide-python}
+weights = 1 / (df['sigma']**2)
+wls = smf.wls('income ~ wealth', data=df, weights=weights).fit()
+print(wls.summary().tables[1])
+```
+
+---
+
+## Python Demo: Compare OLS, HC3, and WLS
+
+```{pyodide-python}
+compare = pd.DataFrame({
+    'OLS_coef': ols.params,
+    'OLS_se': ols.bse,
+    'HC3_se': ols_hc3.bse,
+    'WLS_coef': wls.params,
+    'WLS_se': wls.bse
+}, index=ols.model.exog_names)
+print(compare.round(4))
+```
+
+---
+
+## Python Demo: Visualize Weighted Fit
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+xgrid = np.linspace(df['wealth'].min(), df['wealth'].max(), 60)
+pred_ols = ols.predict(pd.DataFrame({'wealth': xgrid}))
+pred_wls = wls.predict(pd.DataFrame({'wealth': xgrid}))
+
+plt.figure(figsize=(6.5, 4))
+plt.scatter(df['wealth'], df['income'], alpha=0.35)
+plt.plot(xgrid, pred_ols, label='OLS', color='black')
+plt.plot(xgrid, pred_wls, label='WLS', color='darkgreen')
+plt.legend()
+plt.xlabel('Wealth')
+plt.ylabel('Income')
+plt.title('OLS and WLS fitted lines')
+plt.show()
+```
+
+---
+
+## Decision Guide
+
+- If you only need valid inference: use **robust SEs**.
+- If you know the variance structure fairly well: consider **WLS**.
+- If heteroscedasticity comes from scale, try **logs** or respecification too.
+
+::: {.highlight-box}
+Robust SEs fix the standard errors. WLS changes the estimation problem itself.
+:::
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate income data with error variance increasing in wealth.
+2. Estimate OLS and then compute HC3 robust standard errors.
+3. Create weights equal to the inverse of the error variance.
+4. Estimate a WLS model and compare it with OLS.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(55)
+n = 120
+wealth = np.random.uniform(15, 180, n)
+
+# Build sigma, income, and compare OLS with robust SE and WLS
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ Robust standard errors leave OLS coefficients unchanged but repair inference under heteroscedasticity.
+
+✅ HC3 is a useful default robust covariance choice in moderate samples.
+
+✅ WLS reweights observations and can improve efficiency when the variance model is credible.
+
+✅ Comparing OLS, robust OLS, and WLS reveals whether heteroscedasticity matters in practice.
+
+✅ Method choice should follow the empirical goal and how much you know about the variance pattern.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Week 13 — Dummy Variables**
+
+We will cover:
+- binary and categorical predictors
+- interaction terms
+- structural breaks
+- dummy-variable coding in Python
+:::
+
+
+
