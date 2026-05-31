@@ -99,7 +99,7 @@
     code span.vs { color: #e6db74; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-09f181eb42f36f4738546d18e7f3c29a.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-0271e701bd97cfe0366fbbc99fde86e2.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -207,14 +207,83 @@
       height: 45px; width: auto; z-index: 1000;
       pointer-events: none;
     }
+    /* ── Pyodide / Monaco Editor — dark theme ── */
+    /* Editor container */
+    .qpyodide-editor {
+      border: 1px solid #444 !important;
+      border-radius: 0.3em !important;
+    }
+    /* Monaco editor background */
+    .qpyodide-editor .monaco-editor,
+    .qpyodide-editor .monaco-editor-background,
+    .qpyodide-editor .monaco-editor .margin,
+    .qpyodide-editor .monaco-editor .monaco-editor-background {
+      background-color: #1e1e1e !important;
+    }
+    /* Monaco cursor & selection */
+    .qpyodide-editor .monaco-editor .cursors-layer .cursor {
+      background: #DAB300 !important;
+    }
+    /* Toolbar strip above Monaco */
+    .qpyodide-editor-toolbar {
+      background-color: #2a2a2a !important;
+      border-bottom: 1px solid #444 !important;
+      padding: 0.2rem 0.5rem;
+    }
+    /* Run / Reset buttons */
+    .qpyodide-button {
+      background-color: #4a8a4a !important;
+      color: #fff !important;
+      border-color: #4a8a4a !important;
+    }
+    .qpyodide-button:hover {
+      background-color: #1A3300 !important;
+      border-color: #1A3300 !important;
+    }
+    /* stdout output */
+    .qpyodide-output-code-stdout {
+      color: #d4d4d4 !important;
+      background-color: #1e1e1e !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.78em !important;
+      padding: 0.6em 1em !important;
+      border-left: 4px solid #7AB87A !important;
+      border-top: none !important;
+      display: block;
+    }
+    /* stderr output */
+    .qpyodide-output-code-stderr {
+      color: #f48771 !important;
+      background-color: #1e1e1e !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.78em !important;
+      padding: 0.6em 1em !important;
+      border-left: 4px solid #f48771 !important;
+      display: block;
+    }
+    /* Monaco inline text defaults (fallback if theme not set yet) */
+    .qpyodide-editor .view-lines,
+    .qpyodide-editor .view-line span {
+      color: #d4d4d4 !important;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // KAU logo
       var img = document.createElement('img');
       img.id = 'kau-slide-logo';
       img.src = '../../assets/kau-logo.jpg';
       img.alt = 'KAU';
       document.body.appendChild(img);
+      // Set Monaco editor to dark theme once it loads
+      function applyMonacoDark() {
+        if (typeof monaco !== 'undefined' && monaco.editor) {
+          monaco.editor.setTheme('vs-dark');
+        } else {
+          setTimeout(applyMonacoDark, 400);
+        }
+      }
+      applyMonacoDark();
     });
   </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.46.0/min/vs/editor/editor.main.css">

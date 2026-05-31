@@ -34,7 +34,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-09f181eb42f36f4738546d18e7f3c29a.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-0271e701bd97cfe0366fbbc99fde86e2.css">
   <script>
 
     window.document.addEventListener("DOMContentLoaded", function (_event) {
@@ -171,14 +171,83 @@
       height: 45px; width: auto; z-index: 1000;
       pointer-events: none;
     }
+    /* ── Pyodide / Monaco Editor — dark theme ── */
+    /* Editor container */
+    .qpyodide-editor {
+      border: 1px solid #444 !important;
+      border-radius: 0.3em !important;
+    }
+    /* Monaco editor background */
+    .qpyodide-editor .monaco-editor,
+    .qpyodide-editor .monaco-editor-background,
+    .qpyodide-editor .monaco-editor .margin,
+    .qpyodide-editor .monaco-editor .monaco-editor-background {
+      background-color: #1e1e1e !important;
+    }
+    /* Monaco cursor & selection */
+    .qpyodide-editor .monaco-editor .cursors-layer .cursor {
+      background: #DAB300 !important;
+    }
+    /* Toolbar strip above Monaco */
+    .qpyodide-editor-toolbar {
+      background-color: #2a2a2a !important;
+      border-bottom: 1px solid #444 !important;
+      padding: 0.2rem 0.5rem;
+    }
+    /* Run / Reset buttons */
+    .qpyodide-button {
+      background-color: #4a8a4a !important;
+      color: #fff !important;
+      border-color: #4a8a4a !important;
+    }
+    .qpyodide-button:hover {
+      background-color: #1A3300 !important;
+      border-color: #1A3300 !important;
+    }
+    /* stdout output */
+    .qpyodide-output-code-stdout {
+      color: #d4d4d4 !important;
+      background-color: #1e1e1e !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.78em !important;
+      padding: 0.6em 1em !important;
+      border-left: 4px solid #7AB87A !important;
+      border-top: none !important;
+      display: block;
+    }
+    /* stderr output */
+    .qpyodide-output-code-stderr {
+      color: #f48771 !important;
+      background-color: #1e1e1e !important;
+      font-family: 'Fira Code', monospace !important;
+      font-size: 0.78em !important;
+      padding: 0.6em 1em !important;
+      border-left: 4px solid #f48771 !important;
+      display: block;
+    }
+    /* Monaco inline text defaults (fallback if theme not set yet) */
+    .qpyodide-editor .view-lines,
+    .qpyodide-editor .view-line span {
+      color: #d4d4d4 !important;
+    }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // KAU logo
       var img = document.createElement('img');
       img.id = 'kau-slide-logo';
       img.src = '../../assets/kau-logo.jpg';
       img.alt = 'KAU';
       document.body.appendChild(img);
+      // Set Monaco editor to dark theme once it loads
+      function applyMonacoDark() {
+        if (typeof monaco !== 'undefined' && monaco.editor) {
+          monaco.editor.setTheme('vs-dark');
+        } else {
+          setTimeout(applyMonacoDark, 400);
+        }
+      }
+      applyMonacoDark();
     });
   </script>
 <meta property="og:title" content="Week 1 — Python Environment &amp; Basics – ECON 3209 — Econometrics with Python">
@@ -651,7 +720,7 @@ Topic
 </thead>
 <tbody class="list">
 
-<tr data-index="0" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780229555196" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1064" data-listing-title-sort="Getting Started with Python" data-listing-filename-sort="lecture-01.qmd">
+<tr data-index="0" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230021810" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1064" data-listing-title-sort="Getting Started with Python" data-listing-filename-sort="lecture-01.qmd">
 <td>
 <a href="../../slides/week-01/lecture-01.html" class="title listing-title">Getting Started with Python</a>
 </td>
@@ -661,7 +730,7 @@ Topic
 
 </tr>
 
-<tr data-index="1" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780229555196" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1656" data-listing-title-sort="Operators &amp; Expressions" data-listing-filename-sort="lecture-03.qmd">
+<tr data-index="1" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230021810" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1656" data-listing-title-sort="Operators &amp; Expressions" data-listing-filename-sort="lecture-03.qmd">
 <td>
 <a href="../../slides/week-01/lecture-03.html" class="title listing-title">Operators &amp; Expressions</a>
 </td>
@@ -671,7 +740,7 @@ Topic
 
 </tr>
 
-<tr data-index="2" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780229555196" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1591" data-listing-title-sort="Variables &amp; Data Types" data-listing-filename-sort="lecture-02.qmd">
+<tr data-index="2" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780230021810" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1591" data-listing-title-sort="Variables &amp; Data Types" data-listing-filename-sort="lecture-02.qmd">
 <td>
 <a href="../../slides/week-01/lecture-02.html" class="title listing-title">Variables &amp; Data Types</a>
 </td>
