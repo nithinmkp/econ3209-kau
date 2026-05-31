@@ -1,0 +1,233 @@
+---
+title: "Python Curve Fitting"
+subtitle: "ECON 3209 · Week 14, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. fit polynomial curves with `numpy.polyfit`
+2. fit nonlinear functions with `scipy.optimize.curve_fit`
+3. compare model fit using SSE, AIC, and BIC
+4. visualize competing fitted curves
+5. distinguish flexible fitting from economically meaningful modeling
+
+---
+
+## Three Common Curve-Fitting Tools
+
+::: {.cols-2}
+::: {}
+### `statsmodels`
+- regression-style estimation
+- inference and summaries
+- best for linear-in-parameters models
+:::
+::: {}
+### `polyfit` / `curve_fit`
+- direct numerical fitting
+- flexible curves
+- useful for prediction and visualization
+:::
+:::
+
+---
+
+## Model Comparison Metrics
+
+::: {.formula}
+$$AIC = n \ln\left(\frac{SSE}{n}ight) + 2k$$
+$$BIC = n \ln\left(\frac{SSE}{n}ight) + k\ln(n)$$
+:::
+
+where $SSE$ is the sum of squared errors and $k$ is the number of estimated parameters.
+
+---
+
+## Example Curves
+
+We compare:
+- a linear fit
+- a quadratic fit
+- a nonlinear saturation curve
+
+This is useful when modelling diminishing returns to fertilizer or technology adoption.
+
+---
+
+## Nonlinear Saturation Function
+
+A common nonlinear form is
+
+::: {.formula}
+$$Y = \frac{aX}{b + X} + c$$
+:::
+
+- rises quickly at low $X$
+- flattens as $X$ gets large
+- captures saturation or diminishing returns
+
+---
+
+## Python Demo: Generate Nonlinear Data
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+from scipy.optimize import curve_fit
+
+np.random.seed(111)
+x = np.linspace(10, 200, 120)
+y = 8 + (55*x)/(60 + x) + np.random.normal(0, 1.8, len(x))
+df = pd.DataFrame({'x': x, 'y': y})
+print(df.head())
+```
+
+---
+
+## Python Demo: Linear and Quadratic with `polyfit`
+
+```{pyodide-python}
+lin_coef = np.polyfit(df['x'], df['y'], 1)
+quad_coef = np.polyfit(df['x'], df['y'], 2)
+print('Linear coefficients:', np.round(lin_coef, 4))
+print('Quadratic coefficients:', np.round(quad_coef, 4))
+```
+
+---
+
+## Python Demo: Nonlinear Fit with `curve_fit`
+
+```{pyodide-python}
+def sat_func(x, a, b, c):
+    return c + (a*x)/(b + x)
+
+params, _ = curve_fit(sat_func, df['x'], df['y'], p0=[50, 40, 5], maxfev=5000)
+print('Estimated parameters:', np.round(params, 4))
+```
+
+---
+
+## Python Demo: Compute SSE, AIC, and BIC
+
+```{pyodide-python}
+y_lin = np.polyval(lin_coef, df['x'])
+y_quad = np.polyval(quad_coef, df['x'])
+y_sat = sat_func(df['x'], *params)
+
+def info_criteria(y_true, y_hat, k):
+    n = len(y_true)
+    sse = np.sum((y_true - y_hat)**2)
+    aic = n * np.log(sse / n) + 2 * k
+    bic = n * np.log(sse / n) + k * np.log(n)
+    return sse, aic, bic
+
+metrics = pd.DataFrame([
+    ['linear', *info_criteria(df['y'], y_lin, 2)],
+    ['quadratic', *info_criteria(df['y'], y_quad, 3)],
+    ['saturation', *info_criteria(df['y'], y_sat, 3)]
+], columns=['model', 'SSE', 'AIC', 'BIC'])
+print(metrics.round(3))
+```
+
+---
+
+## Python Demo: Plot Competing Fits
+
+```{pyodide-python}
+import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(7, 4))
+plt.scatter(df['x'], df['y'], alpha=0.45, label='Data')
+plt.plot(df['x'], y_lin, label='Linear', color='black')
+plt.plot(df['x'], y_quad, label='Quadratic', color='darkgreen')
+plt.plot(df['x'], y_sat, label='Saturation', color='darkred')
+plt.xlabel('Fertilizer')
+plt.ylabel('Yield')
+plt.title('Comparing nonlinear fits')
+plt.legend()
+plt.show()
+```
+
+---
+
+## Overfitting Warning
+
+- A more flexible curve often fits the sample better.
+- But a better in-sample fit may not mean better economic interpretation or future prediction.
+- Use theory, simplicity, and diagnostics together.
+
+---
+
+## When to Use Which Tool
+
+- Use `statsmodels` when you need regression tables and inference.
+- Use `numpy.polyfit` for quick polynomial approximation.
+- Use `curve_fit` for nonlinear functions that are not linear in parameters.
+
+::: {.highlight-box}
+The best model is not the fanciest one; it is the one that balances fit, interpretation, and economic plausibility.
+:::
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate a nonlinear fertilizer-yield relationship.
+2. Fit a linear, quadratic, and saturation model.
+3. Compute SSE, AIC, and BIC for all three fits.
+4. Plot the competing curves and choose the most convincing model.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+from scipy.optimize import curve_fit
+
+np.random.seed(41)
+x = np.linspace(15, 180, 100)
+
+# Create nonlinear y, fit several curves, and compare them
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ Python offers several complementary approaches to curve fitting.
+
+✅ `numpy.polyfit` is convenient for linear and polynomial approximations.
+
+✅ `curve_fit` handles genuinely nonlinear parameterizations.
+
+✅ AIC and BIC help compare fit while penalizing extra complexity.
+
+✅ Model choice should reflect both the data and the economics of the problem.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Course Next Step**
+
+We will cover:
+- review Weeks 10–14 as a connected block
+- see how these tools modify the basic OLS framework
+- prepare for later topics such as qualitative response and specification tests
+- practice interpreting models, not just running code
+:::
+
+
+
