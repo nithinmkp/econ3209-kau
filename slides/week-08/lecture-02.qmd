@@ -1,0 +1,210 @@
+---
+title: "Statistical Properties of OLS"
+subtitle: "ECON 3209 · Week 8, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+1. Explain the meaning of unbiasedness, consistency, and efficiency.
+2. Describe the sampling distribution of OLS estimators.
+3. Use simulation to see repeated-sample behaviour of $\hat{\beta}_1$.
+4. Understand how sample size affects estimator precision.
+5. Connect OLS properties to later statistical inference.
+
+---
+
+## Why estimator properties matter
+
+- A single regression output comes from one sample.
+- Econometric theory asks what would happen across many possible samples.
+- Good estimators behave well on average and improve with more data.
+- These properties justify confidence intervals and hypothesis tests.
+- OLS is attractive because of its strong theoretical foundations.
+
+---
+
+## Unbiasedness
+
+::: {.formula}
+$$E(\hat{\beta}_1) = \beta_1$$
+:::
+
+- An estimator is unbiased if its average value over repeated samples equals the true parameter.
+- It does **not** mean every individual sample estimate is exact.
+- Some estimates will be above and some below the truth.
+- Under zero conditional mean, OLS is unbiased.
+
+---
+
+## Consistency
+
+- An estimator is consistent if it converges to the true parameter as sample size grows.
+- Symbolically,
+  $$\hat{\beta}_1 \xrightarrow{p} \beta_1$$
+- Large samples reduce random sampling noise.
+- Consistency is crucial in empirical work because no finite sample is perfect.
+- Bias from omitted variables may destroy consistency.
+
+---
+
+## Efficiency
+
+- Among unbiased estimators, a more efficient estimator has smaller variance.
+- Smaller variance means estimates cluster more tightly around the truth.
+- Under the CLR assumptions, OLS is efficient within the class of linear unbiased estimators.
+- Efficiency improves the precision of inference.
+- This is the “best” part of BLUE.
+
+---
+
+## Sampling distribution of OLS
+
+- Because samples vary, $\hat{\beta}_1$ is a random variable.
+- Under normal errors, its sampling distribution is normal in small samples.
+- In large samples, it is approximately normal by asymptotic theory.
+- This supports the use of $t$ tests and confidence intervals.
+- Standard errors measure the spread of this sampling distribution.
+
+---
+
+## Simulating repeated samples
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+true_beta1 = 0.30
+slopes = []
+
+for _ in range(500):
+    x = np.random.uniform(50, 200, 40)
+    y = 15 + true_beta1 * x + np.random.normal(0, 8, 40)
+    beta1_hat = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)
+    slopes.append(beta1_hat)
+
+slopes = np.array(slopes)
+print('Average estimated slope:', round(slopes.mean(), 4))
+print('True slope:', true_beta1)
+```
+
+---
+
+## Seeing sampling variation
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(7, 4))
+plt.hist(slopes, bins=20, color='darkgreen', edgecolor='white')
+plt.axvline(true_beta1, color='goldenrod', linestyle='--', label='True slope')
+plt.title('Sampling distribution of $\\hat{\\beta}_1$')
+plt.xlabel('Estimated slope')
+plt.ylabel('Frequency')
+plt.legend()
+plt.show()
+```
+
+---
+
+## Sample size and consistency
+
+```{pyodide-python}
+def simulate_mean_slope(n, reps=300):
+    estimates = []
+    for _ in range(reps):
+        x = np.random.uniform(50, 200, n)
+        y = 15 + true_beta1 * x + np.random.normal(0, 8, n)
+        b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)
+        estimates.append(b1)
+    return np.mean(estimates), np.std(estimates)
+
+print('n=30 :', simulate_mean_slope(30))
+print('n=300:', simulate_mean_slope(300))
+```
+
+---
+
+## What standard errors represent
+
+- The standard error estimates the standard deviation of the estimator.
+- A smaller standard error means more precise estimation.
+- Standard errors fall when sample size rises, holding everything else constant.
+- Noisy data and weak regressor variation raise standard errors.
+- Precision and bias are different concepts.
+
+---
+
+## Empirical mean and spread of simulated slopes
+
+```{pyodide-python}
+print('Mean of slopes =', round(slopes.mean(), 4))
+print('Standard deviation of slopes =', round(slopes.std(), 4))
+print('Minimum slope =', round(slopes.min(), 4))
+print('Maximum slope =', round(slopes.max(), 4))
+```
+
+---
+
+## When OLS properties break down
+
+- If $E(u \mid X) \neq 0$, OLS is biased and inconsistent.
+- If error variance changes, usual inference becomes unreliable.
+- If the sample is not representative, estimates may not generalise well.
+- If regressors are measured with error, slopes may be attenuated.
+- Theory helps us diagnose what can go wrong.
+
+---
+
+## Omitted variable bias in a quick simulation
+
+```{pyodide-python}
+np.random.seed(7)
+z = np.random.normal(0, 1, 200)
+x = 10 + 2 * z + np.random.normal(0, 1, 200)
+y = 5 + 0.5 * x + 3 * z + np.random.normal(0, 1, 200)
+
+biased_b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)
+print('Slope when omitted variable z is ignored:', round(biased_b1, 4))
+```
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Simulate 200 samples from a simple linear model with a true slope of `0.4`. Store the estimated slopes, compute their average, and explain whether the result supports unbiasedness.
+:::
+
+```{pyodide-python}
+import numpy as np
+
+# Your code below
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ Unbiasedness means the estimator is correct on average across repeated samples.
+- ✅ Consistency means the estimator approaches the true parameter as sample size grows.
+- ✅ Efficiency means lower variance among unbiased estimators.
+- ✅ OLS estimators have a sampling distribution, which underlies inference.
+- ✅ Larger samples usually improve precision.
+- ✅ Violations such as omitted variables can destroy desirable OLS properties.
+
+---
+
+## Next Lecture
+
+- We will implement **OLS in Python from scratch**.
+- First with NumPy formulas, then with `statsmodels.formula.api` for a full regression workflow.
+
