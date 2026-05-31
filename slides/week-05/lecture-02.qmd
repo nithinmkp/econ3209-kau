@@ -1,0 +1,258 @@
+---
+title: "Seaborn Statistical Charts"
+subtitle: "ECON 3209 · Week 5, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Explain why seaborn is useful for statistical graphics
+2. Create distribution, boxplot, heatmap, and pairplot charts
+3. Read variation, outliers, and association from statistical plots
+4. Use seaborn with Kerala agricultural and banking examples
+5. Combine seaborn aesthetics with Matplotlib control
+
+---
+
+## Why Seaborn?
+
+- Seaborn builds on Matplotlib but offers better default styling
+- It is especially strong for statistical visualisation
+- Many exploratory charts require fewer lines of code in seaborn
+- It works naturally with pandas DataFrames
+- Economists often use it for quick, informative exploratory analysis
+
+---
+
+## A Distribution Plot
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+loan_df = pd.DataFrame({"loan_size": [40, 55, 62, 70, 82, 95, 130, 68, 74, 88, 102, 115]})
+
+fig, ax = plt.subplots(figsize=(7, 4))
+if hasattr(sns, "distplot"):
+    sns.distplot(loan_df["loan_size"], kde=True, ax=ax, color="#5DBE50")
+else:
+    sns.histplot(loan_df["loan_size"], kde=True, ax=ax, color="#5DBE50")
+ax.set_title("Distribution of Cooperative Loan Size")
+ax.set_xlabel("Loan size (₹ thousand)")
+plt.show()
+```
+
+- Historically, seaborn users often learned `distplot`
+- Newer versions prefer `histplot(..., kde=True)`
+- Both show the distribution and a smooth density curve
+- Distribution charts help detect skewness and spread
+
+---
+
+## Boxplots for Spread and Outliers
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+yield_df = pd.DataFrame({
+    "crop": ["Rice"] * 5 + ["Banana"] * 5,
+    "yield_kg": [3200, 3450, 3100, 3800, 3600, 1500, 1750, 1800, 2100, 1950]
+})
+
+fig, ax = plt.subplots(figsize=(7, 4))
+sns.boxplot(data=yield_df, x="crop", y="yield_kg", ax=ax, palette=["#5DBE50", "#DAB300"])
+ax.set_title("Yield Distribution by Crop")
+plt.show()
+```
+
+- The box shows the interquartile range
+- The line inside the box is the median
+- Points beyond the whiskers may be outliers
+- Boxplots help compare distributions across groups quickly
+
+---
+
+## Heatmaps for Correlation Structure
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+metrics = pd.DataFrame({
+    "yield_kg": [3200, 3500, 2950, 3800, 3400],
+    "rainfall_mm": [2850, 3100, 2400, 3300, 3000],
+    "deposit_crore": [125, 138, 117, 142, 131],
+    "loan_crore": [96, 108, 92, 101, 99]
+})
+
+corr = metrics.corr(numeric_only=True)
+fig, ax = plt.subplots(figsize=(6, 5))
+sns.heatmap(corr, annot=True, cmap="YlGn", vmin=-1, vmax=1, ax=ax)
+ax.set_title("Correlation Heatmap")
+plt.show()
+```
+
+- Heatmaps are excellent for seeing many correlations at once
+- Colour intensity reveals stronger positive or negative association
+- Annotation helps when an audience needs exact values
+- Heatmaps are descriptive tools, not causal evidence
+
+---
+
+## Pairplots for Many Relationships
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+agri_df = pd.DataFrame({
+    "yield_kg": [3200, 3500, 2950, 3800, 3400],
+    "rainfall_mm": [2850, 3100, 2400, 3300, 3000],
+    "deposit_crore": [125, 138, 117, 142, 131]
+})
+
+g = sns.pairplot(agri_df, diag_kind="hist")
+g.fig.suptitle("Pairwise View of Agricultural Indicators", y=1.02)
+plt.show()
+```
+
+- Pairplots combine scatter plots and univariate distributions
+- They quickly reveal relationships, clusters, and scale differences
+- They are useful in early exploratory work on small-to-medium datasets
+- Large datasets may require sampling to stay readable
+
+---
+
+## Seaborn Works Best with DataFrames
+
+- Seaborn usually expects “long” or tidy DataFrames
+- Column names become plot variables such as `x`, `y`, and `hue`
+- This makes code more expressive than passing many separate arrays
+- It also connects naturally to the pandas workflows from Week 4
+- Good data wrangling improves charting quality immediately
+
+---
+
+## Reading Statistical Graphics Carefully
+
+- A pretty chart is not automatically informative
+- Ask what variable is being summarised and in what units
+- Distinguish between distribution shape, central tendency, and outliers
+- Correlation patterns can reflect scale or omitted factors
+- Use economic context to interpret, not just visual intuition
+
+::: {.gold-box}
+Visualisation should sharpen your questions before modelling — not replace careful econometric reasoning.
+:::
+
+---
+
+## Combining Seaborn and Matplotlib
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+df = pd.DataFrame({
+    "district": ["Thrissur", "Ernakulam", "Palakkad", "Kozhikode"],
+    "deposit_crore": [125, 138, 117, 142]
+})
+
+fig, ax = plt.subplots(figsize=(7, 4))
+sns.barplot(data=df, x="district", y="deposit_crore", color="#5DBE50", ax=ax)
+ax.set_title("District Deposits with Seaborn Style")
+plt.xticks(rotation=15)
+plt.show()
+```
+
+- Seaborn handles style and statistical defaults elegantly
+- Matplotlib still gives fine-grained control over titles and axes
+- In practice, analysts often use both libraries together
+- This combination is powerful and flexible for teaching and research
+
+---
+
+## Choosing Among Seaborn Charts
+
+::: {.cols-2}
+::: {}
+### Use These When
+- Distribution plot: shape of one numeric variable
+- Boxplot: compare spread across groups
+- Heatmap: inspect many correlations
+:::
+::: {}
+### Also Remember
+- Pairplot: multi-variable exploration
+- Too many variables create clutter
+- Always label variables clearly
+:::
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+Create a small DataFrame with a `crop` column and a numeric `price` column.
+
+1. Use seaborn to draw a boxplot of prices by crop.
+2. Add a title.
+3. End with `plt.show()`.
+:::
+
+```{pyodide-python}
+import matplotlib
+matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
+# Write your solution here
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ seaborn provides attractive defaults for statistical graphics
+- ✅ Distribution plots, boxplots, heatmaps, and pairplots answer different questions
+- ✅ seaborn works especially well with pandas DataFrames
+- ✅ Statistical charts help reveal spread, outliers, and association
+- ✅ Matplotlib and seaborn are usually used together, not separately
+- ✅ Clear interpretation still matters more than visual polish alone
+
+---
+
+## Next Lecture
+
+### Interactive Plots and Publication-Ready Figures
+
+- We will build multi-panel charts and improve formatting
+- You will learn saving options, annotations, and presentation standards
+- This turns exploratory plots into polished communication tools
+
