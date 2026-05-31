@@ -4106,14 +4106,7 @@
     "href": "syllabus.html#textbooks-references",
     "title": "Course Syllabus",
     "section": "Textbooks & References",
-    "text": "Textbooks & References\n\nPrimary\n\nGujarati, D.N. & Porter, D.C. (2009). Basic Econometrics (5th ed.). McGraw-Hill.\nStock, J.H. & Watson, M.W. (2019). Introduction to Econometrics (4th ed.). Pearson.\n\n\n\nPython Resources\n\nVanderPlas, J. (2023). Python Data Science Handbook (2nd ed.). O’Reilly.\nMcKinney, W. (2022). Python for Data Analysis (3rd ed.). O’Reilly.\n\n\n\nSupplementary\n\nDougherty, C. (2016). Introduction to Econometrics (5th ed.). Oxford University Press.\nGreene, W.H. (2018). Econometric Analysis (8th ed.). Pearson."
-  },
-  {
-    "objectID": "syllabus.html#assessment",
-    "href": "syllabus.html#assessment",
-    "title": "Course Syllabus",
-    "section": "Assessment",
-    "text": "Assessment\n\n\n\n\n\n\n\n\nComponent\nWeight\nDetails\n\n\n\n\nInternal Assessment\n30%\nAssignments, class participation, practical exercises\n\n\nMid-Semester Examination\n20%\nWritten paper (Weeks 1–10)\n\n\nEnd-Semester Examination\n50%\nWritten theory + data analysis section\n\n\n\n\nAssignment Policy\n\nAssignments are to be submitted as Jupyter notebooks (.ipynb) or Python scripts (.py).\nLate submissions will incur a 10% deduction per day.\nPlagiarism and AI-generated code submitted without disclosure will be penalised."
+    "text": "Textbooks & References\n\nPrimary Textbooks\n\nMaddala, G.S. & Lahiri, K. (2009). Introduction to Econometrics (4th ed.). Wiley.\nWooldridge, J.M. (2020). Introductory Econometrics: A Modern Approach (7th ed.). Cengage.\n\n\n\nPython Resources\n\nSheppard, K. Introduction to Python for Econometrics, Statistics and Data Analysis. University of Oxford. Available free online\nChen, W. Python Programming for Economics and Finance. QuantEcon / ANU. Available free online\nVanderPlas, J. (2023). Python Data Science Handbook (2nd ed.). O’Reilly.\n\n\n\nSupplementary\n\nGreene, W.H. (2018). Econometric Analysis (8th ed.). Pearson.\nGujarati, D.N. & Porter, D.C. (2009). Basic Econometrics (5th ed.). McGraw-Hill."
   },
   {
     "objectID": "syllabus.html#software",
@@ -4128,13 +4121,6 @@
     "title": "Course Syllabus",
     "section": "Academic Integrity",
     "text": "Academic Integrity\nStudents are expected to adhere to the Kerala Agricultural University Academic Integrity Policy. All submitted work must be the student’s own. Discussing ideas is encouraged; copying code is not."
-  },
-  {
-    "objectID": "syllabus.html#accessibility",
-    "href": "syllabus.html#accessibility",
-    "title": "Course Syllabus",
-    "section": "Accessibility",
-    "text": "Accessibility\nStudents requiring accommodations should contact the course instructor during the first week of the semester."
   },
   {
     "objectID": "about.html",
@@ -4170,6 +4156,13 @@
     "title": "About",
     "section": "Technology",
     "text": "Technology\nThis course website and all interactive slide decks are built with:\n\nQuarto — scientific and technical publishing\nPyodide — Python in the browser (via WebAssembly)\nquarto-pyodide — Quarto extension for live Python cells\n\nAll course materials are open and freely accessible."
+  },
+  {
+    "objectID": "about.html#acknowledgements",
+    "href": "about.html#acknowledgements",
+    "title": "About",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThe Python programming sections of this course draw heavily from the freely available notes of:\n\nKevin Sheppard (University of Oxford) — Introduction to Python for Econometrics, Statistics and Data Analysis — an outstanding resource for economists learning Python, available at kevinsheppard.com.\nWeijie Chen (QuantEcon / ANU) — Python Programming for Economics and Finance — part of the QuantEcon lecture series, available at python-programming.quantecon.org.\n\nThe econometrics content follows the treatment in Maddala & Lahiri (Introduction to Econometrics, 4th ed., Wiley) and Wooldridge (Introductory Econometrics, 7th ed., Cengage). Students are encouraged to consult both texts alongside the course slides."
   },
   {
     "objectID": "slides/week-05/lecture-01.html#learning-outcomes",
