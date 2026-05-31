@@ -20,7 +20,6 @@ format:
     scrollable: true
     preview-links: auto
     footer: "ECON 3209 — Kerala Agricultural University"
-    logo: ../../assets/kau-logo.jpg
     chalkboard:
       theme: chalkboard
     highlight-style: github
@@ -35,7 +34,22 @@ format:
           .qp-status, .qp-status-container,
           div[class*="pyodide-status"], div[id*="pyodide-status"],
           .cell-output-display > p:first-child:empty { display: none !important; }
+          /* KAU logo in slide corner */
+          #kau-slide-logo {
+            position: fixed; bottom: 14px; right: 14px;
+            height: 45px; width: auto; z-index: 1000;
+            pointer-events: none;
+          }
         </style>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var img = document.createElement('img');
+            img.id = 'kau-slide-logo';
+            img.src = '../../assets/kau-logo.jpg';
+            img.alt = 'KAU';
+            document.body.appendChild(img);
+          });
+        </script>
 
 filters:
   - pyodide
