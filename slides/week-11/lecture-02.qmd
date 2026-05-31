@@ -1,0 +1,212 @@
+---
+title: "Consequences of Multicollinearity"
+subtitle: "ECON 3209 · Week 11, Lecture 2 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. explain why multicollinearity inflates standard errors
+2. interpret the symptom of high R² with insignificant t-statistics
+3. recognize coefficient instability across samples or specifications
+4. distinguish effects on explanation from effects on prediction
+5. use simulations to compare low- and high-collinearity cases
+
+---
+
+## OLS Is Still Unbiased — But Less Precise
+
+If the zero conditional mean assumption holds, multicollinearity does **not** bias OLS coefficients.
+
+Its main effect is to increase sampling variance.
+
+::: {.formula}
+$$Var(\hat\beta_j) = \frac{\sigma^2}{SST_j(1-R_j^2)}$$
+:::
+
+When $R_j^2$ is large, the denominator shrinks and the variance of $\hat\beta_j$ rises.
+
+---
+
+## Inflated Standard Errors
+
+- Larger standard errors mean wider confidence intervals.
+- Wider intervals make it harder to reject null hypotheses.
+- Important variables may appear statistically insignificant.
+
+::: {.highlight-box}
+Multicollinearity makes it hard to separate who gets credit for explaining variation in $Y$.
+:::
+
+---
+
+## High R² but Weak Individual t-Tests
+
+This pattern is common under strong collinearity:
+- the model fits the data well overall
+- regressors are jointly informative
+- but each variable looks weak on its own
+
+Why? Because highly related regressors compete to explain the same movement in the dependent variable.
+
+---
+
+## Unstable Coefficients Across Samples
+
+With severe multicollinearity:
+- coefficient signs may flip across samples
+- magnitudes may change sharply after adding or dropping a related variable
+- substantive interpretation becomes fragile
+
+This does **not** always imply the model is wrong. It may simply mean the data cannot sharply distinguish separate effects.
+
+---
+
+## Python Demo: Low vs High Collinearity
+
+```{pyodide-python}
+        import numpy as np
+        import pandas as pd
+        import statsmodels.formula.api as smf
+
+        np.random.seed(202)
+        n = 150
+        x1 = np.random.normal(size=n)
+        x2_low = np.random.normal(size=n)
+        x2_high = 0.95*x1 + np.random.normal(scale=0.2, size=n)
+        y_low = 2 + 1.5*x1 + 1.2*x2_low + np.random.normal(scale=1, size=n)
+        y_high = 2 + 1.5*x1 + 1.2*x2_high + np.random.normal(scale=1, size=n)
+
+        low = smf.ols('y ~ x1 + x2', data=pd.DataFrame({'y': y_low, 'x1': x1, 'x2': x2_low})).fit()
+        high = smf.ols('y ~ x1 + x2', data=pd.DataFrame({'y': y_high, 'x1': x1, 'x2': x2_high})).fit()
+
+        print('Low collinearity standard errors')
+        print(low.bse.round(4))
+        print('
+High collinearity standard errors')
+        print(high.bse.round(4))
+        ```
+
+---
+
+## Python Demo: High R² with Weak t-Stats
+
+```{pyodide-python}
+compare = pd.DataFrame({
+    'case': ['low', 'high'],
+    'R2': [low.rsquared, high.rsquared],
+    't_x1': [low.tvalues['x1'], high.tvalues['x1']],
+    't_x2': [low.tvalues['x2'], high.tvalues['x2']]
+})
+print(compare.round(4))
+```
+
+---
+
+## Python Demo: Coefficient Instability Across Samples
+
+```{pyodide-python}
+df_high = pd.DataFrame({'y': y_high, 'x1': x1, 'x2': x2_high})
+first_half = smf.ols('y ~ x1 + x2', data=df_high.iloc[:75]).fit()
+second_half = smf.ols('y ~ x1 + x2', data=df_high.iloc[75:]).fit()
+
+stability = pd.DataFrame({
+    'full': high.params,
+    'first_half': first_half.params,
+    'second_half': second_half.params
+})
+print(stability.round(4))
+```
+
+---
+
+## Prediction Can Still Be Good
+
+Even if individual slopes are unstable, the model may still predict well because the regressors move together in a predictable way.
+
+::: {.gold-box}
+Multicollinearity is usually a **problem for explanation and inference** more than for pure prediction.
+:::
+
+---
+
+## Python Demo: Compare Prediction Error
+
+```{pyodide-python}
+rmse_low = np.sqrt(np.mean(low.resid**2))
+rmse_high = np.sqrt(np.mean(high.resid**2))
+print(f'RMSE (low collinearity):  {rmse_low:.4f}')
+print(f'RMSE (high collinearity): {rmse_high:.4f}')
+```
+
+---
+
+## What Should the Researcher Conclude?
+
+- Do not automatically drop an economically essential variable.
+- Focus on theory, data design, and whether separate effects are truly identifiable.
+- Report uncertainty honestly.
+- Consider combined hypotheses or alternative specifications when variables are conceptually linked.
+
+---
+
+## 🏋️ Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+1. Simulate one dataset with low regressor correlation and one with high correlation.
+2. Estimate the same MLR in both datasets.
+3. Compare standard errors, t-statistics, and RMSE.
+4. Write a two-sentence conclusion about inference versus prediction.
+:::
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(12)
+n = 120
+x1 = np.random.normal(size=n)
+
+# Create x2, build y, estimate the model, and compare precision
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+✅ Multicollinearity usually increases the variance and standard errors of OLS coefficients.
+
+✅ A model can have high overall fit while individual regressors look insignificant.
+
+✅ Coefficient estimates become unstable when regressors compete to explain the same variation.
+
+✅ Prediction may remain acceptable even when interpretation becomes fragile.
+
+✅ The right response depends on the research goal: explanation, causal inference, or prediction.
+
+---
+
+## Next Lecture
+
+::: {.highlight-box}
+**Lecture 3 — VIF & Remedies in Python**
+
+We will cover:
+- the VIF diagnostic
+- computing VIF in Python
+- remedies such as dropping or combining variables
+- a preview of ridge regression
+:::
+
+
+
