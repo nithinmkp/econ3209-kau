@@ -1,0 +1,263 @@
+---
+title: "List Comprehensions & Lambda"
+subtitle: "ECON 3209 · Week 2, Lecture 3 · Kerala Agricultural University"
+author: "Department of Agricultural Economics, KAU"
+date: "Autumn 2026"
+format:
+  revealjs:
+    title-slide-attributes:
+      data-background-color: "#1A3300"
+---
+
+## Learning Outcomes {background-color="#1A3300"}
+
+By the end of this lecture, you will be able to:
+
+1. Write list, dictionary, and set comprehensions in Python
+2. Use conditional logic inside comprehensions
+3. Create short anonymous functions with `lambda`
+4. Apply `map()` and `filter()` to economic data examples
+5. Choose between loops, comprehensions, and lambdas appropriately
+
+---
+
+## Why Comprehensions Matter
+
+- Data work often means transforming one collection into another
+- We convert units, clean strings, recode categories, and build indicators
+- A comprehension gives a compact way to perform that transformation
+- It usually replaces a short `for` loop that builds a new object
+- Good comprehensions are concise **and** readable
+
+::: {.highlight-box}
+Think of a comprehension as a fast recipe: “for each district, calculate the new value and store it.”
+:::
+
+---
+
+## List Comprehension: Basic Pattern
+
+```{pyodide-python}
+# new_list = [expression for item in iterable]
+yields_kg = [3200, 2800, 4100, 3650]
+yields_tonnes = [value / 1000 for value in yields_kg]
+
+print("Kilograms per hectare:", yields_kg)
+print("Tonnes per hectare:", yields_tonnes)
+```
+
+- The expression appears first
+- Then we specify the loop with `for`
+- Python builds the new list automatically
+- Use this for simple one-line transformations
+
+---
+
+## Comprehension vs Loop
+
+```{pyodide-python}
+prices = [28, 32, 26, 40]
+
+# Traditional loop
+revenues_loop = []
+for price in prices:
+    revenues_loop.append(price * 100)
+
+# Comprehension
+revenues_comp = [price * 100 for price in prices]
+
+print(revenues_loop)
+print(revenues_comp)
+```
+
+- Both approaches are correct
+- The comprehension is shorter for simple tasks
+- A regular loop is better when logic spans many steps
+- Readability should guide your choice
+
+---
+
+## Conditional Comprehensions
+
+- We can include `if` to keep only selected values
+- This is useful for data filtering
+- You can also use inline `if/else` to recode values
+- Keep the logic short enough to read in one glance
+- For complex filters, use a standard loop or function instead
+
+```{pyodide-python}
+yields_kg = [2500, 3200, 4100, 2950, 3800]
+high_yields = [value for value in yields_kg if value >= 3500]
+labels = ["high" if value >= 3500 else "moderate" for value in yields_kg]
+
+print("High yields:", high_yields)
+print("Labels:", labels)
+```
+
+---
+
+## Dictionary and Set Comprehensions
+
+```{pyodide-python}
+districts = ["Thrissur", "Ernakulam", "Thrissur", "Palakkad"]
+deposits = [125, 138, 125, 117]
+
+deposit_map = {district: deposit for district, deposit in zip(districts, deposits)}
+unique_districts = {district for district in districts}
+
+print(deposit_map)
+print(unique_districts)
+```
+
+- Dictionary comprehensions build key-value mappings
+- Set comprehensions create collections of unique values
+- These are useful for lookups and de-duplication
+- In economics, they help create quick summaries from raw lists
+
+---
+
+## Applied Example: Revenue Mapping
+
+```{pyodide-python}
+crops = ["Rice", "Coconut", "Rubber", "Banana"]
+prices = [28, 36, 165, 22]
+average_output = [3200, 11000, 1450, 1800]
+
+revenue_per_crop = {
+    crop: price * output
+    for crop, price, output in zip(crops, prices, average_output)
+}
+
+print(revenue_per_crop)
+```
+
+- `zip()` lets us walk through several sequences together
+- The comprehension builds a dictionary in one pass
+- This is a convenient way to prepare lookup tables for analysis
+- Always check units before multiplying economic variables
+
+---
+
+## Lambda Functions
+
+- A `lambda` is a short anonymous function
+- It is best for simple one-line operations
+- The structure is `lambda inputs: expression`
+- Lambdas are often used with `sorted()`, `map()`, and `filter()`
+- Avoid complex lambdas that hide the economic meaning
+
+```{pyodide-python}
+interest = lambda principal, rate: principal * rate
+print(interest(100000, 0.075))
+```
+
+---
+
+## Using `map()` and `filter()`
+
+```{pyodide-python}
+loan_amounts = [50000, 120000, 80000, 200000, 95000]
+
+loan_with_fee = list(map(lambda x: x + 500, loan_amounts))
+large_loans = list(filter(lambda x: x >= 100000, loan_amounts))
+
+print("With processing fee:", loan_with_fee)
+print("Large loans:", large_loans)
+```
+
+- `map()` applies a function to every item
+- `filter()` keeps only items where the function returns `True`
+- In modern Python, comprehensions are often more readable
+- But you should recognise both styles in real notebooks
+
+---
+
+## Sorting with a `lambda`
+
+```{pyodide-python}
+records = [
+    {"district": "Thrissur", "deposit": 125},
+    {"district": "Ernakulam", "deposit": 138},
+    {"district": "Palakkad", "deposit": 117}
+]
+
+sorted_records = sorted(records, key=lambda row: row["deposit"], reverse=True)
+print(sorted_records)
+```
+
+- `key=` tells `sorted()` what to compare
+- A lambda is convenient for “sort by this field”
+- This is common when ranking districts or institutions
+- The original list stays unchanged unless you use `.sort()`
+
+---
+
+## When to Use What?
+
+::: {.cols-2}
+::: {}
+### Prefer a Comprehension When
+- The transformation is short
+- You are creating a new list, dict, or set
+- The rule can be read in one line
+- There is no complicated branching
+:::
+::: {}
+### Prefer a Regular Function/Loop When
+- Logic spans several steps
+- You need comments for clarity
+- You want easy debugging
+- The code will be reused many times
+:::
+:::
+
+::: {.gold-box}
+Good Python is not the shortest Python — it is the clearest Python that still stays efficient.
+:::
+
+---
+
+## Exercise {background-color="#1A3300"}
+
+::: {.gold-box}
+A teacher records district-level loan recovery rates: `88, 91, 76, 95, 83`.
+
+1. Use a list comprehension to create a list called `good_recovery` with rates `>= 85`.
+2. Use a second comprehension to label each rate as `"strong"` or `"needs support"`.
+3. Use `sorted(..., key=lambda ...)` to sort the original list in descending order.
+:::
+
+```{pyodide-python}
+recovery_rates = [88, 91, 76, 95, 83]
+
+# Write your solution here
+good_recovery = []
+labels = []
+sorted_rates = []
+
+print(good_recovery)
+print(labels)
+print(sorted_rates)
+```
+
+---
+
+## Summary {background-color="#1A3300"}
+
+- ✅ List comprehensions transform data compactly
+- ✅ Conditions inside comprehensions help filter and recode values
+- ✅ Dictionary and set comprehensions build useful data structures quickly
+- ✅ `lambda` creates short anonymous functions for simple tasks
+- ✅ `map()`, `filter()`, and `sorted()` often pair with lambdas
+- ✅ Readability remains more important than clever one-line code
+
+---
+
+## Next Lecture
+
+### Arrays & Vectorisation with NumPy
+
+- We now move from core Python objects to numerical arrays
+- NumPy will let us compute faster and more naturally with data vectors
+- This is the foundation for econometrics in Python
+
