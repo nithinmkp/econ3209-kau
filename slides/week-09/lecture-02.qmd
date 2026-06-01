@@ -32,11 +32,14 @@ format:
 ## The 95% confidence interval formula
 
 ::: {.formula}
+$$CI_{0.95} = [\hat{\beta}_i - 1.96 \times SE(\hat{\beta}_i),\; \hat{\beta}_i + 1.96 \times SE(\hat{\beta}_i)]$$
+
 $$\hat{\beta}_1 \pm t_{\alpha/2,\,df} \times se(\hat{\beta}_1)$$
 :::
 
 - The centre is the estimated coefficient.
 - The margin of error depends on the critical value and standard error.
+- For large samples, 1.96 is the common 95% normal critical value.
 - Larger standard errors create wider intervals.
 - Confidence intervals come from the sampling distribution of the estimator.
 
@@ -45,7 +48,7 @@ $$\hat{\beta}_1 \pm t_{\alpha/2,\,df} \times se(\hat{\beta}_1)$$
 ## Correct interpretation
 
 - A 95% confidence interval does **not** mean there is a 95% probability that the fixed true parameter lies inside this specific interval.
-- It means the interval construction method captures the true parameter in 95% of repeated samples.
+- It means that in 95% of all random samples, the interval construction method will contain the true $\beta$.
 - In practice, we treat the interval as a plausible range for the coefficient.
 - The interval combines effect size and uncertainty in one object.
 - This is why intervals are widely reported in empirical studies.
@@ -83,6 +86,17 @@ ci_high = beta1_hat + t_crit * se_beta1
 
 print('95% CI =', (round(ci_low, 4), round(ci_high, 4)))
 ```
+
+---
+
+## Kerala example: confidence interval for rubber-price response
+
+- Suppose we regress the **Kerala rubber price** on **national rubber production** and obtain
+  $$\hat{\beta}_{production} = -238.89, \qquad SE(\hat{\beta}_{production}) = 53.59$$
+- A manual 95% confidence interval is
+  $$-238.89 \pm 1.96(53.59) = [-343.93,\,-133.85]$$
+- Because the interval is entirely negative, higher national production is associated with lower Kerala rubber prices in this example.
+- The interval also shows uncertainty: the effect may be moderately negative or strongly negative, but the sign is consistently below zero.
 
 ---
 

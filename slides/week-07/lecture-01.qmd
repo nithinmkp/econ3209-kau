@@ -172,6 +172,47 @@ print('\nPanel\n', panel)
 
 ---
 
+## "Econometrics is the better half of economics"
+
+::: {.formula}
+*"Econometrics is the better half of economics. It is scientific, practical and useful."*
+:::
+
+- T. Krishna Kumar, *Economic and Political Weekly*, 7-13 February 2004, Vol. 39, No. 6.
+- The quote captures why this course combines theory, data, and policy analysis.
+- For KAU students, econometrics turns questions about crops, prices, credit, and rural livelihoods into evidence.
+
+---
+
+## Indian Econometrics: A rich history
+
+- Kumar (2004) reminds us that econometrics has a deep Indian tradition.
+- The **Indian Econometric Society (TIES)** was founded in **November 1970**.
+- **P C Mahalanobis** linked statistics and planning, helped shape the **Second Five-Year Plan**, and built planning work through ISI.
+- **C R Rao** and **G S Maddala** are central figures in modern econometrics; Maddala also wrote some of the most widely used reference textbooks.
+- Indian economists such as **Amartya Sen** and **Abhijit Banerjee** also show how rigorous quantitative reasoning can influence policy and development debates.
+
+---
+
+## Practical applications of econometrics
+
+- Econometricians estimate relationships behind **balance of payments**, **industrial output**, **fiscal deficit**, and **exchange rates**.
+- In a Kerala context, similar tools help study **cooperative credit recovery**, **district-level crop output**, and **commodity price movements**.
+- Following **Engle** and **Granger** (Nobel Prize, 2003), econometrics is used to analyse **asset-price and stock-price volatility**.
+- Kumar also highlights applications in **patent infringement damages**, **pay equity cases**, and **car demand from product attributes**.
+- The same logic can be used for Indian examples such as tractor demand, rubber price fluctuations, or salary equity across institutions.
+
+---
+
+## Econometrics can be used strategically
+
+- Kumar notes that knowledge of econometrics also helps us detect **deliberate misspecification**.
+- **Friedman's permanent income hypothesis** used omitted-variable logic to argue that simple Keynesian consumption equations overstated the multiplier.
+- The lesson is ethical as well as technical: if we omit relevant variables, coefficients may look persuasive but be misleading.
+- Good econometric training helps us both **build** better models and **criticise** weak ones.
+
+---
+
 ## Exercise {background-color="#1A3300"}
 
 ::: {.gold-box}

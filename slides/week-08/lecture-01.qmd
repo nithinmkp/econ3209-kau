@@ -89,6 +89,27 @@ $$Var(u_i \mid X_i) = \sigma^2$$
 
 ---
 
+## Assumption 6: correct specification
+
+- The model should include the relevant variables in the right functional form.
+- Omitting important regressors or adding badly chosen irrelevant terms can distort interpretation.
+- Example: a fertilizer-yield model that ignores irrigation quality may be misspecified.
+- Correct specification supports both unbiased estimation and meaningful policy interpretation.
+
+---
+
+## Assumption 7: normality
+
+::: {.formula}
+$$u_i \mid X_i \sim N(0, \sigma^2)$$
+:::
+
+- Normality is especially useful for exact **t** and **F** tests in small samples.
+- In large samples, the central limit theorem often gives approximate normal inference even when errors are not perfectly normal.
+- So normality matters most when the sample is limited and we want precise finite-sample inference.
+
+---
+
 ## What does BLUE mean?
 
 - **Best**: minimum variance among linear unbiased estimators.
@@ -200,7 +221,7 @@ import statsmodels.formula.api as smf
 ## Summary {background-color="#1A3300"}
 
 - ✅ The Gauss-Markov theorem relies on the CLR assumptions.
-- ✅ The five core assumptions are linearity, random sampling, variation/no perfect collinearity, zero conditional mean, and homoskedasticity.
+- ✅ The core assumptions now include linearity, random sampling, variation/no perfect collinearity, zero conditional mean, homoskedasticity, correct specification, and normality for small-sample inference.
 - ✅ Under these assumptions, OLS is BLUE.
 - ✅ Zero conditional mean is central for unbiasedness.
 - ✅ Heteroskedasticity affects standard errors more than coefficients.

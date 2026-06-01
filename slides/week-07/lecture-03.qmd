@@ -47,6 +47,22 @@ $$\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i$$
 
 ---
 
+## PRF versus SRF: population and sample
+
+::: {.formula}
+$$\text{PRF: } Y_i = \beta_0 + \beta_1 X_i + \mu_i$$
+
+$$\text{SRF: } \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i$$
+
+$$Y_i = \hat{Y}_i + \hat{u}_i$$
+:::
+
+- The **PRF** describes the population relationship with unknown parameters and an unobserved disturbance $\mu_i$.
+- The **SRF** is the fitted sample line built from estimated coefficients $\hat{\beta}_0$ and $\hat{\beta}_1$.
+- Residuals $\hat{u}_i$ are sample estimates of unexplained variation.
+
+---
+
 ## Residuals and the objective function
 
 - Residual for observation $i$ is
@@ -97,6 +113,69 @@ $$\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$$
 
 - The slope depends on sample covariance divided by sample variance.
 - The intercept ensures the line goes through $(\bar{X}, \bar{Y})$.
+
+---
+
+## RSS minimisation and first-order conditions
+
+::: {.formula}
+$$RSS = \sum_{i=1}^{n}\hat{u}_i^2 = \sum_{i=1}^{n}(Y_i - \hat{\beta}_0 - \hat{\beta}_1 X_i)^2 \rightarrow \min$$
+
+$$\frac{\partial RSS}{\partial \hat{\beta}_0} = 0 \qquad \frac{\partial RSS}{\partial \hat{\beta}_1} = 0$$
+:::
+
+- OLS chooses the coefficient values that make the residual sum of squares as small as possible.
+- These first-order conditions generate the normal equations used to solve for $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
+---
+
+## Manual OLS calculation with five observations
+
+Let $\bar{x}=4$ and $\bar{y}=3$.
+
+| $i$ | $y_i$ | $x_i$ | $(x_i-\bar{x})^2$ | $(x_i-\bar{x})(y_i-\bar{y})$ |
+|---:|---:|---:|---:|---:|
+| 1 | 1 | 2 | 4 | 4 |
+| 2 | 2 | 3 | 1 | 1 |
+| 3 | 3 | 5 | 1 | 0 |
+| 4 | 4 | 4 | 0 | 0 |
+| 5 | 5 | 6 | 4 | 4 |
+| **Sum** | **15** | **20** | **10** | **9** |
+
+- Therefore,
+  $$\hat{\beta}_1 = \frac{9}{10} = 0.9$$
+- And
+  $$\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x} = 3 - 0.9(4) = 0.6$$
+
+---
+
+## Verifying the manual calculation in Python
+
+```{pyodide-python}
+import numpy as np
+
+x = np.array([2, 3, 5, 4, 6], dtype=float)
+y = np.array([1, 2, 3, 4, 5], dtype=float)
+
+beta1_hat = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)
+beta0_hat = y.mean() - beta1_hat * x.mean()
+
+print('x-bar =', x.mean())
+print('y-bar =', y.mean())
+print('beta1_hat =', beta1_hat)
+print('beta0_hat =', beta0_hat)
+```
+
+---
+
+## Matrix form of OLS
+
+::: {.formula}
+$$\hat{\beta} = (X'X)^{-1}X'Y$$
+:::
+
+- In simple regression, the first column of $X$ is a column of ones and the second column is the regressor values.
+- This compact matrix formula extends naturally to multiple regression.
 
 ---
 

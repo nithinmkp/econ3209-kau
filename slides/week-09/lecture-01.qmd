@@ -40,6 +40,18 @@ format:
 
 ---
 
+## Five components of a hypothesis test
+
+1. **Null hypothesis ($H_0$)**: the benchmark claim.
+2. **Alternative hypothesis ($H_1$)**: the competing claim.
+3. **Test statistic**: a rule such as the $t$ statistic.
+4. **Rejection region**: the values that lead us to reject $H_0$.
+5. **Conclusion**: the decision stated in economic language.
+
+- Good hypothesis testing is a sequence of decisions, not just a p-value.
+
+---
+
 ## Test statistic for a coefficient
 
 ::: {.formula}
@@ -113,6 +125,27 @@ print('p-value =', model.pvalues['income'])
 - If `p-value \ge 0.05`, do not reject the null.
 - Always report the estimated effect as well as significance.
 - Practical significance may matter even when p-values are moderate.
+
+---
+
+## Rejection rules for the t-test
+
+- **Right-tail test**: reject $H_0$ if $t > t_{\alpha, df}$.
+- **Two-tail test**: reject $H_0$ if $|t| > t_{\alpha/2, df}$.
+- **P-value rule**: reject $H_0$ whenever $p \leq \alpha$.
+- These rules are equivalent ways to express the same decision.
+
+---
+
+## Kerala MPC example
+
+- Suppose the Kerala finance department studies whether household income raises household expenditure.
+- This is the **marginal propensity to consume (MPC)** question.
+- Test
+  $$H_0: \beta_1 = 0 \qquad \text{vs} \qquad H_1: \beta_1 > 0$$
+- If $\hat{\beta}_1 = 0.62$ and $SE(\hat{\beta}_1) = 0.11$, then
+  $$t = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)} = \frac{0.62}{0.11} \approx 5.64$$
+- Since this exceeds a typical right-tail critical value such as $t_{0.05,30} = 1.697$, we reject $H_0$: the MPC is positive and significant, so a minimum-wage increase is expected to raise aggregate demand.
 
 ---
 

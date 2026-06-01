@@ -40,6 +40,77 @@ format:
 
 ---
 
+## F-test intuition: restricted versus unrestricted
+
+- The **unrestricted model** allows all coefficients to be estimated freely.
+- The **restricted model** imposes the null hypothesis by forcing some coefficients to zero.
+- Because the restricted model fits less flexibly, we usually have
+  $$RSS_R \geq RSS_U$$
+- The F-test asks whether that increase in RSS is large enough to reject the restrictions.
+
+---
+
+## F-statistic for joint significance
+
+::: {.formula}
+$$F = \frac{(RSS_R - RSS_U)/J}{RSS_U/(N-K)} \sim F(J, N-K) \quad \text{under } H_0$$
+:::
+
+- $J$ is the number of restrictions being tested.
+- $N$ is the sample size.
+- $K$ is the number of parameters in the unrestricted model.
+- A larger $F$ means the restrictions worsen model fit substantially.
+
+---
+
+## Kerala example: do rainfall terms matter for procurement?
+
+- Consider the unrestricted model
+  $$\text{paddy procurement} = \beta_1 + \beta_2 price + \beta_3 rainfall + \beta_4 rainfall^2 + \varepsilon$$
+- The restricted model sets the rainfall terms to zero:
+  $$H_0: \beta_3 = 0 \quad \text{and} \quad \beta_4 = 0$$
+- This is the Kerala analogue of testing whether advertising terms matter for sales.
+- If the unrestricted model fits much better, rainfall is jointly important for paddy procurement.
+
+---
+
+## Implementing the rainfall F-test in Python
+
+```{pyodide-python}
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(42)
+n = 80
+price = np.random.uniform(18, 32, n)
+rainfall = np.random.uniform(900, 2400, n)
+rainfall_sq = rainfall ** 2
+procurement = 120 + 6 * price + 0.08 * rainfall - 0.00002 * rainfall_sq + np.random.normal(0, 35, n)
+
+df_proc = pd.DataFrame({
+    'procurement': procurement,
+    'price': price,
+    'rainfall': rainfall,
+    'rainfall_sq': rainfall_sq,
+})
+
+unrestricted = smf.ols('procurement ~ price + rainfall + rainfall_sq', data=df_proc).fit()
+restricted = smf.ols('procurement ~ price', data=df_proc).fit()
+
+rss_u = np.sum(unrestricted.resid ** 2)
+rss_r = np.sum(restricted.resid ** 2)
+J = 2
+N = len(df_proc)
+K = len(unrestricted.params)
+f_manual = ((rss_r - rss_u) / J) / (rss_u / (N - K))
+
+print('Manual F statistic =', round(f_manual, 4))
+print(unrestricted.f_test('rainfall = 0, rainfall_sq = 0'))
+```
+
+---
+
 ## Estimating a multiple regression model
 
 ```{pyodide-python}
