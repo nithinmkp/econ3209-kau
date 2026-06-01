@@ -763,18 +763,18 @@
     "text": "R² versus Adjusted R²\n\n\\[R^2 = 1 - \\frac{SSR}{SST}\\]\n\n\n\\(R^2\\) never falls when you add regressors.\nA useless regressor can still increase \\(R^2\\) slightly.\n\n\n\\[\\bar{R}^2 = 1 - \\frac{SSR/(n-k-1)}{SST/(n-1)}\\]\n\n\nAdjusted \\(R^2\\) penalizes adding weak regressors.\nIt is often more informative for comparing models with different numbers of covariates."
   },
   {
-    "objectID": "slides/week-10/lecture-02.html#python-demo-irrelevant-regressor-and-fit-measures",
-    "href": "slides/week-10/lecture-02.html#python-demo-irrelevant-regressor-and-fit-measures",
+    "objectID": "slides/week-10/lecture-02.html#irrelevant-regressor-and-fit-measures",
+    "href": "slides/week-10/lecture-02.html#irrelevant-regressor-and-fit-measures",
     "title": "Interpretation of Coefficients",
-    "section": "Python Demo: Irrelevant Regressor and Fit Measures",
-    "text": "Python Demo: Irrelevant Regressor and Fit Measures\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+    "section": "Irrelevant Regressor and Fit Measures",
+    "text": "Irrelevant Regressor and Fit Measures\nAdding a completely random variable to the model:\n\nR² always rises (or stays the same) — even with pure noise\nAdjusted R² penalises the extra parameter, so it falls when the new variable adds nothing\nThis is why adjusted R² is used for model comparison, not R²\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
-    "objectID": "slides/week-10/lecture-02.html#python-demo-partial-effect-with-prediction-grid",
-    "href": "slides/week-10/lecture-02.html#python-demo-partial-effect-with-prediction-grid",
+    "objectID": "slides/week-10/lecture-02.html#partial-effect-of-income-holding-others-fixed",
+    "href": "slides/week-10/lecture-02.html#partial-effect-of-income-holding-others-fixed",
     "title": "Interpretation of Coefficients",
-    "section": "Python Demo: Partial Effect with Prediction Grid",
-    "text": "Python Demo: Partial Effect with Prediction Grid\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+    "section": "Partial Effect of Income — Holding Others Fixed",
+    "text": "Partial Effect of Income — Holding Others Fixed\nA prediction grid isolates one variable’s effect:\n\nFix collateral and loan_size at their sample means (so they don’t vary)\nSweep income across its full range in 40 steps\nPredict the score for each income value → this trace is the partial effect\n\nThe slope of the green line is exactly \\(\\hat\\beta_1\\) — the coefficient on income\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "slides/week-10/lecture-02.html#common-interpretation-mistakes",
