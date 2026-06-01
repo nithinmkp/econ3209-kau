@@ -230,14 +230,14 @@ Finally, print whether each farm made a profit or a loss.
 
 ```{pyodide-python}
 def net_income(revenue, cost):
-    # Write your function here
-    pass
+    return revenue - cost
 
 examples = [(125000, 86000), (98000, 102000)]
 
 for revenue, cost in examples:
-    profit = None
-    print(revenue, cost, profit)
+    profit = net_income(revenue, cost)
+    status = "Profit" if profit > 0 else "Loss"
+    print(f"Revenue={revenue:>8,}  Cost={cost:>8,}  Net={profit:>8,}  → {status}")
 ```
 
 ---

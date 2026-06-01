@@ -230,14 +230,13 @@ A teacher records district-level loan recovery rates: `88, 91, 76, 95, 83`.
 ```{pyodide-python}
 recovery_rates = [88, 91, 76, 95, 83]
 
-# Write your solution here
-good_recovery = []
-labels = []
-sorted_rates = []
+good_recovery = [r for r in recovery_rates if r >= 85]
+labels        = ["strong" if r >= 85 else "needs support" for r in recovery_rates]
+sorted_rates  = sorted(recovery_rates, key=lambda r: r, reverse=True)
 
-print(good_recovery)
-print(labels)
-print(sorted_rates)
+print("Rates ≥ 85  :", good_recovery)
+print("Labels      :", labels)
+print("Sorted (desc):", sorted_rates)
 ```
 
 ---

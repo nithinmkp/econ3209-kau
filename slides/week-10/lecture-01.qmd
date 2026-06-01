@@ -195,7 +195,7 @@ Both methods solve the same normal equations. `statsmodels` adds standard errors
 4. **Zero conditional mean**: $E(\varepsilon_i \mid X_{1i},\ldots,X_{ki})=0$.
 
 ::: {.highlight-box}
-Under these conditions, OLS is unbiased. Later lectures add homoskedasticity and normality when we discuss inference.
+Under these conditions, OLS is unbiased. For multiple-regression inference, we later revisit homoskedasticity and normality in the MLR setting.
 :::
 
 ---
@@ -231,17 +231,30 @@ import statsmodels.formula.api as smf
 
 np.random.seed(7)
 n = 80
-df = pd.DataFrame({
-    'fertilizer': np.random.uniform(40, 180, n),
-    'rainfall': np.random.uniform(850, 1550, n),
-    'irrigation': np.random.uniform(0, 1, n)
-})
+fertilizer = np.random.uniform(40, 180, n)
+rainfall   = np.random.uniform(850, 1550, n)
+irrigation = np.random.uniform(0, 1, n)
 
-# Add your own yield equation here
-df['yield_'] = 10
+df = pd.DataFrame({'fertilizer': fertilizer,
+                   'rainfall':   rainfall,
+                   'irrigation': irrigation})
 
-# Estimate the model below
-# model = smf.ols('yield_ ~ fertilizer + rainfall + irrigation', data=df).fit()
+# True DGP: yield depends on all three regressors
+df['yield_'] = (20
+                + 0.25 * df['fertilizer']
+                + 0.01 * df['rainfall']
+                + 5.0  * df['irrigation']
+                + np.random.normal(0, 3, n))
+
+# Matrix OLS
+X = np.column_stack([np.ones(n), df['fertilizer'], df['rainfall'], df['irrigation']])
+Y = df['yield_'].values
+beta_matrix = np.linalg.solve(X.T @ X, X.T @ Y)
+print("Matrix β̂:", beta_matrix.round(4))
+
+# statsmodels — should match matrix result
+model = smf.ols('yield_ ~ fertilizer + rainfall + irrigation', data=df).fit()
+print(model.params.round(4))
 ```
 
 ---

@@ -189,13 +189,13 @@ agri = pd.DataFrame({
 })
 
 agri["yield_tonnes"] = agri["yield_kg"] / 1000
-agri["deposit_per_member_thousand"] = agri["deposit_crore"] / agri["members_thousand"]
+agri["deposit_crore_per_thousand_members"] = agri["deposit_crore"] / agri["members_thousand"]
 print(agri)
 ```
 
 - Derived indicators often communicate better than raw totals
 - Unit conversion should be explicit and documented
-- Ratios can help compare districts of different sizes
+- Ratios can help compare districts of different sizes when the units are labelled explicitly
 - Good data cleaning leads naturally into useful feature creation
 
 ---
@@ -237,9 +237,20 @@ Create a DataFrame with columns `district`, `yield_kg`, and `deposit_crore`.
 
 ```{pyodide-python}
 import pandas as pd
+import numpy as np
 
-# Write your solution here
-df = pd.DataFrame()
+df = pd.DataFrame({
+    'district':      ['Palakkad', 'Wayanad', 'Thrissur', 'Idukki'],
+    'yield_kg':      [3800, np.nan, 4200, 3650],
+    'deposit_crore': [420, 180, 610, 220]
+})
+print("Before cleaning:")
+print(df)
+
+df['yield_kg']     = df['yield_kg'].fillna(df['yield_kg'].mean())
+df['yield_tonnes'] = df['yield_kg'] / 1000
+
+print("\nAfter cleaning:")
 print(df)
 ```
 

@@ -225,11 +225,15 @@ Create a NumPy array of coconut yields: `9000, 10400, 9800, 11200, 10750`.
 ```{pyodide-python}
 import numpy as np
 
-# Write your solution here
-coconut = np.array([])
+coconut = np.array([9000, 10400, 9800, 11200, 10750])
 np.random.seed(0)
 
-print()
+print(f"Mean       : {np.mean(coconut):.2f}")
+print(f"Std dev    : {np.std(coconut, ddof=1):.2f}")
+print(f"25th pctile: {np.percentile(coconut, 25):.2f}")
+print(f"75th pctile: {np.percentile(coconut, 75):.2f}")
+shocks = np.random.normal(0, 150, 5)
+print(f"Shocks     : {shocks.round(2)}")
 ```
 
 ---

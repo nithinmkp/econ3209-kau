@@ -232,14 +232,14 @@ Create a NumPy array called `yields` with values `3000, 3200, 2900, 3600, 3400`.
 ```{pyodide-python}
 import numpy as np
 
-# Write your solution here
-yields = np.array([])
-improved = yields
-mask = []
+yields   = np.array([3000, 3200, 2900, 3600, 3400])
+improved = yields + 200
+mask     = improved > 3300
 
-print(improved)
-print(mask)
-print(improved[mask])
+print("Original yields:", yields)
+print("After irrigation (+200):", improved)
+print("Mask (>3300):", mask)
+print("High-yield farms:", improved[mask])
 ```
 
 ---

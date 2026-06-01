@@ -115,10 +115,10 @@ from statsmodels.tsa.stattools import adfuller, kpss
 
 series = df['paddy_production']
 first_diff = series.diff().dropna()
-print('ADF level p-value:', round(adfuller(series)[1], 4))
-print('ADF first difference p-value:', round(adfuller(first_diff)[1], 4))
-print('KPSS level p-value:', round(kpss(series, nlags='auto')[1], 4))
-print('KPSS first difference p-value:', round(kpss(first_diff, nlags='auto')[1], 4))
+print('ADF level p-value (with trend):', round(adfuller(series, regression='ct')[1], 4))
+print('ADF first difference p-value:', round(adfuller(first_diff, regression='c')[1], 4))
+print('KPSS level p-value (trend-stationary null):', round(kpss(series, regression='ct', nlags='auto')[1], 4))
+print('KPSS first difference p-value:', round(kpss(first_diff, regression='c', nlags='auto')[1], 4))
 ```
 
 ---
@@ -190,10 +190,10 @@ from statsmodels.tsa.stattools import adfuller, kpss
 
 level = df['paddy_production']
 first_diff = level.diff().dropna()
-print('ADF level:', adfuller(level)[1])
-print('ADF diff:', adfuller(first_diff)[1])
-print('KPSS level:', kpss(level, nlags='auto')[1])
-print('KPSS diff:', kpss(first_diff, nlags='auto')[1])
+print('ADF level (with trend):', adfuller(level, regression='ct')[1])
+print('ADF diff:', adfuller(first_diff, regression='c')[1])
+print('KPSS level (trend-stationary null):', kpss(level, regression='ct', nlags='auto')[1])
+print('KPSS diff:', kpss(first_diff, regression='c', nlags='auto')[1])
 ```
 
 ---

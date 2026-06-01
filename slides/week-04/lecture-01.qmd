@@ -244,9 +244,18 @@ Create a DataFrame with three districts and columns for `deposit_crore` and `loa
 ```{pyodide-python}
 import pandas as pd
 
-# Write your solution here
-df = pd.DataFrame()
+df = pd.DataFrame({
+    'district':      ['Palakkad', 'Thrissur', 'Malappuram'],
+    'deposit_crore': [420, 610, 380],
+    'loan_crore':    [310, 550, 370]
+})
+df['gap'] = df['deposit_crore'] - df['loan_crore']
+
 print(df)
+print("\nPalakkad row:")
+print(df.loc[df['district'] == 'Palakkad'])
+print("\nDistricts with gap > 20:")
+print(df[df['gap'] > 20])
 ```
 
 ---

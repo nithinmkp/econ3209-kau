@@ -232,7 +232,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-# Write your solution here
+df = pd.DataFrame({
+    'crop':  ['Rice'] * 5 + ['Wheat'] * 5 + ['Coconut'] * 5,
+    'price': [35, 38, 36, 34, 37, 22, 24, 23, 25, 21, 28, 30, 27, 31, 29]
+})
+
+sns.boxplot(data=df, x='crop', y='price', palette='Greens')
+plt.title('Price Distribution by Crop (₹/kg)')
+plt.ylabel('Price (₹/kg)')
+plt.tight_layout()
+plt.show()
 ```
 
 ---

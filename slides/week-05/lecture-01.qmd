@@ -229,7 +229,16 @@ import matplotlib
 matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
 import matplotlib.pyplot as plt
 
-# Write your solution here
+districts = ['Palakkad', 'Wayanad', 'Kozhikode']
+yields    = [9800, 11200, 10400]
+colors    = ['#4A7A47', '#7AB87A', '#A8D5A2']
+
+plt.figure(figsize=(7, 4))
+plt.bar(districts, yields, color=colors, edgecolor='#1A3300')
+plt.title('Coconut Yield by District')
+plt.ylabel('Yield (nuts/hectare)')
+plt.tight_layout()
+plt.show()
 ```
 
 ---

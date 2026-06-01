@@ -247,7 +247,7 @@ print(f"Min: {lo}, Max: {hi}")
 ## Dictionaries
 
 ```{pyodide-python}
-# Dictionaries: key → value mapping, unordered (insertion order in 3.7+)
+# Dictionaries: key → value mapping, insertion-ordered in modern Python (3.7+)
 cooperative = {
     "name": "Thrissur District Cooperative Bank",
     "established": 1913,
@@ -363,7 +363,22 @@ Print each detail with proper formatting. The loan-to-deposit ratio is `loans / 
 
 ```{pyodide-python}
 # Exercise: Create the cooperative dictionary and compute LDR
+coop = {
+    'name': 'Palakkad Primary Agricultural Credit Society',
+    'deposits': 8_50_00_000,
+    'loans': 6_20_00_000,
+    'members': 3450,
+    'established': 1962
+}
 
+print(f"Society  : {coop['name']}")
+print(f"Deposits : ₹{coop['deposits']:,.0f}")
+print(f"Loans    : ₹{coop['loans']:,.0f}")
+print(f"Members  : {coop['members']}")
+print(f"Year     : {coop['established']}")
+
+ldr = coop['loans'] / coop['deposits']
+print(f"\nLoan-to-Deposit Ratio: {ldr:.4f}  ({ldr*100:.2f}%)")
 ```
 
 ---

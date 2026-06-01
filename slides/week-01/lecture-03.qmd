@@ -349,14 +349,23 @@ Write a Python expression that evaluates to `True` if an applicant with `income=
 :::
 
 ```{pyodide-python}
-# Exercise: Loan eligibility check
 income = 35_000
 loan = 500_000
 credit_score = 680
 has_default = False
 
-# Write your eligibility checks here
+income_ok  = income >= 20_000
+loan_ok    = loan <= 20 * income
+credit_ok  = credit_score >= 650
+default_ok = not has_default
 
+eligible = income_ok and loan_ok and credit_ok and default_ok
+
+print(f"Income ≥ ₹20,000     : {income_ok}")
+print(f"Loan ≤ 20× income    : {loan_ok}")
+print(f"Credit score ≥ 650   : {credit_ok}")
+print(f"No existing default  : {default_ok}")
+print(f"\nApplicant eligible   : {eligible}")
 ```
 
 ---

@@ -193,9 +193,13 @@ from statsmodels.tsa.arima.model import ARIMA
 
 m111 = ARIMA(df['paddy_production'], order=(1, 1, 1)).fit()
 m210 = ARIMA(df['paddy_production'], order=(2, 1, 0)).fit()
+aic_table = {'ARIMA(1,1,1)': m111.aic, 'ARIMA(2,1,0)': m210.aic}
+best_name = min(aic_table, key=aic_table.get)
+best_model = m111 if best_name == 'ARIMA(1,1,1)' else m210
 print('ARIMA(1,1,1) AIC:', m111.aic)
 print('ARIMA(2,1,0) AIC:', m210.aic)
-print('Forecast from ARIMA(1,1,1):', m111.forecast(steps=5))
+print('Lower-AIC model:', best_name)
+print('Forecast from lower-AIC model:', best_model.forecast(steps=5))
 ```
 
 ---

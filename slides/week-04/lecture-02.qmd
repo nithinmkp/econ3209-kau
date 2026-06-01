@@ -241,9 +241,22 @@ Then:
 ```{pyodide-python}
 import pandas as pd
 
-# Write your solution here
-bank_df = pd.DataFrame()
-loan_df = pd.DataFrame()
+bank_df = pd.DataFrame({
+    'district':      ['Palakkad', 'Thrissur', 'Malappuram', 'Kozhikode'],
+    'deposit_crore': [420, 610, 380, 540]
+})
+loan_df = pd.DataFrame({
+    'district':   ['Palakkad', 'Thrissur', 'Malappuram', 'Kozhikode'],
+    'loan_crore': [310, 550, 370, 480]
+})
+
+merged = pd.merge(bank_df, loan_df, on='district')
+merged['gap']    = merged['deposit_crore'] - merged['loan_crore']
+merged['region'] = ['North', 'Central', 'North', 'North']
+
+print(merged)
+print("\nAverage gap by region:")
+print(merged.groupby('region')['gap'].mean())
 ```
 
 ---

@@ -230,7 +230,10 @@ naive_forecast = np.repeat(train['paddy_production'].iloc[-1], len(test))
 arima_forecast = ARIMA(train['paddy_production'], order=(1, 1, 1)).fit().forecast(steps=len(test))
 rmse_naive = np.sqrt(np.mean((test['paddy_production'] - naive_forecast) ** 2))
 rmse_arima = np.sqrt(np.mean((test['paddy_production'] - arima_forecast) ** 2))
-print(rmse_naive, rmse_arima)
+mape_naive = np.mean(np.abs((test['paddy_production'] - naive_forecast) / test['paddy_production'])) * 100
+mape_arima = np.mean(np.abs((test['paddy_production'] - arima_forecast) / test['paddy_production'])) * 100
+print('RMSE:', round(rmse_naive, 3), round(rmse_arima, 3))
+print('MAPE:', round(mape_naive, 3), round(mape_arima, 3))
 ```
 
 ---

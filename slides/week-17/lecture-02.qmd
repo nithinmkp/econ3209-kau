@@ -120,7 +120,7 @@ for i, district in enumerate(districts):
 df = pd.DataFrame(rows, columns=["district", "year", "rainfall", "fertilizer", "soil_quality", "coastal", "productivity"])
 import statsmodels.formula.api as smf
 
-lsdv = smf.ols("productivity ~ fertilizer + rainfall + C(district) + C(year)", data=df).fit()
+lsdv = smf.ols("productivity ~ fertilizer + rainfall + C(district)", data=df).fit()
 print(lsdv.params[['fertilizer', 'rainfall']].round(4))
 ```
 

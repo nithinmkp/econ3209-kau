@@ -239,11 +239,14 @@ A cooperative bank reviews annual loan recovery rates: `92, 88, 95, 76, 90`.
 ```{pyodide-python}
 recovery_rates = [92, 88, 95, 76, 90]
 
-# Write your solution here
 below_90 = 0
-
 for rate in recovery_rates:
-    pass
+    if rate < 80:
+        print(f"{rate}% — Needs field visit")
+    else:
+        print(f"{rate}% — OK")
+    if rate < 90:
+        below_90 += 1
 
 print("Rates below 90:", below_90)
 ```

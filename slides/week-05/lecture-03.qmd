@@ -1,5 +1,5 @@
 ---
-title: "Interactive Plots & Publication-Ready Figures"
+title: "Plot Refinement & Publication-Ready Figures"
 subtitle: "ECON 3209 · Week 5, Lecture 3 · Kerala Agricultural University"
 author: "Department of Development Economics, KAU"
 date: "2026-09-01"
@@ -233,7 +233,22 @@ import matplotlib
 matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
 import matplotlib.pyplot as plt
 
-# Write your solution here
+years    = [2020, 2021, 2022, 2023]
+deposits = [420, 460, 490, 530]
+loans    = [310, 340, 370, 395]
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+ax1.plot(years, deposits, color='#4A7A47', marker='o')
+ax1.set_title('Deposits (₹ crore)')
+ax1.set_xlabel('Year')
+
+ax2.plot(years, loans, color='#DAB300', marker='s')
+ax2.set_title('Loans Outstanding (₹ crore)')
+ax2.set_xlabel('Year')
+
+plt.tight_layout()
+plt.show()
 ```
 
 ---

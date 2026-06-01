@@ -177,7 +177,7 @@ plt.show()
 ## Exercise {background-color="#1A3300"}
 
 ::: {.gold-box}
-Simulate an AR(1) series with $ho=0.5$ and compare its lag-1 autocorrelation with a white-noise series. Which series looks smoother, and why?
+Simulate an AR(1) series with $\rho=0.5$ and compare its lag-1 autocorrelation with a white-noise series. Which series looks smoother, and why?
 :::
 
 ```{pyodide-python}

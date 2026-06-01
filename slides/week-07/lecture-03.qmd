@@ -139,7 +139,7 @@ plt.show()
 
 ---
 
-## Matrix intuition and geometry
+## Geometric interpretation of OLS
 
 - OLS chooses the line with the smallest total squared vertical distance from the data points.
 - In simple regression, the fitted line summarises average linear association.

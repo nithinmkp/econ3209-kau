@@ -91,18 +91,24 @@ print(log_model.params.round(4))
 
 ---
 
-## Python Demo: Compare Log-Log, Log-Lin, and Lin-Log
+## Python Demo: Compare Functional Forms on the Original Income Scale
 
 ```{pyodide-python}
 loglin = smf.ols('np.log(income) ~ land', data=df).fit()
 linlog = smf.ols('income ~ np.log(land)', data=df).fit()
 
 compare = pd.DataFrame({
-    'AIC': [log_model.aic, loglin.aic, linlog.aic],
-    'BIC': [log_model.bic, loglin.bic, linlog.bic]
+    'RMSE_on_income': [
+        np.sqrt(np.mean((df['income'] - np.exp(log_model.fittedvalues)) ** 2)),
+        np.sqrt(np.mean((df['income'] - np.exp(loglin.fittedvalues)) ** 2)),
+        np.sqrt(np.mean((df['income'] - linlog.fittedvalues) ** 2)),
+    ]
 }, index=['log-log', 'log-lin', 'lin-log'])
 print(compare.round(3))
 ```
+
+- AIC and BIC are directly comparable only when the dependent variable is the same across models.
+- Here we compare fitted values on the original income scale instead.
 
 ---
 

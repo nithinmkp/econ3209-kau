@@ -19,7 +19,7 @@ By the end of this lecture, you will be able to:
 2. use ceteris paribus language for economic explanations
 3. distinguish raw and standardized coefficients
 4. compare R² and adjusted R² when regressors are added
-5. avoid common mistakes when interpreting intercepts and dummy slopes
+5. avoid common mistakes when interpreting intercepts and partial slopes
 
 ---
 
@@ -80,7 +80,7 @@ Always say what is held constant. Without that phrase, the interpretation is inc
 A standardized coefficient asks: what happens to $Y$ in **standard deviation units** when $X_j$ changes by one standard deviation?
 
 ::: {.formula}
-$$\beta_j^{std}=\hat\beta_j\left(\frac{s_{X_j}}{s_Y}ight)$$
+$$\hat{\beta}_j^{std}=\hat\beta_j\left(\frac{s_{X_j}}{s_Y}\right)$$
 :::
 
 Use standardized coefficients when:
@@ -117,14 +117,13 @@ print(model.params.round(4))
 ## Python Demo: Standardize Variables
 
 ```{pyodide-python}
-        z = (df - df.mean()) / df.std(ddof=0)
-        z_model = smf.ols('repayment_score ~ income + collateral + loan_size', data=z).fit()
-        print('Raw coefficients:')
-        print(model.params.round(4))
-        print('
-Standardized coefficients:')
-        print(z_model.params.round(4))
-        ```
+z = (df - df.mean()) / df.std(ddof=0)
+z_model = smf.ols('repayment_score ~ income + collateral + loan_size', data=z).fit()
+print('Raw coefficients:')
+print(model.params.round(4))
+print('\nStandardized coefficients:')
+print(z_model.params.round(4))
+```
 
 ---
 

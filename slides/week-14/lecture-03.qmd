@@ -45,8 +45,8 @@ By the end of this lecture, you will be able to:
 ## Model Comparison Metrics
 
 ::: {.formula}
-$$AIC = n \ln\left(\frac{SSE}{n}ight) + 2k$$
-$$BIC = n \ln\left(\frac{SSE}{n}ight) + k\ln(n)$$
+$$AIC = n \ln\left(\frac{SSE}{n}\right) + 2k$$
+$$BIC = n \ln\left(\frac{SSE}{n}\right) + k\ln(n)$$
 :::
 
 where $SSE$ is the sum of squared errors and $k$ is the number of estimated parameters.
