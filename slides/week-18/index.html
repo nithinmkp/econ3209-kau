@@ -134,16 +134,26 @@
     .qp-status, .qp-status-container,
     div[class*="pyodide-status"], div[id*="pyodide-status"],
     .cell-output-display > p:first-child:empty { display: none !important; }
-    /* KAU logo in slide corner */
+    /* KAU logo — top-right, away from controls */
     #kau-slide-logo {
-      position: fixed; bottom: 14px; right: 14px;
+      position: fixed; top: 10px; right: 14px;
       height: 45px; width: auto; z-index: 1000;
       pointer-events: none;
     }
-    /* Forward/back navigation arrows — ensure both always visible */
+    /* Forward/back navigation arrows — ensure all always visible */
+    .reveal .controls {
+      visibility: visible !important;
+      display: block !important;
+    }
     .reveal .controls button {
       color: #7AB87A !important;
       opacity: 0.8 !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+    .reveal .controls button:not(.enabled) {
+      opacity: 0.4 !important;
+      visibility: visible !important;
     }
     .reveal .controls button:hover {
       color: #DAB300 !important;
