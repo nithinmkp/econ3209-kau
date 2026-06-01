@@ -145,41 +145,84 @@ $$\bar{R}^2 = 1 - \frac{SSR/(n-k-1)}{SST/(n-1)}$$
 
 ---
 
-## Python Demo: Irrelevant Regressor and Fit Measures
+## Irrelevant Regressor and Fit Measures
+
+Adding a completely random variable to the model:
+
+- **R²** always rises (or stays the same) — even with pure noise
+- **Adjusted R²** penalises the extra parameter, so it falls when the new variable adds nothing
+- This is why adjusted R² is used for model comparison, not R²
 
 ```{pyodide-python}
-df['noise'] = np.random.normal(0, 1, n)
+import numpy as np, pandas as pd
+import statsmodels.formula.api as smf
+
+np.random.seed(123)
+n = 100
+df = pd.DataFrame({
+    'income':     np.random.uniform(12, 40, n),
+    'collateral': np.random.uniform(1, 15, n),
+    'loan_size':  np.random.uniform(30, 180, n)
+})
+df['repayment_score'] = 65 + 0.9*df['income'] + 1.4*df['collateral'] - 0.08*df['loan_size'] + np.random.normal(0, 2.5, n)
+
+model       = smf.ols('repayment_score ~ income + collateral + loan_size',         data=df).fit()
+df['noise'] = np.random.normal(0, 1, n)   # pure noise — unrelated to outcome
 model_noise = smf.ols('repayment_score ~ income + collateral + loan_size + noise', data=df).fit()
 
 compare = pd.DataFrame({
-    'model': ['baseline', 'with noise'],
-    'R2': [model.rsquared, model_noise.rsquared],
-    'Adj_R2': [model.rsquared_adj, model_noise.rsquared_adj]
+    'model':   ['baseline (3 vars)', 'with noise (4 vars)'],
+    'R2':      [model.rsquared,     model_noise.rsquared],
+    'Adj_R2':  [model.rsquared_adj, model_noise.rsquared_adj]
 })
 print(compare.round(4))
+# Notice: R2 rises slightly, Adj_R2 falls — noise hurts the adjusted measure
 ```
 
 ---
 
-## Python Demo: Partial Effect with Prediction Grid
+## Partial Effect of Income — Holding Others Fixed
+
+A **prediction grid** isolates one variable's effect:
+
+- Fix `collateral` and `loan_size` at their sample means (so they don't vary)
+- Sweep `income` across its full range in 40 steps
+- Predict the score for each income value → this trace is the **partial effect**
+
+The slope of the green line is exactly $\hat\beta_1$ — the coefficient on income
 
 ```{pyodide-python}
+import numpy as np, pandas as pd
+import statsmodels.formula.api as smf
 import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')
 import matplotlib.pyplot as plt
 
+np.random.seed(123)
+n = 100
+df = pd.DataFrame({
+    'income':     np.random.uniform(12, 40, n),
+    'collateral': np.random.uniform(1, 15, n),
+    'loan_size':  np.random.uniform(30, 180, n)
+})
+df['repayment_score'] = 65 + 0.9*df['income'] + 1.4*df['collateral'] - 0.08*df['loan_size'] + np.random.normal(0, 2.5, n)
+model = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()
+
+# Prediction grid: only income varies; others held at their means
 grid = pd.DataFrame({
-    'income': np.linspace(df['income'].min(), df['income'].max(), 40),
-    'collateral': df['collateral'].mean(),
-    'loan_size': df['loan_size'].mean()
+    'income':     np.linspace(df['income'].min(), df['income'].max(), 40),
+    'collateral': df['collateral'].mean(),   # fixed
+    'loan_size':  df['loan_size'].mean()     # fixed
 })
 grid['pred'] = model.predict(grid)
 
 plt.figure(figsize=(7, 4))
-plt.scatter(df['income'], df['repayment_score'], alpha=0.5)
-plt.plot(grid['income'], grid['pred'], color='darkgreen', linewidth=2)
-plt.xlabel('Income (₹ thousand per month)')
-plt.ylabel('Predicted repayment score')
-plt.title('Partial effect of income, holding others fixed')
+plt.scatter(df['income'], df['repayment_score'], alpha=0.4, label='Actual data')
+plt.plot(grid['income'], grid['pred'], color='darkgreen', linewidth=2.5, label='Partial effect of income')
+plt.xlabel('Income (₹ thousand/month)')
+plt.ylabel('Repayment score')
+plt.title('Effect of income on repayment score\n(collateral & loan size held at mean)')
+plt.legend()
+plt.tight_layout()
 plt.show()
 ```
 
