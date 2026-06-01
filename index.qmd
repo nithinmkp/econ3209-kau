@@ -176,5 +176,5 @@ ARIMA models · Forecast evaluation · Course review
 
 ---
 
-> **Interactive Slides:** All lecture slides include live Python code cells powered by [Pyodide](https://pyodide.org) — run Python directly in your browser, no installation needed.
+> **Interactive Slides:** All lecture slides include live Python code cells — run Python directly in your browser, no installation needed.
 

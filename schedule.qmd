@@ -43,6 +43,6 @@ The course runs for 20 weeks. Each week consists of three 50-minute lectures. We
 
 ::: {.callout-tip}
 ## Interactive Slides
-Click any week number to open that week's slide index. All decks include live Pyodide cells — run Python directly in your browser.
+Click any week number to open that week's slide index. All decks include live Python cells — run Python directly in your browser.
 :::
 

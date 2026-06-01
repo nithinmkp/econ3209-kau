@@ -25,8 +25,7 @@ This course is offered by the **Department of Development Economics**, Kerala Ag
 This course website and all interactive slide decks are built with:
 
 - [Quarto](https://quarto.org) — scientific and technical publishing
-- [Pyodide](https://pyodide.org) — Python in the browser (via WebAssembly)
-- [quarto-pyodide](https://github.com/coatless/quarto-pyodide) — Quarto extension for live Python cells
+- Modern in-browser Python tooling for live code execution
 
 All course materials are open and freely accessible.
 

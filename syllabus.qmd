@@ -21,7 +21,7 @@ subtitle: "ECON 3209 — Econometrics with Python"
 
 This course introduces students of Cooperation and Banking to the theory and practice of econometrics using the Python programming language. The first six weeks provide a thorough grounding in Python for data analysis — covering programming fundamentals, numerical computing with NumPy, data wrangling with Pandas, and scientific visualisation. The remaining fourteen weeks develop the classical econometric toolkit: from simple and multiple linear regression through diagnostic testing, qualitative response models, panel data, and time series analysis.
 
-All lecture slides are interactive — powered by Pyodide, students can run Python code directly in their browser during class and for self-study.
+All lecture slides are interactive, so students can run Python code directly in their browser during class and for self-study.
 
 ---
 
@@ -66,7 +66,7 @@ numpy       pandas       matplotlib   seaborn
 scipy       statsmodels  linearmodels jupyter
 ```
 
-> **No installation needed for lectures.** All interactive slide decks run Python via [Pyodide](https://pyodide.org) directly in your browser.
+> **No installation needed for lectures.** All interactive slide decks run Python directly in your browser.
 
 ---
 
