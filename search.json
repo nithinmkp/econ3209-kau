@@ -1586,7 +1586,7 @@
     "href": "slides/week-17/lecture-02.html#next-lecture",
     "title": "Fixed Effects",
     "section": "Next Lecture",
-    "text": "Next Lecture\n\n\nWe study random effects and the Hausman test.\nYou will see when a random-effects assumption is plausible and how to compare FE with RE.\nBecause Pyodide lacks linearmodels, we will implement the logic manually."
+    "text": "Next Lecture\n\n\nWe study random effects and the Hausman test.\nYou will see when a random-effects assumption is plausible and how to compare FE with RE.\nWe implement the fixed-effects logic manually using standard numpy and statsmodels."
   },
   {
     "objectID": "slides/week-16/lecture-03.html#learning-outcomes",
@@ -3378,7 +3378,7 @@
     "href": "slides/week-15/lecture-03.html#statsmodels-versus-scikit-learn",
     "title": "Probit Model in Python",
     "section": "Statsmodels versus scikit-learn",
-    "text": "Statsmodels versus scikit-learn\n\nIn applied econometrics, statsmodels is preferred when you want coefficients, standard errors, hypothesis tests, and marginal effects.\nIn machine learning workflows, scikit-learn focuses on prediction pipelines and classification accuracy.\nIn this browser-based course, Pyodide gives us statsmodels, so that is our main tool for probit.\nThe econometric logic remains the same even if software differs."
+    "text": "Statsmodels versus scikit-learn\n\nIn applied econometrics, statsmodels is preferred when you want coefficients, standard errors, hypothesis tests, and marginal effects.\nIn machine learning workflows, scikit-learn focuses on prediction pipelines and classification accuracy.\nIn this browser-based course, statsmodels is our main tool for probit.\nThe econometric logic remains the same even if software differs."
   },
   {
     "objectID": "slides/week-15/lecture-03.html#estimate-probit-and-logit-together",
@@ -3441,7 +3441,7 @@
     "href": "slides/week-15/lecture-03.html#summary",
     "title": "Probit Model in Python",
     "section": "Summary",
-    "text": "Summary\n\n✅ Probit uses the normal CDF and logit uses the logistic CDF, but both usually tell a similar story.\n✅ Raw coefficients should not be compared across models without caution because scales differ.\n✅ Predicted probabilities, marginal effects, ROC curves, and AUC are more useful for interpretation.\n✅ In Pyodide, statsmodels is the main tool for binary econometric models."
+    "text": "Summary\n\n✅ Probit uses the normal CDF and logit uses the logistic CDF, but both usually tell a similar story.\n✅ Raw coefficients should not be compared across models without caution because scales differ.\n✅ Predicted probabilities, marginal effects, ROC curves, and AUC are more useful for interpretation.\n✅ statsmodels is the main tool for binary econometric models in this course."
   },
   {
     "objectID": "slides/week-15/lecture-03.html#next-lecture",
@@ -4099,7 +4099,7 @@
     "href": "slides/week-05/lecture-03.html#next-lecture",
     "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Next Lecture",
-    "text": "Next Lecture\nLooking Ahead\n\nIn the next block of the course we will begin statistical modelling and inference\nThe coding and plotting foundations from Weeks 1–5 will now support regression-based analysis\nKeep practicing with the live Pyodide cells before we move onward"
+    "text": "Next Lecture\nLooking Ahead\n\nIn the next block of the course we will begin statistical modelling and inference\nThe coding and plotting foundations from Weeks 1–5 will now support regression-based analysis\nKeep practicing with the live interactive cells before we move onward"
   },
   {
     "objectID": "slides/week-05/lecture-02.html#learning-outcomes",
@@ -4932,7 +4932,7 @@
     "href": "slides/week-01/lecture-01.html#course-software-setup",
     "title": "Getting Started with Python",
     "section": "Course Software Setup",
-    "text": "Course Software Setup\n\n\n\n\n\n\nInstallation (for home use)\n\n\n\nDownload Anaconda from anaconda.com (Python 3.11+)\nLaunch Jupyter Notebook from Anaconda Navigator\nAll required packages (numpy, pandas, matplotlib, statsmodels) are included\n\nFor Google Colab (no install): colab.research.google.com\n\n\n\n\n\n\n\n\n\nIn Lectures\n\n\nAll slide decks use Pyodide — Python runs directly in your browser. No setup needed for class."
+    "text": "Course Software Setup\n\n\n\n\n\n\nInstallation (for home use)\n\n\n\nDownload Anaconda from anaconda.com (Python 3.11+)\nLaunch Jupyter Notebook from Anaconda Navigator\nAll required packages (numpy, pandas, matplotlib, statsmodels) are included\n\nFor Google Colab (no install): colab.research.google.com\n\n\n\n\n\n\n\n\n\nIn Lectures\n\n\nAll slide decks run Python directly in your browser. No setup needed for class."
   },
   {
     "objectID": "slides/week-01/lecture-01.html#exercise",
@@ -4946,7 +4946,7 @@
     "href": "slides/week-01/lecture-01.html#summary",
     "title": "Getting Started with Python",
     "section": "Summary",
-    "text": "Summary\n✅ Python is free, powerful, and the #1 language for data science\n✅ Jupyter Notebooks combine code, output, and explanatory text\n✅ Pyodide runs Python right in this browser — no install needed\n✅ Key libraries: numpy · pandas · matplotlib · statsmodels\n✅ Standard BODMAS order of operations applies in Python\n✅ Comments (#) make code readable — use them generously"
+    "text": "Summary\n✅ Python is free, powerful, and the #1 language for data science\n✅ Jupyter Notebooks combine code, output, and explanatory text\n✅ Python runs right in this browser — no install needed\n✅ Key libraries: numpy · pandas · matplotlib · statsmodels\n✅ Standard BODMAS order of operations applies in Python\n✅ Comments (#) make code readable — use them generously"
   },
   {
     "objectID": "slides/week-01/lecture-01.html#next-lecture",
