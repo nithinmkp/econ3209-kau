@@ -277,7 +277,7 @@
     "href": "slides/week-04/lecture-03.html#deriving-useful-indicators",
     "title": "Real Agricultural Data",
     "section": "Deriving Useful Indicators",
-    "text": "Deriving Useful Indicators\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nDerived indicators often communicate better than raw totals\nUnit conversion should be explicit and documented\nRatios can help compare districts of different sizes\nGood data cleaning leads naturally into useful feature creation"
+    "text": "Deriving Useful Indicators\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nDerived indicators often communicate better than raw totals\nUnit conversion should be explicit and documented\nRatios can help compare districts of different sizes when the units are labelled explicitly\nGood data cleaning leads naturally into useful feature creation"
   },
   {
     "objectID": "slides/week-04/lecture-03.html#a-basic-quality-checklist",
@@ -711,7 +711,7 @@
     "href": "slides/week-10/lecture-02.html#learning-outcomes",
     "title": "Interpretation of Coefficients",
     "section": "Learning Outcomes",
-    "text": "Learning Outcomes\nBy the end of this lecture, you will be able to:\n\ninterpret slopes in a multiple regression as partial effects\nuse ceteris paribus language for economic explanations\ndistinguish raw and standardized coefficients\ncompare R² and adjusted R² when regressors are added\navoid common mistakes when interpreting intercepts and dummy slopes"
+    "text": "Learning Outcomes\nBy the end of this lecture, you will be able to:\n\ninterpret slopes in a multiple regression as partial effects\nuse ceteris paribus language for economic explanations\ndistinguish raw and standardized coefficients\ncompare R² and adjusted R² when regressors are added\navoid common mistakes when interpreting intercepts and partial slopes"
   },
   {
     "objectID": "slides/week-10/lecture-02.html#what-does-a-coefficient-mean-in-mlr",
@@ -739,7 +739,7 @@
     "href": "slides/week-10/lecture-02.html#standardized-coefficients",
     "title": "Interpretation of Coefficients",
     "section": "Standardized Coefficients",
-    "text": "Standardized Coefficients\nA standardized coefficient asks: what happens to \\(Y\\) in standard deviation units when \\(X_j\\) changes by one standard deviation?\n\n\\[\\beta_j^{std}=\\hat\\beta_j\\left(\\frac{s_{X_j}}{s_Y}\night)\\] ight)$$\n\nUse standardized coefficients when: - regressors are measured in very different units - you want a rough comparison of relative importance\nDo not use them to replace substantive interpretation in original units."
+    "text": "Standardized Coefficients\nA standardized coefficient asks: what happens to \\(Y\\) in standard deviation units when \\(X_j\\) changes by one standard deviation?\n\n\\[\\hat{\\beta}_j^{std}=\\hat\\beta_j\\left(\\frac{s_{X_j}}{s_Y}\\right)\\]\n\nUse standardized coefficients when: - regressors are measured in very different units - you want a rough comparison of relative importance\nDo not use them to replace substantive interpretation in original units."
   },
   {
     "objectID": "slides/week-10/lecture-02.html#python-demo-fit-and-interpret-an-mlr",
@@ -754,6 +754,20 @@
     "title": "Interpretation of Coefficients",
     "section": "Python Demo: Standardize Variables",
     "text": "Python Demo: Standardize Variables\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "slides/week-10/lecture-02.html#r²-versus-adjusted-r²",
+    "href": "slides/week-10/lecture-02.html#r²-versus-adjusted-r²",
+    "title": "Interpretation of Coefficients",
+    "section": "R² versus Adjusted R²",
+    "text": "R² versus Adjusted R²\n\n\\[R^2 = 1 - \\frac{SSR}{SST}\\]\n\n\n\\(R^2\\) never falls when you add regressors.\nA useless regressor can still increase \\(R^2\\) slightly.\n\n\n\\[\\bar{R}^2 = 1 - \\frac{SSR/(n-k-1)}{SST/(n-1)}\\]\n\n\nAdjusted \\(R^2\\) penalizes adding weak regressors.\nIt is often more informative for comparing models with different numbers of covariates."
+  },
+  {
+    "objectID": "slides/week-10/lecture-02.html#python-demo-irrelevant-regressor-and-fit-measures",
+    "href": "slides/week-10/lecture-02.html#python-demo-irrelevant-regressor-and-fit-measures",
+    "title": "Interpretation of Coefficients",
+    "section": "Python Demo: Irrelevant Regressor and Fit Measures",
+    "text": "Python Demo: Irrelevant Regressor and Fit Measures\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "slides/week-10/lecture-02.html#python-demo-partial-effect-with-prediction-grid",
@@ -929,6 +943,13 @@
     "title": "Consequences of Multicollinearity",
     "section": "Python Demo: Low vs High Collinearity",
     "text": "Python Demo: Low vs High Collinearity\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "slides/week-11/lecture-02.html#python-demo-high-r²-with-weak-t-stats",
+    "href": "slides/week-11/lecture-02.html#python-demo-high-r²-with-weak-t-stats",
+    "title": "Consequences of Multicollinearity",
+    "section": "Python Demo: High R² with Weak t-Stats",
+    "text": "Python Demo: High R² with Weak t-Stats\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "slides/week-11/lecture-02.html#python-demo-coefficient-instability-across-samples",
@@ -2261,11 +2282,11 @@
     "text": "Visualising the fitted regression line\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
-    "objectID": "slides/week-07/lecture-03.html#matrix-intuition-and-geometry",
-    "href": "slides/week-07/lecture-03.html#matrix-intuition-and-geometry",
+    "objectID": "slides/week-07/lecture-03.html#geometric-interpretation-of-ols",
+    "href": "slides/week-07/lecture-03.html#geometric-interpretation-of-ols",
     "title": "Simple OLS Derivation",
-    "section": "Matrix intuition and geometry",
-    "text": "Matrix intuition and geometry\n\nOLS chooses the line with the smallest total squared vertical distance from the data points.\nIn simple regression, the fitted line summarises average linear association.\nThe slope tells us how \\(Y\\) changes when \\(X\\) increases by one unit.\nThe intercept is the predicted value when \\(X = 0\\).\nInterpretation must always respect the economic context and units."
+    "section": "Geometric interpretation of OLS",
+    "text": "Geometric interpretation of OLS\n\nOLS chooses the line with the smallest total squared vertical distance from the data points.\nIn simple regression, the fitted line summarises average linear association.\nThe slope tells us how \\(Y\\) changes when \\(X\\) increases by one unit.\nThe intercept is the predicted value when \\(X = 0\\).\nInterpretation must always respect the economic context and units."
   },
   {
     "objectID": "slides/week-07/lecture-03.html#estimating-the-same-model-with-statsmodels",
@@ -3077,7 +3098,7 @@
     "href": "slides/week-14/lecture-03.html#model-comparison-metrics",
     "title": "Python Curve Fitting",
     "section": "Model Comparison Metrics",
-    "text": "Model Comparison Metrics\n\n\\[AIC = n \\ln\\left(\\frac{SSE}{n}\night) + 2k\\] \\[BIC = n \\ln\\left(\\frac{SSE}{n}\night) + k\\ln(n)\\] \\[BIC = n \\ln\\left(\\frac{SSE}{n}\night) + k\\ln(n)\\]\n\nwhere \\(SSE\\) is the sum of squared errors and \\(k\\) is the number of estimated parameters."
+    "text": "Model Comparison Metrics\n\n\\[AIC = n \\ln\\left(\\frac{SSE}{n}\\right) + 2k\\] \\[BIC = n \\ln\\left(\\frac{SSE}{n}\\right) + k\\ln(n)\\]\n\nwhere \\(SSE\\) is the sum of squared errors and \\(k\\) is the number of estimated parameters."
   },
   {
     "objectID": "slides/week-14/lecture-03.html#example-curves",
@@ -3161,7 +3182,7 @@
     "href": "slides/week-14/lecture-03.html#next-lecture",
     "title": "Python Curve Fitting",
     "section": "Next Lecture",
-    "text": "Next Lecture\n\nCourse Next Step\nWe will cover: - review Weeks 10–14 as a connected block - see how these tools modify the basic OLS framework - prepare for later topics such as qualitative response and specification tests"
+    "text": "Next Lecture\n\nCourse Next Step\nWe will cover: - review Weeks 10–14 as a connected block - see how these tools modify the basic OLS framework - prepare for later topics such as qualitative response and specification tests - practice interpreting models, not just running code"
   },
   {
     "objectID": "slides/week-14/lecture-02.html#learning-outcomes",
@@ -3894,91 +3915,91 @@
   {
     "objectID": "slides/week-05/lecture-03.html#learning-outcomes",
     "href": "slides/week-05/lecture-03.html#learning-outcomes",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Learning Outcomes",
     "text": "Learning Outcomes\nBy the end of this lecture, you will be able to:\n\nBuild multi-panel plots with subplots()\nAdd formatting, annotations, and reference lines effectively\nSave figures for reports and assignments using savefig()\nApply simple design rules for publication-ready visuals\nUse live notebook-style plotting to refine figures interactively"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#what-makes-a-plot-interactive-in-class",
     "href": "slides/week-05/lecture-03.html#what-makes-a-plot-interactive-in-class",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "What Makes a Plot “Interactive” in Class?",
     "text": "What Makes a Plot “Interactive” in Class?\n\nIn this course, plots are interactive because you can edit code and rerun instantly\nSmall changes in colour, scale, or labels produce immediate visual feedback\nThis makes the notebook a laboratory for visual reasoning\nInteractivity helps students test economic storytelling choices\nPublication quality starts with iterative refinement"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#building-subplots",
     "href": "slides/week-05/lecture-03.html#building-subplots",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Building Subplots",
     "text": "Building Subplots\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nsubplots() creates multiple axes in one figure\nThis helps compare related series side by side\nShared formatting gives visual consistency\nMulti-panel plots are common in reports and presentations"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#formatting-for-readability",
     "href": "slides/week-05/lecture-03.html#formatting-for-readability",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Formatting for Readability",
     "text": "Formatting for Readability\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nFormatting choices shape how quickly an audience understands the figure\nRemove unnecessary visual noise when possible\nRotate crowded tick labels for readability\nUse consistent fonts, colours, and units across related figures"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#adding-reference-lines-and-annotations",
     "href": "slides/week-05/lecture-03.html#adding-reference-lines-and-annotations",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Adding Reference Lines and Annotations",
     "text": "Adding Reference Lines and Annotations\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nReference lines help compare data against targets or policy thresholds\nAnnotations can call attention to important events\nUse them sparingly so the plot remains uncluttered\nGood annotations direct the audience to the economic message"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#saving-figures",
     "href": "slides/week-05/lecture-03.html#saving-figures",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Saving Figures",
     "text": "Saving Figures\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nsavefig() exports figures for assignments and reports\ndpi=300 is a common standard for print-quality output\nbbox_inches=\"tight\" helps avoid clipped labels\nChoose meaningful file names so outputs stay organised"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#publication-ready-plot-checklist",
     "href": "slides/week-05/lecture-03.html#publication-ready-plot-checklist",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Publication-Ready Plot Checklist",
     "text": "Publication-Ready Plot Checklist\n\nClear title with economic meaning\nAxis labels include units\nColour palette is readable and consistent\nNo unnecessary 3D effects or distracting backgrounds\nFont sizes are large enough for projection and print\n\n\nPublication-ready does not mean “fancy”; it means accurate, readable, and audience-focused."
   },
   {
     "objectID": "slides/week-05/lecture-03.html#combining-several-design-choices",
     "href": "slides/week-05/lecture-03.html#combining-several-design-choices",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Combining Several Design Choices",
     "text": "Combining Several Design Choices\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nThis figure combines labels, grid control, colour consistency, and a clean legend\nThe message is comparative change over time\nEvery design choice should support that message\nGood figures are built through iteration, not by chance"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#when-to-use-multi-panel-vs-single-panel-plots",
     "href": "slides/week-05/lecture-03.html#when-to-use-multi-panel-vs-single-panel-plots",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "When to Use Multi-Panel vs Single-Panel Plots",
     "text": "When to Use Multi-Panel vs Single-Panel Plots\n\nMulti-Panel Helps When\n\nVariables have different scales\nYou want side-by-side comparison\nSeveral related stories belong together\n\nSingle-Panel Helps When\n\nOne message is central\nComparison can be shown clearly in one axes\nThe audience needs a quick takeaway"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#common-presentation-mistakes",
     "href": "slides/week-05/lecture-03.html#common-presentation-mistakes",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Common Presentation Mistakes",
     "text": "Common Presentation Mistakes\n\nToo many colours with no meaning\nTiny labels that are unreadable in class\nOverlapping text and crowded legends\nMixing different units without explanation\nSaving low-resolution images for final reports\n\n\nA figure should survive three tests: readable on screen, readable in print, and interpretable without the speaker talking over it."
   },
   {
     "objectID": "slides/week-05/lecture-03.html#exercise",
     "href": "slides/week-05/lecture-03.html#exercise",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Exercise",
     "text": "Exercise\n\nCreate a two-panel figure:\n\nLeft panel: a line plot of deposits over four years.\nRight panel: a line plot of loans over the same years.\nAdd titles and call plt.tight_layout() before plt.show().\n\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "slides/week-05/lecture-03.html#summary",
     "href": "slides/week-05/lecture-03.html#summary",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Summary",
     "text": "Summary\n\n✅ Live plotting becomes interactive when you edit and rerun code quickly\n✅ subplots() helps organise related charts in one figure\n✅ Formatting, annotations, and reference lines strengthen interpretation\n✅ savefig() exports figures for assignments and reports\n✅ Publication-ready figures prioritise clarity over decoration\n✅ Strong visuals make econometric arguments easier to follow"
   },
   {
     "objectID": "slides/week-05/lecture-03.html#next-lecture",
     "href": "slides/week-05/lecture-03.html#next-lecture",
-    "title": "Interactive Plots & Publication-Ready Figures",
+    "title": "Plot Refinement & Publication-Ready Figures",
     "section": "Next Lecture",
     "text": "Next Lecture\nLooking Ahead\n\nIn the next block of the course we will begin statistical modelling and inference\nThe coding and plotting foundations from Weeks 1–5 will now support regression-based analysis\nKeep practicing with the live Pyodide cells before we move onward"
   },
@@ -4463,7 +4484,7 @@
     "href": "slides/week-18/lecture-01.html#exercise",
     "title": "Autocorrelation: Nature & Causes",
     "section": "Exercise",
-    "text": "Exercise\n\nSimulate an AR(1) series with $ ho=0.5$ and compare its lag-1 autocorrelation with a white-noise series. Which series looks smoother, and why? ho=0.5$ and compare its lag-1 autocorrelation with a white-noise series. Which series looks smoother, and why?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+    "text": "Exercise\n\nSimulate an AR(1) series with \\(\\rho=0.5\\) and compare its lag-1 autocorrelation with a white-noise series. Which series looks smoother, and why?\n\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
     "objectID": "slides/week-18/lecture-01.html#summary",
@@ -4634,11 +4655,11 @@
     "text": "Python Demo: Estimate a Log-Log Model\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
-    "objectID": "slides/week-14/lecture-01.html#python-demo-compare-log-log-log-lin-and-lin-log",
-    "href": "slides/week-14/lecture-01.html#python-demo-compare-log-log-log-lin-and-lin-log",
+    "objectID": "slides/week-14/lecture-01.html#python-demo-compare-functional-forms-on-the-original-income-scale",
+    "href": "slides/week-14/lecture-01.html#python-demo-compare-functional-forms-on-the-original-income-scale",
     "title": "Log & Polynomial Models",
-    "section": "Python Demo: Compare Log-Log, Log-Lin, and Lin-Log",
-    "text": "Python Demo: Compare Log-Log, Log-Lin, and Lin-Log\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+    "section": "Python Demo: Compare Functional Forms on the Original Income Scale",
+    "text": "Python Demo: Compare Functional Forms on the Original Income Scale\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n\nAIC and BIC are directly comparable only when the dependent variable is the same across models.\nHere we compare fitted values on the original income scale instead."
   },
   {
     "objectID": "slides/week-14/lecture-01.html#python-demo-quadratic-fertilizer-response",
@@ -6031,7 +6052,7 @@
     "href": "slides/week-10/lecture-01.html#key-assumptions-behind-mlr-estimation",
     "title": "MLR Setup & Estimation",
     "section": "Key Assumptions Behind MLR Estimation",
-    "text": "Key Assumptions Behind MLR Estimation\n\nLinearity in parameters: the model is linear in the unknown coefficients.\nRandom sampling: observations are drawn from the relevant population.\nNo perfect multicollinearity: no regressor is an exact linear combination of the others.\nZero conditional mean: \\(E(\\varepsilon_i \\mid X_{1i},\\ldots,X_{ki})=0\\).\n\n\nUnder these conditions, OLS is unbiased. Later lectures add homoskedasticity and normality when we discuss inference."
+    "text": "Key Assumptions Behind MLR Estimation\n\nLinearity in parameters: the model is linear in the unknown coefficients.\nRandom sampling: observations are drawn from the relevant population.\nNo perfect multicollinearity: no regressor is an exact linear combination of the others.\nZero conditional mean: \\(E(\\varepsilon_i \\mid X_{1i},\\ldots,X_{ki})=0\\).\n\n\nUnder these conditions, OLS is unbiased. For multiple-regression inference, we later revisit homoskedasticity and normality in the MLR setting."
   },
   {
     "objectID": "slides/week-10/lecture-01.html#python-demo-nested-models-and-fit",

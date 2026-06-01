@@ -398,7 +398,7 @@
   }
 
   // Store cell data
-  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(123)\nn = 100\ndf = pd.DataFrame({\n    'income': np.random.uniform(12, 40, n),\n    'collateral': np.random.uniform(1, 15, n),\n    'loan_size': np.random.uniform(30, 180, n)\n})\ne = np.random.normal(0, 2.5, n)\ndf['repayment_score'] = 65 + 0.9*df['income'] + 1.4*df['collateral'] - 0.08*df['loan_size'] + e\n\nmodel = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()\nprint(model.params.round(4))","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"        z = (df - df.mean()) / df.std(ddof=0)\n        z_model = smf.ols('repayment_score ~ income + collateral + loan_size', data=z).fit()\n        print('Raw coefficients:')\n        print(model.params.round(4))\n        print('\nStandardized coefficients:')\n        print(z_model.params.round(4))\n        ```\n\n---\n\n## R² versus Adjusted R²\n\n::: {.formula}\n$$R^2 = 1 - \\frac{SSR}{SST}$$\n:::\n\n- $R^2$ never falls when you add regressors.\n- A useless regressor can still increase $R^2$ slightly.\n\n::: {.formula}\n$$\\bar{R}^2 = 1 - \\frac{SSR/(n-k-1)}{SST/(n-1)}$$\n:::\n\n- Adjusted $R^2$ penalizes adding weak regressors.\n- It is often more informative for comparing models with different numbers of covariates.\n\n---\n\n## Python Demo: Irrelevant Regressor and Fit Measures\n\n```{pyodide-python}\ndf['noise'] = np.random.normal(0, 1, n)\nmodel_noise = smf.ols('repayment_score ~ income + collateral + loan_size + noise', data=df).fit()\n\ncompare = pd.DataFrame({\n    'model': ['baseline', 'with noise'],\n    'R2': [model.rsquared, model_noise.rsquared],\n    'Adj_R2': [model.rsquared_adj, model_noise.rsquared_adj]\n})\nprint(compare.round(4))","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')\nimport matplotlib.pyplot as plt\n\ngrid = pd.DataFrame({\n    'income': np.linspace(df['income'].min(), df['income'].max(), 40),\n    'collateral': df['collateral'].mean(),\n    'loan_size': df['loan_size'].mean()\n})\ngrid['pred'] = model.predict(grid)\n\nplt.figure(figsize=(7, 4))\nplt.scatter(df['income'], df['repayment_score'], alpha=0.5)\nplt.plot(grid['income'], grid['pred'], color='darkgreen', linewidth=2)\nplt.xlabel('Income (₹ thousand per month)')\nplt.ylabel('Predicted repayment score')\nplt.title('Partial effect of income, holding others fixed')\nplt.show()","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(321)\nn = 90\ndf = pd.DataFrame({\n    'income': np.random.uniform(10, 35, n),\n    'collateral': np.random.uniform(1, 12, n),\n    'loan_size': np.random.uniform(40, 160, n)\n})\n\n# Create your own outcome and estimate a model\n# df['repayment_score'] = ...\n# model = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(123)\nn = 100\ndf = pd.DataFrame({\n    'income': np.random.uniform(12, 40, n),\n    'collateral': np.random.uniform(1, 15, n),\n    'loan_size': np.random.uniform(30, 180, n)\n})\ne = np.random.normal(0, 2.5, n)\ndf['repayment_score'] = 65 + 0.9*df['income'] + 1.4*df['collateral'] - 0.08*df['loan_size'] + e\n\nmodel = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()\nprint(model.params.round(4))","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"z = (df - df.mean()) / df.std(ddof=0)\nz_model = smf.ols('repayment_score ~ income + collateral + loan_size', data=z).fit()\nprint('Raw coefficients:')\nprint(model.params.round(4))\nprint('\\nStandardized coefficients:')\nprint(z_model.params.round(4))","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"df['noise'] = np.random.normal(0, 1, n)\nmodel_noise = smf.ols('repayment_score ~ income + collateral + loan_size + noise', data=df).fit()\n\ncompare = pd.DataFrame({\n    'model': ['baseline', 'with noise'],\n    'R2': [model.rsquared, model_noise.rsquared],\n    'Adj_R2': [model.rsquared_adj, model_noise.rsquared_adj]\n})\nprint(compare.round(4))","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import matplotlib; matplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')\nimport matplotlib.pyplot as plt\n\ngrid = pd.DataFrame({\n    'income': np.linspace(df['income'].min(), df['income'].max(), 40),\n    'collateral': df['collateral'].mean(),\n    'loan_size': df['loan_size'].mean()\n})\ngrid['pred'] = model.predict(grid)\n\nplt.figure(figsize=(7, 4))\nplt.scatter(df['income'], df['repayment_score'], alpha=0.5)\nplt.plot(grid['income'], grid['pred'], color='darkgreen', linewidth=2)\nplt.xlabel('Income (₹ thousand per month)')\nplt.ylabel('Predicted repayment score')\nplt.title('Partial effect of income, holding others fixed')\nplt.show()","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(321)\nn = 90\ndf = pd.DataFrame({\n    'income': np.random.uniform(10, 35, n),\n    'collateral': np.random.uniform(1, 12, n),\n    'loan_size': np.random.uniform(40, 160, n)\n})\n\n# Create your own outcome and estimate a model\n# df['repayment_score'] = ...\n# model = smf.ols('repayment_score ~ income + collateral + loan_size', data=df).fit()","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
   </script>
@@ -628,7 +628,7 @@ Department of Development Economics, KAU
 <li>use ceteris paribus language for economic explanations</li>
 <li>distinguish raw and standardized coefficients</li>
 <li>compare R² and adjusted R² when regressors are added</li>
-<li>avoid common mistakes when interpreting intercepts and dummy slopes</li>
+<li>avoid common mistakes when interpreting intercepts and partial slopes</li>
 </ol>
 </section>
 <section id="what-does-a-coefficient-mean-in-mlr" class="slide level2">
@@ -677,8 +677,7 @@ Department of Development Economics, KAU
 <h2>Standardized Coefficients</h2>
 <p>A standardized coefficient asks: what happens to <span class="math inline">\(Y\)</span> in <strong>standard deviation units</strong> when <span class="math inline">\(X_j\)</span> changes by one standard deviation?</p>
 <div class="formula">
-<p><span class="math display">\[\beta_j^{std}=\hat\beta_j\left(\frac{s_{X_j}}{s_Y}
-ight)\]</span> ight)$$</p>
+<p><span class="math display">\[\hat{\beta}_j^{std}=\hat\beta_j\left(\frac{s_{X_j}}{s_Y}\right)\]</span></p>
 </div>
 <p>Use standardized coefficients when: - regressors are measured in very different units - you want a rough comparison of relative importance</p>
 <p>Do <strong>not</strong> use them to replace substantive interpretation in original units.</p>
@@ -693,9 +692,31 @@ ight)\]</span> ight)$$</p>
 <div id="qpyodide-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
+<section id="r²-versus-adjusted-r²" class="slide level2">
+<h2>R² versus Adjusted R²</h2>
+<div class="formula">
+<p><span class="math display">\[R^2 = 1 - \frac{SSR}{SST}\]</span></p>
+</div>
+<ul>
+<li><span class="math inline">\(R^2\)</span> never falls when you add regressors.</li>
+<li>A useless regressor can still increase <span class="math inline">\(R^2\)</span> slightly.</li>
+</ul>
+<div class="formula">
+<p><span class="math display">\[\bar{R}^2 = 1 - \frac{SSR/(n-k-1)}{SST/(n-1)}\]</span></p>
+</div>
+<ul>
+<li>Adjusted <span class="math inline">\(R^2\)</span> penalizes adding weak regressors.</li>
+<li>It is often more informative for comparing models with different numbers of covariates.</li>
+</ul>
+</section>
+<section id="python-demo-irrelevant-regressor-and-fit-measures" class="slide level2">
+<h2>Python Demo: Irrelevant Regressor and Fit Measures</h2>
+<div id="qpyodide-insertion-location-3"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
 <section id="python-demo-partial-effect-with-prediction-grid" class="slide level2">
 <h2>Python Demo: Partial Effect with Prediction Grid</h2>
-<div id="qpyodide-insertion-location-3"></div>
+<div id="qpyodide-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="common-interpretation-mistakes" class="slide level2">
@@ -721,7 +742,7 @@ ight)\]</span> ight)$$</p>
 <li>Add a random noise variable and report the change in <span class="math inline">\(R^2\)</span> and adjusted <span class="math inline">\(R^2\)</span>.</li>
 </ol>
 </div>
-<div id="qpyodide-insertion-location-4"></div>
+<div id="qpyodide-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="summary" class="slide level2" data-background-color="#1A3300">
@@ -737,9 +758,9 @@ ight)\]</span> ight)$$</p>
 <div class="highlight-box">
 <p><strong>Lecture 3 — Partial Effects in Python</strong></p>
 <p>We will cover: - building MLR models in statsmodels - reading every part of the summary table - plotting partial effects - computing scenario-based marginal effects</p>
-
-
 </div>
+
+
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
