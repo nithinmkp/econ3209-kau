@@ -56,6 +56,11 @@ format:
             opacity: 0.4 !important;
             visibility: visible !important;
           }
+          /* Hide up/down arrows — horizontal navigation only */
+          .reveal .controls .navigate-up,
+          .reveal .controls .navigate-down {
+            display: none !important;
+          }
           .reveal .controls button:hover {
             color: #DAB300 !important;
             opacity: 1 !important;
