@@ -171,6 +171,42 @@
       height: 45px; width: auto; z-index: 1000;
       pointer-events: none;
     }
+    /* Forward/back navigation arrows — ensure both always visible */
+    .reveal .controls button {
+      color: #7AB87A !important;
+      opacity: 0.8 !important;
+    }
+    .reveal .controls button:hover {
+      color: #DAB300 !important;
+      opacity: 1 !important;
+    }
+    .reveal .controls button.enabled {
+      opacity: 1 !important;
+    }
+    /* Home button */
+    #kau-home-btn {
+      position: fixed;
+      bottom: 14px; left: 14px;
+      z-index: 1000;
+      background: #1A3300;
+      color: #DAB300;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 1.1em;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75em;
+      letter-spacing: 0.03em;
+      opacity: 0.85;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    #kau-home-btn:hover {
+      background: #3D6B3A;
+      opacity: 1;
+    }
     /* ── Pyodide output text — key fix ── */
     /* White background, blue text */
     .reveal pre div code.qpyodide-output-code-stdout,
@@ -255,6 +291,13 @@
       img.src = '../../assets/kau-logo.jpg';
       img.alt = 'KAU';
       document.body.appendChild(img);
+      // Home button
+      var btn = document.createElement('a');
+      btn.id = 'kau-home-btn';
+      btn.href = 'https://nithinmkp.github.io/econ3209-kau/';
+      btn.title = 'Course Home';
+      btn.innerHTML = '<i class="fa fa-house"></i> Course Home';
+      document.body.appendChild(btn);
       // Set Monaco editor to dark theme once it loads
       function applyMonacoDark() {
         if (typeof monaco !== 'undefined' && monaco.editor) {
@@ -368,7 +411,7 @@
 
         // Visibility rule for backwards navigation arrows; "faded", "hidden"
         // or "visible"
-        controlsBackArrows: 'faded',
+        controlsBackArrows: 'visible',
 
         // Display a presentation progress bar
         progress: true,
@@ -736,7 +779,7 @@ Topic
 </thead>
 <tbody class="list">
 
-<tr data-index="0" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780287992751" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1064" data-listing-title-sort="Getting Started with Python" data-listing-filename-sort="lecture-01.qmd">
+<tr data-index="0" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780314689390" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1064" data-listing-title-sort="Getting Started with Python" data-listing-filename-sort="lecture-01.qmd">
 <td>
 <a href="../../slides/week-01/lecture-01.html" class="title listing-title">Getting Started with Python</a>
 </td>
@@ -746,7 +789,7 @@ Topic
 
 </tr>
 
-<tr data-index="1" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780287992751" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1710" data-listing-title-sort="Operators &amp; Expressions" data-listing-filename-sort="lecture-03.qmd">
+<tr data-index="1" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780314689390" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1710" data-listing-title-sort="Operators &amp; Expressions" data-listing-filename-sort="lecture-03.qmd">
 <td>
 <a href="../../slides/week-01/lecture-03.html" class="title listing-title">Operators &amp; Expressions</a>
 </td>
@@ -756,7 +799,7 @@ Topic
 
 </tr>
 
-<tr data-index="2" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780287992751" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1649" data-listing-title-sort="Variables &amp; Data Types" data-listing-filename-sort="lecture-02.qmd">
+<tr data-index="2" data-listing-date-sort="1788220800000" data-listing-file-modified-sort="1780314689390" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1649" data-listing-title-sort="Variables &amp; Data Types" data-listing-filename-sort="lecture-02.qmd">
 <td>
 <a href="../../slides/week-01/lecture-02.html" class="title listing-title">Variables &amp; Data Types</a>
 </td>
