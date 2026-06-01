@@ -46,7 +46,7 @@ $$P(Y_i=1|X_i)=\Phi(\beta_0+\beta_1X_{1i}+\cdots+\beta_kX_{ki})$$
 
 - In applied econometrics, **statsmodels** is preferred when you want coefficients, standard errors, hypothesis tests, and marginal effects.
 - In machine learning workflows, **scikit-learn** focuses on prediction pipelines and classification accuracy.
-- In this browser-based course, Pyodide gives us **statsmodels**, so that is our main tool for probit.
+- In this browser-based course, **statsmodels** is our main tool for probit.
 - The econometric logic remains the same even if software differs.
 
 ---
@@ -299,7 +299,7 @@ print("Logit:", logit_model.predict(case))
 - ✅ Probit uses the normal CDF and logit uses the logistic CDF, but both usually tell a similar story.
 - ✅ Raw coefficients should not be compared across models without caution because scales differ.
 - ✅ Predicted probabilities, marginal effects, ROC curves, and AUC are more useful for interpretation.
-- ✅ In Pyodide, statsmodels is the main tool for binary econometric models.
+- ✅ statsmodels is the main tool for binary econometric models in this course.
 
 ---
 

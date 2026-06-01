@@ -272,7 +272,7 @@ print(smf.ols('productivity ~ fertilizer + rainfall + C(district)', data=df).fit
 ::: {.highlight-box}
 - We study random effects and the Hausman test.
 - You will see when a random-effects assumption is plausible and how to compare FE with RE.
-- Because Pyodide lacks linearmodels, we will implement the logic manually.
+- We implement the fixed-effects logic manually using standard numpy and statsmodels.
 :::
 
 

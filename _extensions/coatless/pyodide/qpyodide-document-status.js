@@ -56,7 +56,7 @@ function qpyodideDisplayStartupMessage(showStartupMessage) {
   const secondInnerDiv = document.createElement("div");
   secondInnerDiv.setAttribute("id", "qpyodide-status-message-title");
   secondInnerDiv.classList.add("quarto-title-meta-heading");
-  secondInnerDiv.innerText = "Pyodide Status";
+  secondInnerDiv.innerText = "Python Status";
 
   // Create another inner div for contents
   const secondInnerDivContents = document.createElement("div");

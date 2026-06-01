@@ -270,7 +270,7 @@ plt.show()
 
 - In the next block of the course we will begin statistical modelling and inference
 - The coding and plotting foundations from Weeks 1–5 will now support regression-based analysis
-- Keep practicing with the live Pyodide cells before we move onward
+- Keep practicing with the live interactive cells before we move onward
 
 
 

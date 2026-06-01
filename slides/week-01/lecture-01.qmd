@@ -258,7 +258,7 @@ For **Google Colab** (no install): [colab.research.google.com](https://colab.res
 
 ::: {.callout-tip}
 ## In Lectures
-All slide decks use **Pyodide** — Python runs directly in your browser. No setup needed for class.
+All slide decks run Python directly in your browser. No setup needed for class.
 :::
 
 ---
@@ -292,7 +292,7 @@ print("Your name here — 6th Semester")
 
 ✅ **Jupyter Notebooks** combine code, output, and explanatory text
 
-✅ **Pyodide** runs Python right in this browser — no install needed
+✅ Python runs right in this browser — no install needed
 
 ✅ Key libraries: `numpy` · `pandas` · `matplotlib` · `statsmodels`
 

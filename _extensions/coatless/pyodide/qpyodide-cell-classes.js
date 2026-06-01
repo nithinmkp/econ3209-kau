@@ -150,7 +150,7 @@ class InteractiveCell extends BaseCell {
         runCodeButton.disabled = true;
         runCodeButton.type = 'button';
         runCodeButton.id = `qpyodide-button-run-${this.id}`;
-        runCodeButton.textContent = '🟡 Loading Pyodide...';
+        runCodeButton.textContent = '🟡 Loading...';
         runCodeButton.title = `Run code (Shift + Enter)`;
 
         // Append buttons to the leftButtonsDiv
