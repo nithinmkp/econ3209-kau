@@ -753,6 +753,26 @@ Department of Development Economics, KAU
 <li>But it makes the usual standard errors unreliable.</li>
 </ul>
 </section>
+<section id="assumption-6-correct-specification" class="slide level2">
+<h2>Assumption 6: correct specification</h2>
+<ul>
+<li>The model should include the relevant variables in the right functional form.</li>
+<li>Omitting important regressors or adding badly chosen irrelevant terms can distort interpretation.</li>
+<li>Example: a fertilizer-yield model that ignores irrigation quality may be misspecified.</li>
+<li>Correct specification supports both unbiased estimation and meaningful policy interpretation.</li>
+</ul>
+</section>
+<section id="assumption-7-normality" class="slide level2">
+<h2>Assumption 7: normality</h2>
+<div class="formula">
+<p><span class="math display">\[u_i \mid X_i \sim N(0, \sigma^2)\]</span></p>
+</div>
+<ul>
+<li>Normality is especially useful for exact <strong>t</strong> and <strong>F</strong> tests in small samples.</li>
+<li>In large samples, the central limit theorem often gives approximate normal inference even when errors are not perfectly normal.</li>
+<li>So normality matters most when the sample is limited and we want precise finite-sample inference.</li>
+</ul>
+</section>
 <section id="what-does-blue-mean" class="slide level2">
 <h2>What does BLUE mean?</h2>
 <ul>
@@ -815,7 +835,7 @@ Department of Development Economics, KAU
 <h2>Summary</h2>
 <ul>
 <li>✅ The Gauss-Markov theorem relies on the CLR assumptions.</li>
-<li>✅ The five core assumptions are linearity, random sampling, variation/no perfect collinearity, zero conditional mean, and homoskedasticity.</li>
+<li>✅ The core assumptions now include linearity, random sampling, variation/no perfect collinearity, zero conditional mean, homoskedasticity, correct specification, and normality for small-sample inference.</li>
 <li>✅ Under these assumptions, OLS is BLUE.</li>
 <li>✅ Zero conditional mean is central for unbiasedness.</li>
 <li>✅ Heteroskedasticity affects standard errors more than coefficients.</li>

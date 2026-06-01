@@ -456,7 +456,7 @@
   }
 
   // Store cell data
-  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\n\nx = np.array([50, 70, 90, 110, 130], dtype=float)\ny = np.array([42, 46, 51, 57, 63], dtype=float)\n\nbeta1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\nbeta0 = y.mean() - beta1 * x.mean()\n\nprint('beta0 =', round(beta0, 4))\nprint('beta1 =', round(beta1, 4))","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import matplotlib\nmatplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')\nimport matplotlib.pyplot as plt\n\nfitted = beta0 + beta1 * x\n\nplt.figure(figsize=(7, 4))\nplt.scatter(x, y, color='darkgreen', label='Observed data')\nplt.plot(x, fitted, color='goldenrod', label='OLS line')\nplt.xlabel('Fertilizer use')\nplt.ylabel('Rice yield')\nplt.title('Simple OLS fit')\nplt.legend()\nplt.show()","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import statsmodels.formula.api as smf\n\nreg_df = pd.DataFrame({'fertilizer': x, 'yield_': y})\nmodel = smf.ols('yield_ ~ fertilizer', data=reg_df).fit()\nprint(model.params)","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"reg_df['fitted'] = model.fittedvalues\nreg_df['residual'] = model.resid\nssr = np.sum(reg_df['residual'] ** 2)\n\nprint(reg_df)\nprint('\\nSSR =', round(ssr, 4))","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\n\n# Your code below","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\n\nx = np.array([2, 3, 5, 4, 6], dtype=float)\ny = np.array([1, 2, 3, 4, 5], dtype=float)\n\nbeta1_hat = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\nbeta0_hat = y.mean() - beta1_hat * x.mean()\n\nprint('x-bar =', x.mean())\nprint('y-bar =', y.mean())\nprint('beta1_hat =', beta1_hat)\nprint('beta0_hat =', beta0_hat)","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\n\nx = np.array([50, 70, 90, 110, 130], dtype=float)\ny = np.array([42, 46, 51, 57, 63], dtype=float)\n\nbeta1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\nbeta0 = y.mean() - beta1 * x.mean()\n\nprint('beta0 =', round(beta0, 4))\nprint('beta1 =', round(beta1, 4))","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import matplotlib\nmatplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')\nimport matplotlib.pyplot as plt\n\nfitted = beta0 + beta1 * x\n\nplt.figure(figsize=(7, 4))\nplt.scatter(x, y, color='darkgreen', label='Observed data')\nplt.plot(x, fitted, color='goldenrod', label='OLS line')\nplt.xlabel('Fertilizer use')\nplt.ylabel('Rice yield')\nplt.title('Simple OLS fit')\nplt.legend()\nplt.show()","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import statsmodels.formula.api as smf\n\nreg_df = pd.DataFrame({'fertilizer': x, 'yield_': y})\nmodel = smf.ols('yield_ ~ fertilizer', data=reg_df).fit()\nprint(model.params)","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"reg_df['fitted'] = model.fittedvalues\nreg_df['residual'] = model.resid\nssr = np.sum(reg_df['residual'] ** 2)\n\nprint(reg_df)\nprint('\\nSSR =', round(ssr, 4))","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\n\n# Your code below","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
   </script>
@@ -714,6 +714,19 @@ Department of Development Economics, KAU
 <li>That sense is minimising squared residuals.</li>
 </ul>
 </section>
+<section id="prf-versus-srf-population-and-sample" class="slide level2">
+<h2>PRF versus SRF: population and sample</h2>
+<div class="formula">
+<p><span class="math display">\[\text{PRF: } Y_i = \beta_0 + \beta_1 X_i + \mu_i\]</span></p>
+<p><span class="math display">\[\text{SRF: } \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i\]</span></p>
+<p><span class="math display">\[Y_i = \hat{Y}_i + \hat{u}_i\]</span></p>
+</div>
+<ul>
+<li>The <strong>PRF</strong> describes the population relationship with unknown parameters and an unobserved disturbance <span class="math inline">\(\mu_i\)</span>.</li>
+<li>The <strong>SRF</strong> is the fitted sample line built from estimated coefficients <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>.</li>
+<li>Residuals <span class="math inline">\(\hat{u}_i\)</span> are sample estimates of unexplained variation.</li>
+</ul>
+</section>
 <section id="residuals-and-the-objective-function" class="slide level2">
 <h2>Residuals and the objective function</h2>
 <ul>
@@ -755,14 +768,110 @@ Department of Development Economics, KAU
 <li>The intercept ensures the line goes through <span class="math inline">\((\bar{X}, \bar{Y})\)</span>.</li>
 </ul>
 </section>
+<section id="rss-minimisation-and-first-order-conditions" class="slide level2">
+<h2>RSS minimisation and first-order conditions</h2>
+<div class="formula">
+<p><span class="math display">\[RSS = \sum_{i=1}^{n}\hat{u}_i^2 = \sum_{i=1}^{n}(Y_i - \hat{\beta}_0 - \hat{\beta}_1 X_i)^2 \rightarrow \min\]</span></p>
+<p><span class="math display">\[\frac{\partial RSS}{\partial \hat{\beta}_0} = 0 \qquad \frac{\partial RSS}{\partial \hat{\beta}_1} = 0\]</span></p>
+</div>
+<ul>
+<li>OLS chooses the coefficient values that make the residual sum of squares as small as possible.</li>
+<li>These first-order conditions generate the normal equations used to solve for <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>.</li>
+</ul>
+</section>
+<section id="manual-ols-calculation-with-five-observations" class="slide level2">
+<h2>Manual OLS calculation with five observations</h2>
+<p>Let <span class="math inline">\(\bar{x}=4\)</span> and <span class="math inline">\(\bar{y}=3\)</span>.</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(y_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(x_i\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((x_i-\bar{x})^2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\((x_i-\bar{x})(y_i-\bar{y})\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;"><strong>Sum</strong></td>
+<td style="text-align: right;"><strong>15</strong></td>
+<td style="text-align: right;"><strong>20</strong></td>
+<td style="text-align: right;"><strong>10</strong></td>
+<td style="text-align: right;"><strong>9</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Therefore, <span class="math display">\[\hat{\beta}_1 = \frac{9}{10} = 0.9\]</span></li>
+<li>And <span class="math display">\[\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x} = 3 - 0.9(4) = 0.6\]</span></li>
+</ul>
+</section>
+<section id="verifying-the-manual-calculation-in-python" class="slide level2">
+<h2>Verifying the manual calculation in Python</h2>
+<div id="qpyodide-insertion-location-1"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="matrix-form-of-ols" class="slide level2">
+<h2>Matrix form of OLS</h2>
+<div class="formula">
+<p><span class="math display">\[\hat{\beta} = (X'X)^{-1}X'Y\]</span></p>
+</div>
+<ul>
+<li>In simple regression, the first column of <span class="math inline">\(X\)</span> is a column of ones and the second column is the regressor values.</li>
+<li>This compact matrix formula extends naturally to multiple regression.</li>
+</ul>
+</section>
 <section id="computing-ols-by-hand-in-python" class="slide level2">
 <h2>Computing OLS by hand in Python</h2>
-<div id="qpyodide-insertion-location-1"></div>
+<div id="qpyodide-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="visualising-the-fitted-regression-line" class="slide level2">
 <h2>Visualising the fitted regression line</h2>
-<div id="qpyodide-insertion-location-2"></div>
+<div id="qpyodide-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="geometric-interpretation-of-ols" class="slide level2">
@@ -777,12 +886,12 @@ Department of Development Economics, KAU
 </section>
 <section id="estimating-the-same-model-with-statsmodels" class="slide level2">
 <h2>Estimating the same model with statsmodels</h2>
-<div id="qpyodide-insertion-location-3"></div>
+<div id="qpyodide-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="residuals-and-fit-quality" class="slide level2">
 <h2>Residuals and fit quality</h2>
-<div id="qpyodide-insertion-location-4"></div>
+<div id="qpyodide-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="interpreting-coefficients-in-context" class="slide level2">
@@ -800,7 +909,7 @@ Department of Development Economics, KAU
 <div class="gold-box">
 <p>Use the arrays <code>x = [10, 20, 30, 40]</code> and <code>y = [15, 18, 23, 27]</code> to compute <span class="math inline">\(\hat{\beta}_1\)</span> and <span class="math inline">\(\hat{\beta}_0\)</span> manually. Then print the fitted values.</p>
 </div>
-<div id="qpyodide-insertion-location-5"></div>
+<div id="qpyodide-insertion-location-6"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="summary" class="slide level2" data-background-color="#1A3300">

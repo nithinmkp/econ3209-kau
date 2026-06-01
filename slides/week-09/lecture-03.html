@@ -456,7 +456,7 @@
   }
 
   // Store cell data
-  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(42)\nn = 80\nfertilizer = np.random.uniform(50, 200, n)\nrainfall = np.random.uniform(800, 1800, n)\nlabour = np.random.uniform(20, 60, n)\nyield_ = 12 + 0.12 * fertilizer + 0.01 * rainfall + 0.25 * labour + np.random.normal(0, 6, n)\n\ndf = pd.DataFrame({'yield_': yield_, 'fertilizer': fertilizer, 'rainfall': rainfall, 'labour': labour})\nmodel = smf.ols('yield_ ~ fertilizer + rainfall + labour', data=df).fit()\nprint(model.summary())","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"test_fert = model.t_test('fertilizer = 0')\nprint(test_fert)","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"joint_test = model.f_test('fertilizer = 0, rainfall = 0')\nprint(joint_test)","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"restricted = smf.ols('yield_ ~ labour', data=df).fit()\nprint('Unrestricted R-squared:', round(model.rsquared, 4))\nprint('Restricted R-squared  :', round(restricted.rsquared, 4))\nprint('Model F-statistic     :', round(model.fvalue, 4))\nprint('Model F p-value       :', model.f_pvalue)","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"print('t statistic for fertilizer:', model.tvalues['fertilizer'])\nprint('p-value for fertilizer    :', model.pvalues['fertilizer'])\nprint('Overall model F-statistic :', model.fvalue)\nprint('Overall model F p-value   :', model.f_pvalue)","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\n# Your code below","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(42)\nn = 80\nprice = np.random.uniform(18, 32, n)\nrainfall = np.random.uniform(900, 2400, n)\nrainfall_sq = rainfall ** 2\nprocurement = 120 + 6 * price + 0.08 * rainfall - 0.00002 * rainfall_sq + np.random.normal(0, 35, n)\n\ndf_proc = pd.DataFrame({\n    'procurement': procurement,\n    'price': price,\n    'rainfall': rainfall,\n    'rainfall_sq': rainfall_sq,\n})\n\nunrestricted = smf.ols('procurement ~ price + rainfall + rainfall_sq', data=df_proc).fit()\nrestricted = smf.ols('procurement ~ price', data=df_proc).fit()\n\nrss_u = np.sum(unrestricted.resid ** 2)\nrss_r = np.sum(restricted.resid ** 2)\nJ = 2\nN = len(df_proc)\nK = len(unrestricted.params)\nf_manual = ((rss_r - rss_u) / J) / (rss_u / (N - K))\n\nprint('Manual F statistic =', round(f_manual, 4))\nprint(unrestricted.f_test('rainfall = 0, rainfall_sq = 0'))","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nnp.random.seed(42)\nn = 80\nfertilizer = np.random.uniform(50, 200, n)\nrainfall = np.random.uniform(800, 1800, n)\nlabour = np.random.uniform(20, 60, n)\nyield_ = 12 + 0.12 * fertilizer + 0.01 * rainfall + 0.25 * labour + np.random.normal(0, 6, n)\n\ndf = pd.DataFrame({'yield_': yield_, 'fertilizer': fertilizer, 'rainfall': rainfall, 'labour': labour})\nmodel = smf.ols('yield_ ~ fertilizer + rainfall + labour', data=df).fit()\nprint(model.summary())","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"test_fert = model.t_test('fertilizer = 0')\nprint(test_fert)","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"joint_test = model.f_test('fertilizer = 0, rainfall = 0')\nprint(joint_test)","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"restricted = smf.ols('yield_ ~ labour', data=df).fit()\nprint('Unrestricted R-squared:', round(model.rsquared, 4))\nprint('Restricted R-squared  :', round(restricted.rsquared, 4))\nprint('Model F-statistic     :', round(model.fvalue, 4))\nprint('Model F p-value       :', model.f_pvalue)","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"print('t statistic for fertilizer:', model.tvalues['fertilizer'])\nprint('p-value for fertilizer    :', model.pvalues['fertilizer'])\nprint('Overall model F-statistic :', model.fvalue)\nprint('Overall model F p-value   :', model.f_pvalue)","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\n# Your code below","id":7,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
   </script>
@@ -708,9 +708,44 @@ Department of Development Economics, KAU
 <li>It is a standard tool in multiple regression.</li>
 </ul>
 </section>
+<section id="f-test-intuition-restricted-versus-unrestricted" class="slide level2">
+<h2>F-test intuition: restricted versus unrestricted</h2>
+<ul>
+<li>The <strong>unrestricted model</strong> allows all coefficients to be estimated freely.</li>
+<li>The <strong>restricted model</strong> imposes the null hypothesis by forcing some coefficients to zero.</li>
+<li>Because the restricted model fits less flexibly, we usually have <span class="math display">\[RSS_R \geq RSS_U\]</span></li>
+<li>The F-test asks whether that increase in RSS is large enough to reject the restrictions.</li>
+</ul>
+</section>
+<section id="f-statistic-for-joint-significance" class="slide level2">
+<h2>F-statistic for joint significance</h2>
+<div class="formula">
+<p><span class="math display">\[F = \frac{(RSS_R - RSS_U)/J}{RSS_U/(N-K)} \sim F(J, N-K) \quad \text{under } H_0\]</span></p>
+</div>
+<ul>
+<li><span class="math inline">\(J\)</span> is the number of restrictions being tested.</li>
+<li><span class="math inline">\(N\)</span> is the sample size.</li>
+<li><span class="math inline">\(K\)</span> is the number of parameters in the unrestricted model.</li>
+<li>A larger <span class="math inline">\(F\)</span> means the restrictions worsen model fit substantially.</li>
+</ul>
+</section>
+<section id="kerala-example-do-rainfall-terms-matter-for-procurement" class="slide level2">
+<h2>Kerala example: do rainfall terms matter for procurement?</h2>
+<ul>
+<li>Consider the unrestricted model <span class="math display">\[\text{paddy procurement} = \beta_1 + \beta_2 price + \beta_3 rainfall + \beta_4 rainfall^2 + \varepsilon\]</span></li>
+<li>The restricted model sets the rainfall terms to zero: <span class="math display">\[H_0: \beta_3 = 0 \quad \text{and} \quad \beta_4 = 0\]</span></li>
+<li>This is the Kerala analogue of testing whether advertising terms matter for sales.</li>
+<li>If the unrestricted model fits much better, rainfall is jointly important for paddy procurement.</li>
+</ul>
+</section>
+<section id="implementing-the-rainfall-f-test-in-python" class="slide level2">
+<h2>Implementing the rainfall F-test in Python</h2>
+<div id="qpyodide-insertion-location-1"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
 <section id="estimating-a-multiple-regression-model" class="slide level2">
 <h2>Estimating a multiple regression model</h2>
-<div id="qpyodide-insertion-location-1"></div>
+<div id="qpyodide-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="running-a-t-test-in-statsmodels" class="slide level2">
@@ -724,7 +759,7 @@ Department of Development Economics, KAU
 </section>
 <section id="t-test-for-one-coefficient" class="slide level2">
 <h2>t-test for one coefficient</h2>
-<div id="qpyodide-insertion-location-2"></div>
+<div id="qpyodide-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="joint-significance-with-an-f-test" class="slide level2">
@@ -738,7 +773,7 @@ Department of Development Economics, KAU
 </section>
 <section id="f-test-in-python" class="slide level2">
 <h2>F-test in Python</h2>
-<div id="qpyodide-insertion-location-3"></div>
+<div id="qpyodide-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="interpreting-t-and-f-results" class="slide level2">
@@ -763,7 +798,7 @@ Department of Development Economics, KAU
 </section>
 <section id="comparing-models-in-code" class="slide level2">
 <h2>Comparing models in code</h2>
-<div id="qpyodide-insertion-location-4"></div>
+<div id="qpyodide-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="reporting-test-results-well" class="slide level2">
@@ -788,7 +823,7 @@ Department of Development Economics, KAU
 </section>
 <section id="extracting-key-test-information" class="slide level2">
 <h2>Extracting key test information</h2>
-<div id="qpyodide-insertion-location-5"></div>
+<div id="qpyodide-insertion-location-6"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="exercise" class="slide level2" data-background-color="#1A3300">
@@ -796,7 +831,7 @@ Department of Development Economics, KAU
 <div class="gold-box">
 <p>Simulate a multiple regression with <code>yield_</code> as the dependent variable and <code>fertilizer</code>, <code>rainfall</code>, and <code>labour</code> as regressors. Then run a t-test for <code>labour = 0</code> and an F-test for <code>fertilizer = 0</code> and <code>rainfall = 0</code> jointly.</p>
 </div>
-<div id="qpyodide-insertion-location-6"></div>
+<div id="qpyodide-insertion-location-7"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="summary" class="slide level2" data-background-color="#1A3300">

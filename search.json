@@ -2184,6 +2184,34 @@
     "text": "Empirical mean and spread of simulated slopes\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
   },
   {
+    "objectID": "slides/week-08/lecture-02.html#sum-of-squares-decomposition",
+    "href": "slides/week-08/lecture-02.html#sum-of-squares-decomposition",
+    "title": "Statistical Properties of OLS",
+    "section": "Sum of squares decomposition",
+    "text": "Sum of squares decomposition\n\n\\[TSS = \\sum_{i=1}^{n}(Y_i - \\bar{Y})^2\\]\n\\[ESS = \\sum_{i=1}^{n}(\\hat{Y}_i - \\bar{Y})^2\\]\n\\[RSS = \\sum_{i=1}^{n}\\hat{u}_i^2\\]\n\\[TSS = ESS + RSS\\]\n\n\nTSS measures total variation in the dependent variable.\nESS is the variation explained by the fitted regression line.\nRSS is the unexplained variation left in the residuals."
+  },
+  {
+    "objectID": "slides/week-08/lecture-02.html#r-squared",
+    "href": "slides/week-08/lecture-02.html#r-squared",
+    "title": "Statistical Properties of OLS",
+    "section": "R-squared",
+    "text": "R-squared\n\n\\[R^2 = \\frac{ESS}{TSS} = 1 - \\frac{RSS}{TSS}, \\qquad 0 \\leq R^2 \\leq 1\\]\n\n\n\\(R^2\\) tells us the share of variation in \\(Y\\) explained by the model.\nA higher \\(R^2\\) means better fit, but not necessarily better causal identification.\nA key limitation is that adding regressors never reduces \\(R^2\\), even if the extra variables add little real value."
+  },
+  {
+    "objectID": "slides/week-08/lecture-02.html#adjusted-r-squared",
+    "href": "slides/week-08/lecture-02.html#adjusted-r-squared",
+    "title": "Statistical Properties of OLS",
+    "section": "Adjusted R-squared",
+    "text": "Adjusted R-squared\n\n\\[\\bar{R}^2 = 1 - \\frac{(1-R^2)(n-1)}{n-k-1}\\]\n\n\nHere \\(n\\) is the sample size and \\(k\\) is the number of explanatory variables.\nAdjusted \\(R^2\\) penalises unnecessary regressors by accounting for lost degrees of freedom.\nUnlike ordinary \\(R^2\\), adjusted \\(R^2\\) can fall when a new variable adds almost no explanatory power."
+  },
+  {
+    "objectID": "slides/week-08/lecture-02.html#computing-r2-and-adjusted-r2-manually-in-python",
+    "href": "slides/week-08/lecture-02.html#computing-r2-and-adjusted-r2-manually-in-python",
+    "title": "Statistical Properties of OLS",
+    "section": "Computing \\(R^2\\) and adjusted \\(R^2\\) manually in Python",
+    "text": "Computing \\(R^2\\) and adjusted \\(R^2\\) manually in Python\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
     "objectID": "slides/week-08/lecture-02.html#when-ols-properties-break-down",
     "href": "slides/week-08/lecture-02.html#when-ols-properties-break-down",
     "title": "Statistical Properties of OLS",
@@ -2240,6 +2268,13 @@
     "text": "The sample regression function (SRF)\n\n\\[\\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_i\\]\n\n\nThe SRF is estimated from sample data.\nIt gives fitted values, not actual observations.\nResiduals are the gaps between actual and fitted outcomes.\nOLS chooses the line that fits the sample best in a specific sense.\nThat sense is minimising squared residuals."
   },
   {
+    "objectID": "slides/week-07/lecture-03.html#prf-versus-srf-population-and-sample",
+    "href": "slides/week-07/lecture-03.html#prf-versus-srf-population-and-sample",
+    "title": "Simple OLS Derivation",
+    "section": "PRF versus SRF: population and sample",
+    "text": "PRF versus SRF: population and sample\n\n\\[\\text{PRF: } Y_i = \\beta_0 + \\beta_1 X_i + \\mu_i\\]\n\\[\\text{SRF: } \\hat{Y}_i = \\hat{\\beta}_0 + \\hat{\\beta}_1 X_i\\]\n\\[Y_i = \\hat{Y}_i + \\hat{u}_i\\]\n\n\nThe PRF describes the population relationship with unknown parameters and an unobserved disturbance \\(\\mu_i\\).\nThe SRF is the fitted sample line built from estimated coefficients \\(\\hat{\\beta}_0\\) and \\(\\hat{\\beta}_1\\).\nResiduals \\(\\hat{u}_i\\) are sample estimates of unexplained variation."
+  },
+  {
     "objectID": "slides/week-07/lecture-03.html#residuals-and-the-objective-function",
     "href": "slides/week-07/lecture-03.html#residuals-and-the-objective-function",
     "title": "Simple OLS Derivation",
@@ -2266,6 +2301,34 @@
     "title": "Simple OLS Derivation",
     "section": "Closed-form OLS estimators",
     "text": "Closed-form OLS estimators\n\n\\[\\hat{\\beta}_1 = \\frac{\\sum (X_i - \\bar{X})(Y_i - \\bar{Y})}{\\sum (X_i - \\bar{X})^2}\\]\n\\[\\hat{\\beta}_0 = \\bar{Y} - \\hat{\\beta}_1 \\bar{X}\\]\n\n\nThe slope depends on sample covariance divided by sample variance.\nThe intercept ensures the line goes through \\((\\bar{X}, \\bar{Y})\\)."
+  },
+  {
+    "objectID": "slides/week-07/lecture-03.html#rss-minimisation-and-first-order-conditions",
+    "href": "slides/week-07/lecture-03.html#rss-minimisation-and-first-order-conditions",
+    "title": "Simple OLS Derivation",
+    "section": "RSS minimisation and first-order conditions",
+    "text": "RSS minimisation and first-order conditions\n\n\\[RSS = \\sum_{i=1}^{n}\\hat{u}_i^2 = \\sum_{i=1}^{n}(Y_i - \\hat{\\beta}_0 - \\hat{\\beta}_1 X_i)^2 \\rightarrow \\min\\]\n\\[\\frac{\\partial RSS}{\\partial \\hat{\\beta}_0} = 0 \\qquad \\frac{\\partial RSS}{\\partial \\hat{\\beta}_1} = 0\\]\n\n\nOLS chooses the coefficient values that make the residual sum of squares as small as possible.\nThese first-order conditions generate the normal equations used to solve for \\(\\hat{\\beta}_0\\) and \\(\\hat{\\beta}_1\\)."
+  },
+  {
+    "objectID": "slides/week-07/lecture-03.html#manual-ols-calculation-with-five-observations",
+    "href": "slides/week-07/lecture-03.html#manual-ols-calculation-with-five-observations",
+    "title": "Simple OLS Derivation",
+    "section": "Manual OLS calculation with five observations",
+    "text": "Manual OLS calculation with five observations\nLet \\(\\bar{x}=4\\) and \\(\\bar{y}=3\\).\n\n\n\n\n\n\n\n\n\n\n\\(i\\)\n\\(y_i\\)\n\\(x_i\\)\n\\((x_i-\\bar{x})^2\\)\n\\((x_i-\\bar{x})(y_i-\\bar{y})\\)\n\n\n\n\n1\n1\n2\n4\n4\n\n\n2\n2\n3\n1\n1\n\n\n3\n3\n5\n1\n0\n\n\n4\n4\n4\n0\n0\n\n\n5\n5\n6\n4\n4\n\n\nSum\n15\n20\n10\n9\n\n\n\n\nTherefore, \\[\\hat{\\beta}_1 = \\frac{9}{10} = 0.9\\]\nAnd \\[\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1\\bar{x} = 3 - 0.9(4) = 0.6\\]"
+  },
+  {
+    "objectID": "slides/week-07/lecture-03.html#verifying-the-manual-calculation-in-python",
+    "href": "slides/week-07/lecture-03.html#verifying-the-manual-calculation-in-python",
+    "title": "Simple OLS Derivation",
+    "section": "Verifying the manual calculation in Python",
+    "text": "Verifying the manual calculation in Python\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "slides/week-07/lecture-03.html#matrix-form-of-ols",
+    "href": "slides/week-07/lecture-03.html#matrix-form-of-ols",
+    "title": "Simple OLS Derivation",
+    "section": "Matrix form of OLS",
+    "text": "Matrix form of OLS\n\n\\[\\hat{\\beta} = (X'X)^{-1}X'Y\\]\n\n\nIn simple regression, the first column of \\(X\\) is a column of ones and the second column is the regressor values.\nThis compact matrix formula extends naturally to multiple regression."
   },
   {
     "objectID": "slides/week-07/lecture-03.html#computing-ols-by-hand-in-python",
@@ -3710,6 +3773,34 @@
     "text": "Why do we need an F-test?\n\nSometimes we want to test several restrictions together.\nExample: are fertilizer and rainfall jointly irrelevant in explaining yield?\nTesting them one at a time misses the joint question.\nThe F-test evaluates combined restrictions on multiple coefficients.\nIt is a standard tool in multiple regression."
   },
   {
+    "objectID": "slides/week-09/lecture-03.html#f-test-intuition-restricted-versus-unrestricted",
+    "href": "slides/week-09/lecture-03.html#f-test-intuition-restricted-versus-unrestricted",
+    "title": "t and F Tests in Python",
+    "section": "F-test intuition: restricted versus unrestricted",
+    "text": "F-test intuition: restricted versus unrestricted\n\nThe unrestricted model allows all coefficients to be estimated freely.\nThe restricted model imposes the null hypothesis by forcing some coefficients to zero.\nBecause the restricted model fits less flexibly, we usually have \\[RSS_R \\geq RSS_U\\]\nThe F-test asks whether that increase in RSS is large enough to reject the restrictions."
+  },
+  {
+    "objectID": "slides/week-09/lecture-03.html#f-statistic-for-joint-significance",
+    "href": "slides/week-09/lecture-03.html#f-statistic-for-joint-significance",
+    "title": "t and F Tests in Python",
+    "section": "F-statistic for joint significance",
+    "text": "F-statistic for joint significance\n\n\\[F = \\frac{(RSS_R - RSS_U)/J}{RSS_U/(N-K)} \\sim F(J, N-K) \\quad \\text{under } H_0\\]\n\n\n\\(J\\) is the number of restrictions being tested.\n\\(N\\) is the sample size.\n\\(K\\) is the number of parameters in the unrestricted model.\nA larger \\(F\\) means the restrictions worsen model fit substantially."
+  },
+  {
+    "objectID": "slides/week-09/lecture-03.html#kerala-example-do-rainfall-terms-matter-for-procurement",
+    "href": "slides/week-09/lecture-03.html#kerala-example-do-rainfall-terms-matter-for-procurement",
+    "title": "t and F Tests in Python",
+    "section": "Kerala example: do rainfall terms matter for procurement?",
+    "text": "Kerala example: do rainfall terms matter for procurement?\n\nConsider the unrestricted model \\[\\text{paddy procurement} = \\beta_1 + \\beta_2 price + \\beta_3 rainfall + \\beta_4 rainfall^2 + \\varepsilon\\]\nThe restricted model sets the rainfall terms to zero: \\[H_0: \\beta_3 = 0 \\quad \\text{and} \\quad \\beta_4 = 0\\]\nThis is the Kerala analogue of testing whether advertising terms matter for sales.\nIf the unrestricted model fits much better, rainfall is jointly important for paddy procurement."
+  },
+  {
+    "objectID": "slides/week-09/lecture-03.html#implementing-the-rainfall-f-test-in-python",
+    "href": "slides/week-09/lecture-03.html#implementing-the-rainfall-f-test-in-python",
+    "title": "t and F Tests in Python",
+    "section": "Implementing the rainfall F-test in Python",
+    "text": "Implementing the rainfall F-test in Python\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
     "objectID": "slides/week-09/lecture-03.html#estimating-a-multiple-regression-model",
     "href": "slides/week-09/lecture-03.html#estimating-a-multiple-regression-model",
     "title": "t and F Tests in Python",
@@ -3826,14 +3917,14 @@
     "href": "slides/week-09/lecture-02.html#the-95-confidence-interval-formula",
     "title": "Confidence Intervals",
     "section": "The 95% confidence interval formula",
-    "text": "The 95% confidence interval formula\n\n\\[\\hat{\\beta}_1 \\pm t_{\\alpha/2,\\,df} \\times se(\\hat{\\beta}_1)\\]\n\n\nThe centre is the estimated coefficient.\nThe margin of error depends on the critical value and standard error.\nLarger standard errors create wider intervals.\nConfidence intervals come from the sampling distribution of the estimator."
+    "text": "The 95% confidence interval formula\n\n\\[CI_{0.95} = [\\hat{\\beta}_i - 1.96 \\times SE(\\hat{\\beta}_i),\\; \\hat{\\beta}_i + 1.96 \\times SE(\\hat{\\beta}_i)]\\]\n\\[\\hat{\\beta}_1 \\pm t_{\\alpha/2,\\,df} \\times se(\\hat{\\beta}_1)\\]\n\n\nThe centre is the estimated coefficient.\nThe margin of error depends on the critical value and standard error.\nFor large samples, 1.96 is the common 95% normal critical value.\nLarger standard errors create wider intervals.\nConfidence intervals come from the sampling distribution of the estimator."
   },
   {
     "objectID": "slides/week-09/lecture-02.html#correct-interpretation",
     "href": "slides/week-09/lecture-02.html#correct-interpretation",
     "title": "Confidence Intervals",
     "section": "Correct interpretation",
-    "text": "Correct interpretation\n\nA 95% confidence interval does not mean there is a 95% probability that the fixed true parameter lies inside this specific interval.\nIt means the interval construction method captures the true parameter in 95% of repeated samples.\nIn practice, we treat the interval as a plausible range for the coefficient.\nThe interval combines effect size and uncertainty in one object.\nThis is why intervals are widely reported in empirical studies."
+    "text": "Correct interpretation\n\nA 95% confidence interval does not mean there is a 95% probability that the fixed true parameter lies inside this specific interval.\nIt means that in 95% of all random samples, the interval construction method will contain the true \\(\\beta\\).\nIn practice, we treat the interval as a plausible range for the coefficient.\nThe interval combines effect size and uncertainty in one object.\nThis is why intervals are widely reported in empirical studies."
   },
   {
     "objectID": "slides/week-09/lecture-02.html#estimating-a-model-and-extracting-intervals",
@@ -3848,6 +3939,13 @@
     "title": "Confidence Intervals",
     "section": "Manual 95% CI calculation",
     "text": "Manual 95% CI calculation\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "slides/week-09/lecture-02.html#kerala-example-confidence-interval-for-rubber-price-response",
+    "href": "slides/week-09/lecture-02.html#kerala-example-confidence-interval-for-rubber-price-response",
+    "title": "Confidence Intervals",
+    "section": "Kerala example: confidence interval for rubber-price response",
+    "text": "Kerala example: confidence interval for rubber-price response\n\nSuppose we regress the Kerala rubber price on national rubber production and obtain \\[\\hat{\\beta}_{production} = -238.89, \\qquad SE(\\hat{\\beta}_{production}) = 53.59\\]\nA manual 95% confidence interval is \\[-238.89 \\pm 1.96(53.59) = [-343.93,\\,-133.85]\\]\nBecause the interval is entirely negative, higher national production is associated with lower Kerala rubber prices in this example.\nThe interval also shows uncertainty: the effect may be moderately negative or strongly negative, but the sign is consistently below zero."
   },
   {
     "objectID": "slides/week-09/lecture-02.html#what-affects-interval-width",
@@ -4305,6 +4403,13 @@
     "text": "Null and alternative hypotheses\n\nThe null hypothesis is the benchmark claim we test.\nThe alternative hypothesis is what we consider if the null is rejected.\nIn simple regression, a common test is \\[H_0: \\beta_1 = 0 \\quad \\text{vs} \\quad H_1: \\beta_1 \\neq 0\\]\nThis asks whether the regressor has a statistically detectable linear effect.\nThe null is not “proved true”; it is either rejected or not rejected."
   },
   {
+    "objectID": "slides/week-09/lecture-01.html#five-components-of-a-hypothesis-test",
+    "href": "slides/week-09/lecture-01.html#five-components-of-a-hypothesis-test",
+    "title": "Hypothesis Testing",
+    "section": "Five components of a hypothesis test",
+    "text": "Five components of a hypothesis test\n\nNull hypothesis (\\(H_0\\)): the benchmark claim.\nAlternative hypothesis (\\(H_1\\)): the competing claim.\nTest statistic: a rule such as the \\(t\\) statistic.\nRejection region: the values that lead us to reject \\(H_0\\).\nConclusion: the decision stated in economic language.\n\n\nGood hypothesis testing is a sequence of decisions, not just a p-value."
+  },
+  {
     "objectID": "slides/week-09/lecture-01.html#test-statistic-for-a-coefficient",
     "href": "slides/week-09/lecture-01.html#test-statistic-for-a-coefficient",
     "title": "Hypothesis Testing",
@@ -4345,6 +4450,20 @@
     "title": "Hypothesis Testing",
     "section": "Decision rule",
     "text": "Decision rule\n\nChoose a significance level, such as \\(\\alpha = 0.05\\).\nIf p-value &lt; 0.05, reject the null at the 5% level.\nIf p-value \\ge 0.05, do not reject the null.\nAlways report the estimated effect as well as significance.\nPractical significance may matter even when p-values are moderate."
+  },
+  {
+    "objectID": "slides/week-09/lecture-01.html#rejection-rules-for-the-t-test",
+    "href": "slides/week-09/lecture-01.html#rejection-rules-for-the-t-test",
+    "title": "Hypothesis Testing",
+    "section": "Rejection rules for the t-test",
+    "text": "Rejection rules for the t-test\n\nRight-tail test: reject \\(H_0\\) if \\(t &gt; t_{\\alpha, df}\\).\nTwo-tail test: reject \\(H_0\\) if \\(|t| &gt; t_{\\alpha/2, df}\\).\nP-value rule: reject \\(H_0\\) whenever \\(p \\leq \\alpha\\).\nThese rules are equivalent ways to express the same decision."
+  },
+  {
+    "objectID": "slides/week-09/lecture-01.html#kerala-mpc-example",
+    "href": "slides/week-09/lecture-01.html#kerala-mpc-example",
+    "title": "Hypothesis Testing",
+    "section": "Kerala MPC example",
+    "text": "Kerala MPC example\n\nSuppose the Kerala finance department studies whether household income raises household expenditure.\nThis is the marginal propensity to consume (MPC) question.\nTest \\[H_0: \\beta_1 = 0 \\qquad \\text{vs} \\qquad H_1: \\beta_1 &gt; 0\\]\nIf \\(\\hat{\\beta}_1 = 0.62\\) and \\(SE(\\hat{\\beta}_1) = 0.11\\), then \\[t = \\frac{\\hat{\\beta}_1}{SE(\\hat{\\beta}_1)} = \\frac{0.62}{0.11} \\approx 5.64\\]\nSince this exceeds a typical right-tail critical value such as \\(t_{0.05,30} = 1.697\\), we reject \\(H_0\\): the MPC is positive and significant, so a minimum-wage increase is expected to raise aggregate demand."
   },
   {
     "objectID": "slides/week-09/lecture-01.html#statistical-versus-economic-significance",
@@ -5159,6 +5278,34 @@
     "text": "From description to evidence\n\nDescriptive statistics tell us what the data look like.\nEconometrics goes further by estimating relationships systematically.\nIt does not replace economic judgment; it strengthens it.\nIn agriculture and banking, evidence-based decisions can improve outcomes.\nThis is why econometrics is a core skill for applied economics students."
   },
   {
+    "objectID": "slides/week-07/lecture-01.html#econometrics-is-the-better-half-of-economics",
+    "href": "slides/week-07/lecture-01.html#econometrics-is-the-better-half-of-economics",
+    "title": "What is Econometrics?",
+    "section": "“Econometrics is the better half of economics”",
+    "text": "“Econometrics is the better half of economics”\n\n“Econometrics is the better half of economics. It is scientific, practical and useful.”\n\n\nT. Krishna Kumar, Economic and Political Weekly, 7-13 February 2004, Vol. 39, No. 6.\nThe quote captures why this course combines theory, data, and policy analysis.\nFor KAU students, econometrics turns questions about crops, prices, credit, and rural livelihoods into evidence."
+  },
+  {
+    "objectID": "slides/week-07/lecture-01.html#indian-econometrics-a-rich-history",
+    "href": "slides/week-07/lecture-01.html#indian-econometrics-a-rich-history",
+    "title": "What is Econometrics?",
+    "section": "Indian Econometrics: A rich history",
+    "text": "Indian Econometrics: A rich history\n\nKumar (2004) reminds us that econometrics has a deep Indian tradition.\nThe Indian Econometric Society (TIES) was founded in November 1970.\nP C Mahalanobis linked statistics and planning, helped shape the Second Five-Year Plan, and built planning work through ISI.\nC R Rao and G S Maddala are central figures in modern econometrics; Maddala also wrote some of the most widely used reference textbooks.\nIndian economists such as Amartya Sen and Abhijit Banerjee also show how rigorous quantitative reasoning can influence policy and development debates."
+  },
+  {
+    "objectID": "slides/week-07/lecture-01.html#practical-applications-of-econometrics",
+    "href": "slides/week-07/lecture-01.html#practical-applications-of-econometrics",
+    "title": "What is Econometrics?",
+    "section": "Practical applications of econometrics",
+    "text": "Practical applications of econometrics\n\nEconometricians estimate relationships behind balance of payments, industrial output, fiscal deficit, and exchange rates.\nIn a Kerala context, similar tools help study cooperative credit recovery, district-level crop output, and commodity price movements.\nFollowing Engle and Granger (Nobel Prize, 2003), econometrics is used to analyse asset-price and stock-price volatility.\nKumar also highlights applications in patent infringement damages, pay equity cases, and car demand from product attributes.\nThe same logic can be used for Indian examples such as tractor demand, rubber price fluctuations, or salary equity across institutions."
+  },
+  {
+    "objectID": "slides/week-07/lecture-01.html#econometrics-can-be-used-strategically",
+    "href": "slides/week-07/lecture-01.html#econometrics-can-be-used-strategically",
+    "title": "What is Econometrics?",
+    "section": "Econometrics can be used strategically",
+    "text": "Econometrics can be used strategically\n\nKumar notes that knowledge of econometrics also helps us detect deliberate misspecification.\nFriedman’s permanent income hypothesis used omitted-variable logic to argue that simple Keynesian consumption equations overstated the multiplier.\nThe lesson is ethical as well as technical: if we omit relevant variables, coefficients may look persuasive but be misleading.\nGood econometric training helps us both build better models and criticise weak ones."
+  },
+  {
     "objectID": "slides/week-07/lecture-01.html#exercise",
     "href": "slides/week-07/lecture-01.html#exercise",
     "title": "What is Econometrics?",
@@ -5236,6 +5383,20 @@
     "text": "Assumption 5: homoskedasticity\n\n\\[Var(u_i \\mid X_i) = \\sigma^2\\]\n\n\nThe variance of the error term is constant for all observations.\nIf dispersion changes with income, farm size, or district size, errors are heteroskedastic.\nHeteroskedasticity does not usually bias OLS coefficients.\nBut it makes the usual standard errors unreliable."
   },
   {
+    "objectID": "slides/week-08/lecture-01.html#assumption-6-correct-specification",
+    "href": "slides/week-08/lecture-01.html#assumption-6-correct-specification",
+    "title": "Gauss-Markov Theorem",
+    "section": "Assumption 6: correct specification",
+    "text": "Assumption 6: correct specification\n\nThe model should include the relevant variables in the right functional form.\nOmitting important regressors or adding badly chosen irrelevant terms can distort interpretation.\nExample: a fertilizer-yield model that ignores irrigation quality may be misspecified.\nCorrect specification supports both unbiased estimation and meaningful policy interpretation."
+  },
+  {
+    "objectID": "slides/week-08/lecture-01.html#assumption-7-normality",
+    "href": "slides/week-08/lecture-01.html#assumption-7-normality",
+    "title": "Gauss-Markov Theorem",
+    "section": "Assumption 7: normality",
+    "text": "Assumption 7: normality\n\n\\[u_i \\mid X_i \\sim N(0, \\sigma^2)\\]\n\n\nNormality is especially useful for exact t and F tests in small samples.\nIn large samples, the central limit theorem often gives approximate normal inference even when errors are not perfectly normal.\nSo normality matters most when the sample is limited and we want precise finite-sample inference."
+  },
+  {
     "objectID": "slides/week-08/lecture-01.html#what-does-blue-mean",
     "href": "slides/week-08/lecture-01.html#what-does-blue-mean",
     "title": "Gauss-Markov Theorem",
@@ -5296,7 +5457,7 @@
     "href": "slides/week-08/lecture-01.html#summary",
     "title": "Gauss-Markov Theorem",
     "section": "Summary",
-    "text": "Summary\n\n✅ The Gauss-Markov theorem relies on the CLR assumptions.\n✅ The five core assumptions are linearity, random sampling, variation/no perfect collinearity, zero conditional mean, and homoskedasticity.\n✅ Under these assumptions, OLS is BLUE.\n✅ Zero conditional mean is central for unbiasedness.\n✅ Heteroskedasticity affects standard errors more than coefficients.\n✅ Diagnostics and robust standard errors are part of practical econometrics."
+    "text": "Summary\n\n✅ The Gauss-Markov theorem relies on the CLR assumptions.\n✅ The core assumptions now include linearity, random sampling, variation/no perfect collinearity, zero conditional mean, homoskedasticity, correct specification, and normality for small-sample inference.\n✅ Under these assumptions, OLS is BLUE.\n✅ Zero conditional mean is central for unbiasedness.\n✅ Heteroskedasticity affects standard errors more than coefficients.\n✅ Diagnostics and robust standard errors are part of practical econometrics."
   },
   {
     "objectID": "slides/week-08/lecture-01.html#next-lecture",

@@ -456,7 +456,7 @@
   }
 
   // Store cell data
-  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\n\nnp.random.seed(42)\ntrue_beta1 = 0.30\nslopes = []\n\nfor _ in range(500):\n    x = np.random.uniform(50, 200, 40)\n    y = 15 + true_beta1 * x + np.random.normal(0, 8, 40)\n    beta1_hat = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\n    slopes.append(beta1_hat)\n\nslopes = np.array(slopes)\nprint('Average estimated slope:', round(slopes.mean(), 4))\nprint('True slope:', true_beta1)","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import matplotlib\nmatplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')\nimport matplotlib.pyplot as plt\n\nplt.figure(figsize=(7, 4))\nplt.hist(slopes, bins=20, color='darkgreen', edgecolor='white')\nplt.axvline(true_beta1, color='goldenrod', linestyle='--', label='True slope')\nplt.title('Sampling distribution of $\\\\hat{\\\\beta}_1$')\nplt.xlabel('Estimated slope')\nplt.ylabel('Frequency')\nplt.legend()\nplt.show()","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"def simulate_mean_slope(n, reps=300):\n    estimates = []\n    for _ in range(reps):\n        x = np.random.uniform(50, 200, n)\n        y = 15 + true_beta1 * x + np.random.normal(0, 8, n)\n        b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\n        estimates.append(b1)\n    return np.mean(estimates), np.std(estimates)\n\nprint('n=30 :', simulate_mean_slope(30))\nprint('n=300:', simulate_mean_slope(300))","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"print('Mean of slopes =', round(slopes.mean(), 4))\nprint('Standard deviation of slopes =', round(slopes.std(), 4))\nprint('Minimum slope =', round(slopes.min(), 4))\nprint('Maximum slope =', round(slopes.max(), 4))","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"np.random.seed(7)\nz = np.random.normal(0, 1, 200)\nx = 10 + 2 * z + np.random.normal(0, 1, 200)\ny = 5 + 0.5 * x + 3 * z + np.random.normal(0, 1, 200)\n\nbiased_b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\nprint('Slope when omitted variable z is ignored:', round(biased_b1, 4))","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\n\n# Your code below","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
+  globalThis.qpyodideCellDetails = [{"code":"import numpy as np\nimport pandas as pd\n\nnp.random.seed(42)\ntrue_beta1 = 0.30\nslopes = []\n\nfor _ in range(500):\n    x = np.random.uniform(50, 200, 40)\n    y = 15 + true_beta1 * x + np.random.normal(0, 8, 40)\n    beta1_hat = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\n    slopes.append(beta1_hat)\n\nslopes = np.array(slopes)\nprint('Average estimated slope:', round(slopes.mean(), 4))\nprint('True slope:', true_beta1)","id":1,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import matplotlib\nmatplotlib.use('module://matplotlib_pyodide.html5_canvas_backend')\nimport matplotlib.pyplot as plt\n\nplt.figure(figsize=(7, 4))\nplt.hist(slopes, bins=20, color='darkgreen', edgecolor='white')\nplt.axvline(true_beta1, color='goldenrod', linestyle='--', label='True slope')\nplt.title('Sampling distribution of $\\\\hat{\\\\beta}_1$')\nplt.xlabel('Estimated slope')\nplt.ylabel('Frequency')\nplt.legend()\nplt.show()","id":2,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"def simulate_mean_slope(n, reps=300):\n    estimates = []\n    for _ in range(reps):\n        x = np.random.uniform(50, 200, n)\n        y = 15 + true_beta1 * x + np.random.normal(0, 8, n)\n        b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\n        estimates.append(b1)\n    return np.mean(estimates), np.std(estimates)\n\nprint('n=30 :', simulate_mean_slope(30))\nprint('n=300:', simulate_mean_slope(300))","id":3,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"print('Mean of slopes =', round(slopes.mean(), 4))\nprint('Standard deviation of slopes =', round(slopes.std(), 4))\nprint('Minimum slope =', round(slopes.min(), 4))\nprint('Maximum slope =', round(slopes.max(), 4))","id":4,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nfertilizer = np.array([40, 60, 80, 100, 120, 140], dtype=float)\nyield_ = np.array([20, 25, 31, 34, 39, 44], dtype=float)\n\ndf_fit = pd.DataFrame({'fertilizer': fertilizer, 'yield_': yield_})\nmodel_fit = smf.ols('yield_ ~ fertilizer', data=df_fit).fit()\n\ny = df_fit['yield_']\ny_hat = model_fit.fittedvalues\nresid = model_fit.resid\n\ntss = np.sum((y - y.mean()) ** 2)\ness = np.sum((y_hat - y.mean()) ** 2)\nrss = np.sum(resid ** 2)\nr2 = ess / tss\nn = len(df_fit)\nk = 1\nadj_r2 = 1 - ((1 - r2) * (n - 1) / (n - k - 1))\n\nprint('TSS =', round(tss, 4))\nprint('ESS =', round(ess, 4))\nprint('RSS =', round(rss, 4))\nprint('R^2 =', round(r2, 4))\nprint('Adjusted R^2 =', round(adj_r2, 4))\nprint('statsmodels R^2 =', round(model_fit.rsquared, 4))\nprint('statsmodels Adjusted R^2 =', round(model_fit.rsquared_adj, 4))","id":5,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"np.random.seed(7)\nz = np.random.normal(0, 1, 200)\nx = 10 + 2 * z + np.random.normal(0, 1, 200)\ny = 5 + 0.5 * x + 3 * z + np.random.normal(0, 1, 200)\n\nbiased_b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)\nprint('Slope when omitted variable z is ignored:', round(biased_b1, 4))","id":6,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}},{"code":"import numpy as np\n\n# Your code below","id":7,"options":{"autorun":"","classes":"","comment":"","context":"interactive","dpi":72,"fig-cap":"","fig-height":5,"fig-width":7,"label":"","message":"true","out-height":"","out-width":"700px","output":"true","read-only":"false","results":"markup","warning":"true"}}];
 
 
   </script>
@@ -770,6 +770,47 @@ Department of Development Economics, KAU
 <div id="qpyodide-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
+<section id="sum-of-squares-decomposition" class="slide level2">
+<h2>Sum of squares decomposition</h2>
+<div class="formula">
+<p><span class="math display">\[TSS = \sum_{i=1}^{n}(Y_i - \bar{Y})^2\]</span></p>
+<p><span class="math display">\[ESS = \sum_{i=1}^{n}(\hat{Y}_i - \bar{Y})^2\]</span></p>
+<p><span class="math display">\[RSS = \sum_{i=1}^{n}\hat{u}_i^2\]</span></p>
+<p><span class="math display">\[TSS = ESS + RSS\]</span></p>
+</div>
+<ul>
+<li><strong>TSS</strong> measures total variation in the dependent variable.</li>
+<li><strong>ESS</strong> is the variation explained by the fitted regression line.</li>
+<li><strong>RSS</strong> is the unexplained variation left in the residuals.</li>
+</ul>
+</section>
+<section id="r-squared" class="slide level2">
+<h2>R-squared</h2>
+<div class="formula">
+<p><span class="math display">\[R^2 = \frac{ESS}{TSS} = 1 - \frac{RSS}{TSS}, \qquad 0 \leq R^2 \leq 1\]</span></p>
+</div>
+<ul>
+<li><span class="math inline">\(R^2\)</span> tells us the share of variation in <span class="math inline">\(Y\)</span> explained by the model.</li>
+<li>A higher <span class="math inline">\(R^2\)</span> means better fit, but not necessarily better causal identification.</li>
+<li>A key limitation is that <strong>adding regressors never reduces <span class="math inline">\(R^2\)</span></strong>, even if the extra variables add little real value.</li>
+</ul>
+</section>
+<section id="adjusted-r-squared" class="slide level2">
+<h2>Adjusted R-squared</h2>
+<div class="formula">
+<p><span class="math display">\[\bar{R}^2 = 1 - \frac{(1-R^2)(n-1)}{n-k-1}\]</span></p>
+</div>
+<ul>
+<li>Here <span class="math inline">\(n\)</span> is the sample size and <span class="math inline">\(k\)</span> is the number of explanatory variables.</li>
+<li>Adjusted <span class="math inline">\(R^2\)</span> penalises unnecessary regressors by accounting for lost degrees of freedom.</li>
+<li>Unlike ordinary <span class="math inline">\(R^2\)</span>, adjusted <span class="math inline">\(R^2\)</span> can fall when a new variable adds almost no explanatory power.</li>
+</ul>
+</section>
+<section id="computing-r2-and-adjusted-r2-manually-in-python" class="slide level2">
+<h2>Computing <span class="math inline">\(R^2\)</span> and adjusted <span class="math inline">\(R^2\)</span> manually in Python</h2>
+<div id="qpyodide-insertion-location-5"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
 <section id="when-ols-properties-break-down" class="slide level2">
 <h2>When OLS properties break down</h2>
 <ul>
@@ -782,7 +823,7 @@ Department of Development Economics, KAU
 </section>
 <section id="omitted-variable-bias-in-a-quick-simulation" class="slide level2">
 <h2>Omitted variable bias in a quick simulation</h2>
-<div id="qpyodide-insertion-location-5"></div>
+<div id="qpyodide-insertion-location-6"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="exercise" class="slide level2" data-background-color="#1A3300">
@@ -790,7 +831,7 @@ Department of Development Economics, KAU
 <div class="gold-box">
 <p>Simulate 200 samples from a simple linear model with a true slope of <code>0.4</code>. Store the estimated slopes, compute their average, and explain whether the result supports unbiasedness.</p>
 </div>
-<div id="qpyodide-insertion-location-6"></div>
+<div id="qpyodide-insertion-location-7"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 <section id="summary" class="slide level2" data-background-color="#1A3300">

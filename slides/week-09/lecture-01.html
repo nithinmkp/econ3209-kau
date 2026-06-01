@@ -708,6 +708,19 @@ Department of Development Economics, KAU
 <li>The null is not “proved true”; it is either rejected or not rejected.</li>
 </ul>
 </section>
+<section id="five-components-of-a-hypothesis-test" class="slide level2 scrollable">
+<h2>Five components of a hypothesis test</h2>
+<ol type="1">
+<li><strong>Null hypothesis (<span class="math inline">\(H_0\)</span>)</strong>: the benchmark claim.</li>
+<li><strong>Alternative hypothesis (<span class="math inline">\(H_1\)</span>)</strong>: the competing claim.</li>
+<li><strong>Test statistic</strong>: a rule such as the <span class="math inline">\(t\)</span> statistic.</li>
+<li><strong>Rejection region</strong>: the values that lead us to reject <span class="math inline">\(H_0\)</span>.</li>
+<li><strong>Conclusion</strong>: the decision stated in economic language.</li>
+</ol>
+<ul>
+<li>Good hypothesis testing is a sequence of decisions, not just a p-value.</li>
+</ul>
+</section>
 <section id="test-statistic-for-a-coefficient" class="slide level2">
 <h2>Test statistic for a coefficient</h2>
 <div class="formula">
@@ -758,6 +771,25 @@ Department of Development Economics, KAU
 <li>If <code>p-value \ge 0.05</code>, do not reject the null.</li>
 <li>Always report the estimated effect as well as significance.</li>
 <li>Practical significance may matter even when p-values are moderate.</li>
+</ul>
+</section>
+<section id="rejection-rules-for-the-t-test" class="slide level2">
+<h2>Rejection rules for the t-test</h2>
+<ul>
+<li><strong>Right-tail test</strong>: reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(t &gt; t_{\alpha, df}\)</span>.</li>
+<li><strong>Two-tail test</strong>: reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|t| &gt; t_{\alpha/2, df}\)</span>.</li>
+<li><strong>P-value rule</strong>: reject <span class="math inline">\(H_0\)</span> whenever <span class="math inline">\(p \leq \alpha\)</span>.</li>
+<li>These rules are equivalent ways to express the same decision.</li>
+</ul>
+</section>
+<section id="kerala-mpc-example" class="slide level2">
+<h2>Kerala MPC example</h2>
+<ul>
+<li>Suppose the Kerala finance department studies whether household income raises household expenditure.</li>
+<li>This is the <strong>marginal propensity to consume (MPC)</strong> question.</li>
+<li>Test <span class="math display">\[H_0: \beta_1 = 0 \qquad \text{vs} \qquad H_1: \beta_1 &gt; 0\]</span></li>
+<li>If <span class="math inline">\(\hat{\beta}_1 = 0.62\)</span> and <span class="math inline">\(SE(\hat{\beta}_1) = 0.11\)</span>, then <span class="math display">\[t = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)} = \frac{0.62}{0.11} \approx 5.64\]</span></li>
+<li>Since this exceeds a typical right-tail critical value such as <span class="math inline">\(t_{0.05,30} = 1.697\)</span>, we reject <span class="math inline">\(H_0\)</span>: the MPC is positive and significant, so a minimum-wage increase is expected to raise aggregate demand.</li>
 </ul>
 </section>
 <section id="statistical-versus-economic-significance" class="slide level2">

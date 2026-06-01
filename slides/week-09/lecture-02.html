@@ -701,11 +701,13 @@ Department of Development Economics, KAU
 <section id="the-95-confidence-interval-formula" class="slide level2">
 <h2>The 95% confidence interval formula</h2>
 <div class="formula">
+<p><span class="math display">\[CI_{0.95} = [\hat{\beta}_i - 1.96 \times SE(\hat{\beta}_i),\; \hat{\beta}_i + 1.96 \times SE(\hat{\beta}_i)]\]</span></p>
 <p><span class="math display">\[\hat{\beta}_1 \pm t_{\alpha/2,\,df} \times se(\hat{\beta}_1)\]</span></p>
 </div>
 <ul>
 <li>The centre is the estimated coefficient.</li>
 <li>The margin of error depends on the critical value and standard error.</li>
+<li>For large samples, 1.96 is the common 95% normal critical value.</li>
 <li>Larger standard errors create wider intervals.</li>
 <li>Confidence intervals come from the sampling distribution of the estimator.</li>
 </ul>
@@ -714,7 +716,7 @@ Department of Development Economics, KAU
 <h2>Correct interpretation</h2>
 <ul>
 <li>A 95% confidence interval does <strong>not</strong> mean there is a 95% probability that the fixed true parameter lies inside this specific interval.</li>
-<li>It means the interval construction method captures the true parameter in 95% of repeated samples.</li>
+<li>It means that in 95% of all random samples, the interval construction method will contain the true <span class="math inline">\(\beta\)</span>.</li>
 <li>In practice, we treat the interval as a plausible range for the coefficient.</li>
 <li>The interval combines effect size and uncertainty in one object.</li>
 <li>This is why intervals are widely reported in empirical studies.</li>
@@ -729,6 +731,15 @@ Department of Development Economics, KAU
 <h2>Manual 95% CI calculation</h2>
 <div id="qpyodide-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="kerala-example-confidence-interval-for-rubber-price-response" class="slide level2">
+<h2>Kerala example: confidence interval for rubber-price response</h2>
+<ul>
+<li>Suppose we regress the <strong>Kerala rubber price</strong> on <strong>national rubber production</strong> and obtain <span class="math display">\[\hat{\beta}_{production} = -238.89, \qquad SE(\hat{\beta}_{production}) = 53.59\]</span></li>
+<li>A manual 95% confidence interval is <span class="math display">\[-238.89 \pm 1.96(53.59) = [-343.93,\,-133.85]\]</span></li>
+<li>Because the interval is entirely negative, higher national production is associated with lower Kerala rubber prices in this example.</li>
+<li>The interval also shows uncertainty: the effect may be moderately negative or strongly negative, but the sign is consistently below zero.</li>
+</ul>
 </section>
 <section id="what-affects-interval-width" class="slide level2">
 <h2>What affects interval width?</h2>
